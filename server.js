@@ -1,4 +1,3 @@
-
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -70,11 +69,11 @@ async function initDatabase() {
           ring_type: 'health'
         }
       ];
-      
+
       await db.set('default_cards', defaultCards);
       await db.set('cards_initialized', true);
     }
-    
+
     console.log('Replit database initialized successfully');
   } catch (err) {
     console.error('Database initialization error:', err);
@@ -103,7 +102,7 @@ io.on('connection', (socket) => {
 
       // Store game in database
       await db.set(`game:${gameId}`, game);
-      
+
       // Store game state
       const gameState = {
         id: gameId,
@@ -118,7 +117,7 @@ io.on('connection', (socket) => {
           babel: { frequency: 12, lastTriggered: 0 }
         }
       };
-      
+
       gameStates.set(gameId, gameState);
       await db.set(`gamestate:${gameId}`, gameState);
 
@@ -133,7 +132,7 @@ io.on('connection', (socket) => {
   socket.on('join_game', async (data) => {
     try {
       const { gameId, username } = data;
-      
+
       // Get game from database
       const game = await db.get(`game:${gameId}`);
       if (!game) {
@@ -148,7 +147,7 @@ io.on('connection', (socket) => {
 
       // Generate random character
       const character = generateRandomCharacter();
-      
+
       const player = {
         id: uuidv4(),
         game_id: gameId,
@@ -165,9 +164,9 @@ io.on('connection', (socket) => {
       game.players.push(player);
       await db.set(`game:${gameId}`, game);
       await db.set(`player:${player.id}`, player);
-      
+
       socket.join(gameId);
-      
+
       const gameState = gameStates.get(gameId);
       if (gameState) {
         gameState.players.push(player);
@@ -185,14 +184,14 @@ io.on('connection', (socket) => {
   socket.on('start_game', async (data) => {
     try {
       const { gameId } = data;
-      
+
       // Update game status
       const game = await db.get(`game:${gameId}`);
       if (game) {
         game.status = 'active';
         await db.set(`game:${gameId}`, game);
       }
-      
+
       const gameState = gameStates.get(gameId);
       if (gameState) {
         gameState.currentRound = 1;
@@ -210,7 +209,7 @@ io.on('connection', (socket) => {
   socket.on('player_turn', async (data) => {
     try {
       const { gameId, playerId, action, rollResult } = data;
-      
+
       const gameState = gameStates.get(gameId);
       if (!gameState) return;
 
@@ -223,7 +222,7 @@ io.on('connection', (socket) => {
 
       // Determine which ring events trigger
       const triggeredRings = checkRingTriggers(gameState, gameState.currentRound);
-      
+
       // Generate appropriate cards based on position and triggered rings
       const cards = await generateCardsForTurn(playerId, triggeredRings);
 
@@ -251,7 +250,7 @@ io.on('connection', (socket) => {
       if (gameState.currentPlayer === 0) {
         gameState.currentRound++;
       }
-      
+
       await db.set(`gamestate:${gameId}`, gameState);
     } catch (err) {
       console.error('Turn processing error:', err);
@@ -296,14 +295,14 @@ function generateRandomCharacter() {
 
 function checkRingTriggers(gameState, currentRound) {
   const triggered = [];
-  
+
   Object.entries(gameState.chaos_rings).forEach(([ringName, ring]) => {
     if (currentRound % ring.frequency === 0) {
       triggered.push(ringName);
       ring.lastTriggered = currentRound;
     }
   });
-  
+
   return triggered;
 }
 
@@ -330,14 +329,14 @@ app.get('/api/games', async (req, res) => {
   try {
     const gameKeys = await db.list('game:');
     const games = [];
-    
+
     for (const key of gameKeys) {
       const game = await db.get(key);
       if (game && game.status === 'waiting') {
         games.push(game);
       }
     }
-    
+
     res.json(games);
   } catch (err) {
     console.error('Fetch games error:', err);
@@ -345,16 +344,20 @@ app.get('/api/games', async (req, res) => {
   }
 });
 
-app.get('/api/game/:gameId', async (req, res) => {
+// API endpoint to load game state
+app.get('/api/game/:roomId', async (req, res) => {
   try {
-    const game = await db.get(`game:${req.params.gameId}`);
-    if (!game) {
-      return res.status(404).json({ error: 'Game not found' });
+    const { roomId } = req.params;
+    const gameData = await db.get(`game:${roomId}`);
+
+    if (gameData) {
+      res.json(JSON.parse(gameData));
+    } else {
+      res.json({ players: {}, currentPlayer: 0, gamePhase: 'waiting' });
     }
-    res.json(game);
-  } catch (err) {
-    console.error('Fetch game error:', err);
-    res.status(500).json({ error: 'Failed to fetch game' });
+  } catch (error) {
+    console.error('Error loading game:', error);
+    res.status(500).json({ error: 'Failed to load game' });
   }
 });
 
@@ -363,6 +366,16 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
+// Initialize database - Replit DB is key-value, no tables needed
+async function initDatabase() {
+  try {
+    // Replit Database is ready to use, no initialization required
+    console.log('Replit Database connected successfully');
+  } catch (error) {
+    console.error('Database initialization error:', error);
+  }
+}
 
 initDatabase().then(() => {
   server.listen(PORT, '0.0.0.0', () => {
