@@ -1,6 +1,23 @@
 run = "npm start"
+modules = ["nodejs-20", "postgresql-16"]
 [nix]
 channel = "stable-24_05"
 
 [deployment]
 run = ["sh", "-c", "npm start"]
+
+[workflows]
+runButton = "Start Reality Check Server"
+
+[[workflows.workflow]]
+name = "Start Reality Check Server"
+author = 42214058
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm start"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
