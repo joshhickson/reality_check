@@ -3,11 +3,11 @@
 // Interactive tool for fine-tuning Reality Check board parameters
 
 const DEFAULT_RINGS = [
-  { label: "Career", cusps: 3, R: 120, color: "#ff6b6b" },
-  { label: "Health", cusps: 4, R: 100, color: "#feca57" },
-  { label: "Social", cusps: 5, R: 80, color: "#48dbfb" },
-  { label: "Personal", cusps: 6, R: 60, color: "#1dd1a1" },
-  { label: "BabelEvents", cusps: 2, R: 40, color: "#5f27cd" },
+  { label: "Career", cusps: 3, R: 127, color: "#ff6b6b" },
+  { label: "Health", cusps: 4, R: 137, color: "#feca57" },
+  { label: "Social", cusps: 5, R: 150, color: "#48dbfb" },
+  { label: "Personal", cusps: 6, R: 150, color: "#1dd1a1" },
+  { label: "BabelEvents", cusps: 2, R: 150, color: "#5f27cd" },
 ];
 
 let designerRings = JSON.parse(JSON.stringify(DEFAULT_RINGS));
@@ -29,6 +29,7 @@ let currentPoint = 0;
 let lastTickTime = 0;
 let animationId = null;
 let boardPoints = [];  // Will store all point positions and data
+let countdownInterval = null;
 
 // Generate hypocycloid points for designer
 function generateDesignerHypocycloid(R, cusps, steps) {
@@ -159,6 +160,10 @@ function animateHand(currentTime) {
   const deltaTime = currentTime - lastTickTime;
   
   if (handSettings.enabled && handSettings.tickInterval > 0) {
+    // Update countdown display
+    const timeUntilNextTick = handSettings.tickInterval - (deltaTime / 1000);
+    updateCountdownDisplay(Math.max(0, timeUntilNextTick));
+    
     // Check if it's time to move to next point
     if (deltaTime >= handSettings.tickInterval * 1000) {
       currentPoint = (currentPoint + 1) % handSettings.totalPoints;
@@ -176,6 +181,22 @@ function animateHand(currentTime) {
   animationId = requestAnimationFrame(animateHand);
 }
 
+function updateCountdownDisplay(timeRemaining) {
+  const countdownElement = document.getElementById("countdown-timer");
+  if (countdownElement) {
+    countdownElement.textContent = `Next tick in: ${timeRemaining.toFixed(1)}s`;
+    
+    // Color-code based on time remaining
+    if (timeRemaining < 3) {
+      countdownElement.style.color = "#ff6b6b";
+    } else if (timeRemaining < 5) {
+      countdownElement.style.color = "#feca57";
+    } else {
+      countdownElement.style.color = "#48dbfb";
+    }
+  }
+}
+
 function startHandAnimation() {
   if (animationId) {
     cancelAnimationFrame(animationId);
@@ -188,6 +209,13 @@ function stopHandAnimation() {
   if (animationId) {
     cancelAnimationFrame(animationId);
     animationId = null;
+  }
+  
+  // Reset countdown display
+  const countdownElement = document.getElementById("countdown-timer");
+  if (countdownElement) {
+    countdownElement.textContent = "Hand stopped";
+    countdownElement.style.color = "#888";
   }
 }
 
@@ -203,6 +231,9 @@ function setupDesignerControls() {
   handControlDiv.style.borderLeftColor = "#ffffff";
   handControlDiv.innerHTML = `
     <h4 style="margin: 0 0 10px 0; color: #ffffff;">⏱️ Ticking Hand</h4>
+    <div id="countdown-timer" style="font-size: 14px; font-weight: bold; margin-bottom: 10px; padding: 5px; background: rgba(0,0,0,0.3); border-radius: 3px; text-align: center;">
+      Next tick in: ${handSettings.tickInterval.toFixed(1)}s
+    </div>
     <label>
       <input type="checkbox" ${handSettings.enabled ? 'checked' : ''} 
              onchange="updateHandParameter('enabled', this.checked)"> Enable Hand
