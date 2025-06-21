@@ -3,9 +3,8 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
-const { Pool } = require('pg');
-const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
+const Database = require('@replit/database');
 
 const app = express();
 const server = http.createServer(app);
@@ -20,64 +19,63 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// PostgreSQL connection
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+// Replit Key-Value Store
+const db = new Database();
 
-// Initialize database tables
+// Initialize database with default cards
 async function initDatabase() {
   try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS games (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        name VARCHAR(255) NOT NULL,
-        status VARCHAR(50) DEFAULT 'waiting',
-        max_players INTEGER DEFAULT 5,
-        current_round INTEGER DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS players (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        game_id UUID REFERENCES games(id) ON DELETE CASCADE,
-        username VARCHAR(100) NOT NULL,
-        socket_id VARCHAR(255),
-        character_data JSONB,
-        stats JSONB DEFAULT '{"money": 5000, "mental_health": 5, "sin": 0, "virtue": 0, "public_eye": 0}',
-        position INTEGER DEFAULT 0,
-        is_alive BOOLEAN DEFAULT true,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS game_events (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        game_id UUID REFERENCES games(id) ON DELETE CASCADE,
-        player_id UUID REFERENCES players(id) ON DELETE CASCADE,
-        event_type VARCHAR(100) NOT NULL,
-        event_data JSONB,
-        round_number INTEGER,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS cards (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        type VARCHAR(50) NOT NULL,
-        title VARCHAR(255) NOT NULL,
-        description TEXT NOT NULL,
-        effects JSONB,
-        ring_type VARCHAR(50)
-      )
-    `);
-
-    console.log('Database initialized successfully');
+    // Initialize default cards if they don't exist
+    const cardsExist = await db.get('cards_initialized');
+    if (!cardsExist) {
+      const defaultCards = [
+        {
+          id: uuidv4(),
+          type: 'sin',
+          title: 'Easy Money',
+          description: 'Accept a suspicious cash job. +$2000, +2 Sin',
+          effects: { money: 2000, sin: 2 },
+          ring_type: 'career'
+        },
+        {
+          id: uuidv4(),
+          type: 'virtue',
+          title: 'Help a Neighbor',
+          description: 'Spend your weekend helping someone move. -$100, +2 Virtue',
+          effects: { money: -100, virtue: 2 },
+          ring_type: 'social'
+        },
+        {
+          id: uuidv4(),
+          type: 'chaos',
+          title: 'Unexpected Vet Bill',
+          description: 'Your pet needs emergency surgery. -$3000, +1 Mental Health if you pay',
+          effects: { money: -3000, mental_health: 1 },
+          ring_type: 'personal'
+        },
+        {
+          id: uuidv4(),
+          type: 'chaos',
+          title: 'Divorce Papers',
+          description: 'Your spouse files for divorce. -$5000, -2 Mental Health, +3 Public Eye',
+          effects: { money: -5000, mental_health: -2, public_eye: 3 },
+          ring_type: 'personal'
+        },
+        {
+          id: uuidv4(),
+          type: 'chaos',
+          title: 'Medical Mystery',
+          description: 'Roll for diagnosis. 1-2: Cancer, 3-4: Chronic illness, 5-6: False alarm',
+          effects: { mental_health: -1 },
+          ring_type: 'health'
+        }
+      ];
+      
+      await db.set('default_cards', defaultCards);
+      await db.set('cards_initialized', true);
+    }
+    
+    console.log('Replit database initialized successfully');
   } catch (err) {
     console.error('Database initialization error:', err);
   }
@@ -93,13 +91,21 @@ io.on('connection', (socket) => {
   socket.on('create_game', async (data) => {
     try {
       const gameId = uuidv4();
-      const result = await pool.query(
-        'INSERT INTO games (id, name, max_players) VALUES ($1, $2, $3) RETURNING *',
-        [gameId, data.gameName, data.maxPlayers || 5]
-      );
+      const game = {
+        id: gameId,
+        name: data.gameName,
+        status: 'waiting',
+        max_players: data.maxPlayers || 5,
+        current_round: 0,
+        created_at: new Date().toISOString(),
+        players: []
+      };
 
-      const game = result.rows[0];
-      gameStates.set(gameId, {
+      // Store game in database
+      await db.set(`game:${gameId}`, game);
+      
+      // Store game state
+      const gameState = {
         id: gameId,
         players: [],
         currentRound: 0,
@@ -111,11 +117,15 @@ io.on('connection', (socket) => {
           personal: { frequency: 10, lastTriggered: 0 },
           babel: { frequency: 12, lastTriggered: 0 }
         }
-      });
+      };
+      
+      gameStates.set(gameId, gameState);
+      await db.set(`gamestate:${gameId}`, gameState);
 
       socket.join(gameId);
       socket.emit('game_created', { gameId, game });
     } catch (err) {
+      console.error('Create game error:', err);
       socket.emit('error', { message: 'Failed to create game' });
     }
   });
@@ -124,16 +134,14 @@ io.on('connection', (socket) => {
     try {
       const { gameId, username } = data;
       
-      const gameResult = await pool.query('SELECT * FROM games WHERE id = $1', [gameId]);
-      if (gameResult.rows.length === 0) {
+      // Get game from database
+      const game = await db.get(`game:${gameId}`);
+      if (!game) {
         socket.emit('error', { message: 'Game not found' });
         return;
       }
 
-      const playersResult = await pool.query('SELECT COUNT(*) FROM players WHERE game_id = $1', [gameId]);
-      const playerCount = parseInt(playersResult.rows[0].count);
-      
-      if (playerCount >= gameResult.rows[0].max_players) {
+      if (game.players.length >= game.max_players) {
         socket.emit('error', { message: 'Game is full' });
         return;
       }
@@ -141,23 +149,35 @@ io.on('connection', (socket) => {
       // Generate random character
       const character = generateRandomCharacter();
       
-      const playerResult = await pool.query(
-        'INSERT INTO players (game_id, username, socket_id, character_data) VALUES ($1, $2, $3, $4) RETURNING *',
-        [gameId, username, socket.id, JSON.stringify(character)]
-      );
+      const player = {
+        id: uuidv4(),
+        game_id: gameId,
+        username: username,
+        socket_id: socket.id,
+        character_data: character,
+        stats: { money: character.background.money, mental_health: 5, sin: 0, virtue: 0, public_eye: 0 },
+        position: 0,
+        is_alive: true,
+        created_at: new Date().toISOString()
+      };
 
-      const player = playerResult.rows[0];
+      // Add player to game
+      game.players.push(player);
+      await db.set(`game:${gameId}`, game);
+      await db.set(`player:${player.id}`, player);
       
       socket.join(gameId);
       
       const gameState = gameStates.get(gameId);
       if (gameState) {
         gameState.players.push(player);
+        await db.set(`gamestate:${gameId}`, gameState);
       }
 
-      io.to(gameId).emit('player_joined', { player, playerCount: playerCount + 1 });
+      io.to(gameId).emit('player_joined', { player, playerCount: game.players.length });
       socket.emit('character_assigned', { character });
     } catch (err) {
+      console.error('Join game error:', err);
       socket.emit('error', { message: 'Failed to join game' });
     }
   });
@@ -166,16 +186,23 @@ io.on('connection', (socket) => {
     try {
       const { gameId } = data;
       
-      await pool.query('UPDATE games SET status = $1 WHERE id = $2', ['active', gameId]);
+      // Update game status
+      const game = await db.get(`game:${gameId}`);
+      if (game) {
+        game.status = 'active';
+        await db.set(`game:${gameId}`, game);
+      }
       
       const gameState = gameStates.get(gameId);
       if (gameState) {
         gameState.currentRound = 1;
         gameState.currentPlayer = 0;
+        await db.set(`gamestate:${gameId}`, gameState);
       }
 
       io.to(gameId).emit('game_started', { gameState });
     } catch (err) {
+      console.error('Start game error:', err);
       socket.emit('error', { message: 'Failed to start game' });
     }
   });
@@ -188,16 +215,29 @@ io.on('connection', (socket) => {
       if (!gameState) return;
 
       // Update player position
-      await pool.query(
-        'UPDATE players SET position = position + $1 WHERE id = $2',
-        [rollResult, playerId]
-      );
+      const player = await db.get(`player:${playerId}`);
+      if (player) {
+        player.position += rollResult;
+        await db.set(`player:${playerId}`, player);
+      }
 
       // Determine which ring events trigger
       const triggeredRings = checkRingTriggers(gameState, gameState.currentRound);
       
       // Generate appropriate cards based on position and triggered rings
       const cards = await generateCardsForTurn(playerId, triggeredRings);
+
+      // Log the event
+      const gameEvent = {
+        id: uuidv4(),
+        game_id: gameId,
+        player_id: playerId,
+        event_type: 'player_turn',
+        event_data: { rollResult, triggeredRings, cards },
+        round_number: gameState.currentRound,
+        created_at: new Date().toISOString()
+      };
+      await db.set(`event:${gameEvent.id}`, gameEvent);
 
       io.to(gameId).emit('turn_result', {
         playerId,
@@ -211,7 +251,10 @@ io.on('connection', (socket) => {
       if (gameState.currentPlayer === 0) {
         gameState.currentRound++;
       }
+      
+      await db.set(`gamestate:${gameId}`, gameState);
     } catch (err) {
+      console.error('Turn processing error:', err);
       socket.emit('error', { message: 'Turn processing failed' });
     }
   });
@@ -285,10 +328,33 @@ async function generateCardsForTurn(playerId, triggeredRings) {
 // API Routes
 app.get('/api/games', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM games WHERE status = $1', ['waiting']);
-    res.json(result.rows);
+    const gameKeys = await db.list('game:');
+    const games = [];
+    
+    for (const key of gameKeys) {
+      const game = await db.get(key);
+      if (game && game.status === 'waiting') {
+        games.push(game);
+      }
+    }
+    
+    res.json(games);
   } catch (err) {
+    console.error('Fetch games error:', err);
     res.status(500).json({ error: 'Failed to fetch games' });
+  }
+});
+
+app.get('/api/game/:gameId', async (req, res) => {
+  try {
+    const game = await db.get(`game:${req.params.gameId}`);
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
+    }
+    res.json(game);
+  } catch (err) {
+    console.error('Fetch game error:', err);
+    res.status(500).json({ error: 'Failed to fetch game' });
   }
 });
 
