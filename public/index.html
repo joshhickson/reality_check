@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reality Check - The Game</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .game-board {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .board-container {
+            flex: 2;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .game-controls {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        #board {
+            width: 100%;
+            height: 600px;
+            border-radius: 10px;
+            background: #1a1a2e;
+        }
+        .player-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .stat {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 5px;
+        }
+        button {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff5252;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .sin-card {
+            border-left: 5px solid #ff6b6b;
+        }
+        .virtue-card {
+            border-left: 5px solid #1dd1a1;
+        }
+        .ring-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .ring-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        .ring-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        #gameSetup {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Reality Check: The Game</h1>
+        <p>The only board game where your dog might get TikTok famous, your crypto side hustle triggers an IRS raid, and you still have to split rent with your emotionally unavailable ex.</p>
+        
+        <div id="gameSetup">
+            <h2>Game Setup</h2>
+            <div>
+                <input type="text" id="usernameInput" placeholder="Enter your username" />
+                <input type="text" id="gameNameInput" placeholder="Game name (for creating)" />
+            </div>
+            <div>
+                <button onclick="createGame()">Create New Game</button>
+                <button onclick="joinGame()">Join Game</button>
+            </div>
+            <div id="gamesList"></div>
+        </div>
+
+        <div id="gameArea" style="display: none;">
+            <div class="game-board">
+                <div class="board-container">
+                    <h3>The Chaos Circle</h3>
+                    <div class="ring-legend">
+                        <div class="ring-item">
+                            <div class="ring-color" style="background: #ff6b6b;"></div>
+                            Career (Red)
+                        </div>
+                        <div class="ring-item">
+                            <div class="ring-color" style="background: #feca57;"></div>
+                            Health (Gold)
+                        </div>
+                        <div class="ring-item">
+                            <div class="ring-color" style="background: #48dbfb;"></div>
+                            Social (Cyan)
+                        </div>
+                        <div class="ring-item">
+                            <div class="ring-color" style="background: #1dd1a1;"></div>
+                            Personal (Green)
+                        </div>
+                        <div class="ring-item">
+                            <div class="ring-color" style="background: #5f27cd;"></div>
+                            Babel Events (Purple)
+                        </div>
+                    </div>
+                    <svg id="board" width="600" height="600" viewBox="-300 -300 600 600"></svg>
+                </div>
+                
+                <div class="game-controls">
+                    <h3>Game Status</h3>
+                    <div id="gameStatus">Waiting for players...</div>
+                    
+                    <div id="playerInfo" class="player-card" style="display: none;">
+                        <h4>Your Character</h4>
+                        <div id="characterInfo"></div>
+                        <div class="stats-grid">
+                            <div class="stat">💰 Money: <span id="money">5000</span></div>
+                            <div class="stat">🧠 Mental: <span id="mental">5</span></div>
+                            <div class="stat">☠️ Sin: <span id="sin">0</span></div>
+                            <div class="stat">✝️ Virtue: <span id="virtue">0</span></div>
+                        </div>
+                    </div>
+                    
+                    <div id="turnControls" style="display: none;">
+                        <button id="rollButton" onclick="rollDice()">Roll Dice</button>
+                        <div id="rollResult"></div>
+                    </div>
+                    
+                    <div id="cardsArea"></div>
+                    
+                    <div id="playersArea">
+                        <h4>Players</h4>
+                        <div id="playersList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+    <script src="board-render.js"></script>
+</body>
+</html>
