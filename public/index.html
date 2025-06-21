@@ -147,6 +147,64 @@
             padding: 3px;
             font-size: 12px;
         }
+        
+        /* Console Styles */
+        .console-window {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 350px;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #444;
+            border-radius: 8px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .console-header {
+            background: #333;
+            padding: 8px 12px;
+            border-radius: 8px 8px 0 0;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .console-close {
+            cursor: pointer;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .console-content {
+            flex: 1;
+            padding: 8px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #00ff00;
+            line-height: 1.4;
+        }
+        
+        .console-info { color: #00ff00; }
+        .console-warning { color: #feca57; }
+        .console-error { color: #ff6b6b; }
+        .console-success { color: #1dd1a1; }
+        .console-card { color: #ff9800; }
+        .console-state { color: #9c88ff; }
+        .console-timer { color: #48dbfb; }
+        .console-event { color: #f0932b; }
+        .console-global { color: #eb4d4b; }
+        .console-math { color: #6c5ce7; }
+        .console-perf { color: #a29bfe; }
+        
+        .timestamp {
+            color: #666;
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
@@ -361,12 +419,44 @@
                 </div>
             </div>
         </div>
+
+        <!-- Console Window -->
+        <div id="consoleWindow" class="console-window" style="display: none;">
+            <div class="console-header">
+                <span>🔧 Game Console</span>
+                <span class="console-close" onclick="toggleConsole()">✕</span>
+            </div>
+            <div id="gameConsole" class="console-content">
+                <div class="console-info"><span class="timestamp">[00:00:00]</span> Game console initialized</div>
+            </div>
+        </div>
+
+        <!-- Console Toggle Button -->
+        <button onclick="toggleConsole()" style="position: fixed; bottom: 20px; right: 20px; z-index: 999; background: #333; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 16px;">
+            🔧
+        </button>
     </div>
 
     <script src="game.js"></script>
     <script src="board-render.js"></script>
     <script src="board-designer.js"></script>
     <script>
+        // Console window management
+        function addToConsole(message, type = 'info') {
+            const console = document.getElementById('gameConsole');
+            const timestamp = new Date().toLocaleTimeString();
+            const messageEl = document.createElement('div');
+            messageEl.className = `console-${type}`;
+            messageEl.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
+            console.appendChild(messageEl);
+            console.scrollTop = console.scrollHeight;
+            
+            // Keep only last 100 messages
+            while (console.children.length > 100) {
+                console.removeChild(console.firstChild);
+            }
+        }
+
         // Collapsible section management
         function toggleSection(contentId) {
             const content = document.getElementById(contentId);
@@ -382,35 +472,35 @@
         }
 
         // Card System Testing Functions
-        let cardData = { sin: [], virtue: [] };
+        let testCardData = { sin: [], virtue: [] };
         
         async function loadCardData() {
             try {
                 // Simulate loading from CSV parser
-                cardData.sin = [
+                testCardData.sin = [
                     { id: 1, title: "Greed", effect: "Gain $500, +1 Sin", category: "Financial" },
                     { id: 2, title: "Envy", effect: "Target player loses $200, +1 Sin", category: "Social" },
                     { id: 3, title: "Wrath", effect: "All players lose 1 Mental Health, +2 Sin", category: "Mental" }
                 ];
-                cardData.virtue = [
+                testCardData.virtue = [
                     { id: 1, title: "Charity", effect: "Give $300 to another player, +1 Virtue", category: "Financial" },
                     { id: 2, title: "Patience", effect: "Gain 2 Mental Health, +1 Virtue", category: "Mental" },
                     { id: 3, title: "Kindness", effect: "All players gain $100, +1 Virtue", category: "Social" }
                 ];
                 
                 document.getElementById('deckInfo').innerHTML = 
-                    `Loaded: ${cardData.sin.length} Sin cards, ${cardData.virtue.length} Virtue cards`;
-                document.getElementById('cardEffects').innerHTML = 'Card data loaded successfully!';
+                    `Loaded: ${testCardData.sin.length} Sin cards, ${testCardData.virtue.length} Virtue cards`;
+                addToConsole(`Card data loaded: ${testCardData.sin.length} Sin, ${testCardData.virtue.length} Virtue cards`, 'success');
             } catch (error) {
-                document.getElementById('cardEffects').innerHTML = `Error loading cards: ${error.message}`;
+                addToConsole(`Error loading cards: ${error.message}`, 'error');
             }
         }
 
         function shuffleDeck() {
             // Shuffle both decks
-            cardData.sin.sort(() => Math.random() - 0.5);
-            cardData.virtue.sort(() => Math.random() - 0.5);
-            document.getElementById('cardEffects').innerHTML = 'Decks shuffled!';
+            testCardData.sin.sort(() => Math.random() - 0.5);
+            testCardData.virtue.sort(() => Math.random() - 0.5);
+            addToConsole('Card decks shuffled successfully', 'info');
         }
 
         function drawCard(type) {
@@ -419,8 +509,8 @@
                 type = Math.random() < 0.5 ? 'sin' : 'virtue';
             }
             
-            if (cardData[type] && cardData[type].length > 0) {
-                card = cardData[type][Math.floor(Math.random() * cardData[type].length)];
+            if (testCardData[type] && testCardData[type].length > 0) {
+                card = testCardData[type][Math.floor(Math.random() * testCardData[type].length)];
                 
                 document.getElementById('drawnCard').innerHTML = `
                     <div class="card ${type}-card">
@@ -430,10 +520,9 @@
                     </div>
                 `;
                 
-                document.getElementById('cardEffects').innerHTML = 
-                    `Drew ${type.toUpperCase()} card: ${card.title}\n${card.effect}`;
+                addToConsole(`Drew ${type.toUpperCase()} card: ${card.title} - ${card.effect}`, 'card');
             } else {
-                document.getElementById('cardEffects').innerHTML = 'No cards available. Load card data first.';
+                addToConsole('No cards available. Load card data first.', 'warning');
             }
         }
 
@@ -468,72 +557,80 @@
         }
 
         // Game Engine Testing Functions
-        let gameState = 'SETUP';
-        let stateHistory = [];
-        let gameTimer = null;
-        let timerSeconds = 30 * 60; // 30 minutes
-        let timerSpeed = 1;
+        let testGameState = 'SETUP';
+        let testStateHistory = [];
+        let testGameTimer = null;
+        let testTimerSeconds = 30 * 60; // 30 minutes
+        let testTimerSpeed = 1;
 
         function advanceState() {
             const states = ['SETUP', 'WAITING', 'TURN_START', 'ROLLING', 'MOVING', 'TILE_RESOLVE', 'TURN_END'];
-            const currentIndex = states.indexOf(gameState);
-            gameState = states[(currentIndex + 1) % states.length];
+            const currentIndex = states.indexOf(testGameState);
+            testGameState = states[(currentIndex + 1) % states.length];
             
-            stateHistory.push(`${new Date().toLocaleTimeString()}: ${gameState}`);
-            document.getElementById('currentState').innerHTML = `State: ${gameState}`;
+            testStateHistory.push(`${new Date().toLocaleTimeString()}: ${testGameState}`);
+            document.getElementById('currentState').innerHTML = `State: ${testGameState}`;
             
             const historyEl = document.getElementById('stateHistory');
-            historyEl.innerHTML = stateHistory.slice(-10).join('\n');
+            historyEl.innerHTML = testStateHistory.slice(-10).join('\n');
             historyEl.scrollTop = historyEl.scrollHeight;
+            
+            addToConsole(`Game state advanced to: ${testGameState}`, 'state');
         }
 
         function resetGameState() {
-            gameState = 'SETUP';
-            stateHistory = [];
-            document.getElementById('currentState').innerHTML = `State: ${gameState}`;
+            testGameState = 'SETUP';
+            testStateHistory = [];
+            document.getElementById('currentState').innerHTML = `State: ${testGameState}`;
             document.getElementById('stateHistory').innerHTML = '';
+            addToConsole('Game state reset to SETUP', 'state');
         }
 
         function startTimer() {
-            if (gameTimer) clearInterval(gameTimer);
-            gameTimer = setInterval(() => {
-                timerSeconds -= timerSpeed;
-                if (timerSeconds <= 0) {
-                    timerSeconds = 0;
-                    clearInterval(gameTimer);
+            if (testGameTimer) clearInterval(testGameTimer);
+            testGameTimer = setInterval(() => {
+                testTimerSeconds -= testTimerSpeed;
+                if (testTimerSeconds <= 0) {
+                    testTimerSeconds = 0;
+                    clearInterval(testGameTimer);
                     scheduleEvent('Timer expired - auto-resolve turn');
+                    addToConsole('Timer expired! Auto-resolving turn', 'warning');
                 }
                 updateTimerDisplay();
-            }, 1000 / timerSpeed);
+            }, 1000 / testTimerSpeed);
+            addToConsole(`Timer started at ${testTimerSpeed}x speed`, 'timer');
         }
 
         function pauseTimer() {
-            if (gameTimer) {
-                clearInterval(gameTimer);
-                gameTimer = null;
+            if (testGameTimer) {
+                clearInterval(testGameTimer);
+                testGameTimer = null;
+                addToConsole('Timer paused', 'timer');
             }
         }
 
         function resetTimer() {
             pauseTimer();
-            timerSeconds = 30 * 60;
+            testTimerSeconds = 30 * 60;
             updateTimerDisplay();
+            addToConsole('Timer reset to 30:00', 'timer');
         }
 
         function updateTimerDisplay() {
-            const minutes = Math.floor(timerSeconds / 60);
-            const seconds = timerSeconds % 60;
+            const minutes = Math.floor(testTimerSeconds / 60);
+            const seconds = testTimerSeconds % 60;
             document.getElementById('timerDisplay').innerHTML = 
                 `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
         function updateTimerSpeed() {
-            timerSpeed = parseFloat(document.getElementById('timerSpeed').value);
-            document.getElementById('speedDisplay').innerHTML = `${timerSpeed}x`;
+            testTimerSpeed = parseFloat(document.getElementById('timerSpeed').value);
+            document.getElementById('speedDisplay').innerHTML = `${testTimerSpeed}x`;
+            addToConsole(`Timer speed changed to ${testTimerSpeed}x`, 'timer');
         }
 
         // Event Scheduler Functions
-        let eventQueue = [];
+        let testEventQueue = [];
 
         function scheduleEvent(eventText = null) {
             const events = [
@@ -547,18 +644,20 @@
             const event = eventText || events[Math.floor(Math.random() * events.length)];
             const delay = Math.floor(Math.random() * 5) + 1;
             
-            eventQueue.push({
+            testEventQueue.push({
                 event: event,
                 time: new Date().toLocaleTimeString(),
                 delay: delay
             });
             
             updateEventQueue();
+            addToConsole(`Event scheduled: ${event} (${delay}s delay)`, 'event');
             
             // Simulate event processing
             setTimeout(() => {
-                eventQueue = eventQueue.filter(e => e.event !== event);
+                testEventQueue = testEventQueue.filter(e => e.event !== event);
                 updateEventQueue();
+                addToConsole(`Event processed: ${event}`, 'event');
             }, delay * 1000);
         }
 
@@ -570,12 +669,14 @@
                 'Economic Boom: All players gain $1000'
             ];
             
-            scheduleEvent(globalEvents[Math.floor(Math.random() * globalEvents.length)]);
+            const selectedEvent = globalEvents[Math.floor(Math.random() * globalEvents.length)];
+            scheduleEvent(selectedEvent);
+            addToConsole(`Global event triggered: ${selectedEvent}`, 'global');
         }
 
         function updateEventQueue() {
             const queueEl = document.getElementById('eventQueue');
-            queueEl.innerHTML = eventQueue.map(e => 
+            queueEl.innerHTML = testEventQueue.map(e => 
                 `[${e.time}] ${e.event} (${e.delay}s)`
             ).join('\n');
         }
@@ -594,6 +695,7 @@
             }
             
             document.getElementById('coordinateOutput').innerHTML = coordinates.join('\n');
+            addToConsole(`Generated ${cusps} coordinates for radius ${radius}`, 'math');
         }
 
         function testCollisions() {
@@ -606,6 +708,7 @@
             ];
             
             document.getElementById('collisionResults').innerHTML = results.join('\n');
+            addToConsole('Collision detection test completed', 'math');
         }
 
         function testRingOverlaps() {
@@ -618,21 +721,36 @@
             ];
             
             document.getElementById('collisionResults').innerHTML = results.join('\n');
+            addToConsole('Ring overlap test completed', 'math');
         }
 
         function benchmarkRendering() {
             const start = performance.now();
+            addToConsole('Starting rendering benchmark...', 'perf');
             // Simulate rendering benchmark
             setTimeout(() => {
                 const end = performance.now();
-                document.getElementById('performanceMetrics').innerHTML = 
-                    `Rendering benchmark: ${(end - start).toFixed(2)}ms\nFPS: 60\nPoints rendered: 47\nMemory usage: 2.3MB`;
+                const result = `Rendering benchmark: ${(end - start).toFixed(2)}ms\nFPS: 60\nPoints rendered: 47\nMemory usage: 2.3MB`;
+                document.getElementById('performanceMetrics').innerHTML = result;
+                addToConsole(`Rendering benchmark completed: ${(end - start).toFixed(2)}ms`, 'perf');
             }, 100);
         }
 
         function memoryUsageTest() {
-            document.getElementById('performanceMetrics').innerHTML = 
-                `Memory usage test:\nHeap used: ${Math.floor(Math.random() * 10) + 5}MB\nPoints in memory: 47\nEvent queue size: ${eventQueue.length}\nState history: ${stateHistory.length} entries`;
+            const result = `Memory usage test:\nHeap used: ${Math.floor(Math.random() * 10) + 5}MB\nPoints in memory: 47\nEvent queue size: ${testEventQueue.length}\nState history: ${testStateHistory.length} entries`;
+            document.getElementById('performanceMetrics').innerHTML = result;
+            addToConsole(`Memory usage: ${Math.floor(Math.random() * 10) + 5}MB heap, ${testEventQueue.length} events queued`, 'perf');
+        }
+
+        // Console window management
+        function toggleConsole() {
+            const consoleWindow = document.getElementById('consoleWindow');
+            if (consoleWindow.style.display === 'none') {
+                consoleWindow.style.display = 'flex';
+                addToConsole('Console window opened', 'info');
+            } else {
+                consoleWindow.style.display = 'none';
+            }
         }
 
         // Initialize sections as collapsed except board designer
@@ -641,6 +759,12 @@
             toggleSection('skinSystemContent');
             toggleSection('gameEngineContent');
             toggleSection('mathTestingContent');
+            
+            // Auto-load card data on startup
+            loadCardData();
+            generateTestCoordinates();
+            
+            addToConsole('Reality Check testing environment initialized', 'success');
         });
     </script>
 </body>
