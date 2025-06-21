@@ -1,0 +1,13 @@
+<body>
+  <svg id="board" width="600" height="600" viewBox="-300 -300 600 600"></svg>
+  <form id="hypocycloid-controls" style="margin-bottom:10px;">
+    <label>R: <input type="range" id="param-R" min="20" max="200" value="120"> <span id="val-R">120</span></label>
+    <label>r: <input type="range" id="param-r" min="5" max="100" value="40"> <span id="val-r">40</span></label>
+    <label>d: <input type="range" id="param-d" min="1" max="120" value="60"> <span id="val-d">60</span></label>
+    <label>steps: <input type="range" id="param-steps" min="100" max="2000" value="800"> <span id="val-steps">800</span></label>
+    <label>color: <input type="color" id="param-color" value="#48dbfb"></label>
+  </form>
+  <div id="three-container" style="width:600px; height:600px;"></div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script src="reality_check_board_render.js"></script>
+</body>
