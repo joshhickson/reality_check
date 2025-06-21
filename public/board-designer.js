@@ -16,16 +16,19 @@ const DESIGNER_STEPS = 360;
 
 // Rotating hand parameters
 let handSettings = {
-  rotationSpeed: 2,    // seconds per full rotation
+  tickInterval: 20,    // seconds between point movements
   handLength: 140,     // length of the hand
   handColor: "#ffffff",
   handWidth: 3,
-  enabled: true
+  enabled: true,
+  totalPoints: 50      // total points on the board (10 per ring × 5 rings)
 };
 
 let handRotation = 0;
-let lastTime = 0;
+let currentPoint = 0;
+let lastTickTime = 0;
 let animationId = null;
+let boardPoints = [];  // Will store all point positions and data
 
 // Generate hypocycloid points for designer
 function generateDesignerHypocycloid(R, cusps, steps) {
@@ -55,6 +58,7 @@ function drawDesignerBoard() {
   if (!svg) return;
   
   svg.innerHTML = "";
+  boardPoints = []; // Reset board points array
 
   designerRings.forEach((ring, ringIndex) => {
     const pts = generateDesignerHypocycloid(ring.R, ring.cusps, DESIGNER_STEPS);
@@ -69,18 +73,32 @@ function drawDesignerBoard() {
     });
     svg.appendChild(path);
 
-    // Add tile markers
+    // Add tile markers and store point data
     for (let i = 0; i < DESIGNER_SEGMENTS; i++) {
       const idx = Math.floor((pts.length / DESIGNER_SEGMENTS) * i);
       const [x, y] = pts[idx];
       
+      // Store point data for hand targeting
+      const pointData = {
+        x: x,
+        y: y,
+        ring: ring.label,
+        ringIndex: ringIndex,
+        pointIndex: i,
+        globalIndex: boardPoints.length,
+        color: ring.color,
+        angle: Math.atan2(y, x) * 180 / Math.PI
+      };
+      boardPoints.push(pointData);
+      
       const tile = createDesignerSVGElement("circle", {
         cx: x,
         cy: y,
-        r: 3,
-        fill: ring.color,
+        r: currentPoint === pointData.globalIndex ? 5 : 3,
+        fill: currentPoint === pointData.globalIndex ? "#ffff00" : ring.color,
         stroke: "#fff",
-        "stroke-width": 0.5
+        "stroke-width": currentPoint === pointData.globalIndex ? 2 : 0.5,
+        "data-point-index": pointData.globalIndex
       });
       svg.appendChild(tile);
     }
@@ -106,9 +124,11 @@ function drawDesignerBoard() {
 }
 
 function drawRotatingHand(svg) {
-  const angle = handRotation * Math.PI / 180;
-  const endX = Math.cos(angle - Math.PI/2) * handSettings.handLength;
-  const endY = Math.sin(angle - Math.PI/2) * handSettings.handLength;
+  if (boardPoints.length === 0) return;
+  
+  const targetPoint = boardPoints[currentPoint];
+  const endX = targetPoint.x;
+  const endY = targetPoint.y;
   
   // Hand line
   const handLine = createDesignerSVGElement("line", {
@@ -126,26 +146,31 @@ function drawRotatingHand(svg) {
   const handTip = createDesignerSVGElement("circle", {
     cx: endX,
     cy: endY,
-    r: 4,
+    r: 6,
     fill: handSettings.handColor,
     stroke: "#000",
-    "stroke-width": 1
+    "stroke-width": 2
   });
   svg.appendChild(handTip);
 }
 
 function animateHand(currentTime) {
-  if (!lastTime) lastTime = currentTime;
-  const deltaTime = currentTime - lastTime;
-  lastTime = currentTime;
+  if (!lastTickTime) lastTickTime = currentTime;
+  const deltaTime = currentTime - lastTickTime;
   
-  if (handSettings.enabled && handSettings.rotationSpeed > 0) {
-    // Calculate rotation increment based on speed (degrees per millisecond)
-    const degreesPerSecond = 360 / handSettings.rotationSpeed;
-    const increment = (degreesPerSecond * deltaTime) / 1000;
-    
-    handRotation = (handRotation + increment) % 360;
-    drawDesignerBoard();
+  if (handSettings.enabled && handSettings.tickInterval > 0) {
+    // Check if it's time to move to next point
+    if (deltaTime >= handSettings.tickInterval * 1000) {
+      currentPoint = (currentPoint + 1) % handSettings.totalPoints;
+      lastTickTime = currentTime;
+      drawDesignerBoard();
+      
+      // Trigger point landed event
+      if (boardPoints[currentPoint]) {
+        console.log(`Hand landed on point ${currentPoint}:`, boardPoints[currentPoint]);
+        onHandLandedOnPoint(boardPoints[currentPoint]);
+      }
+    }
   }
   
   animationId = requestAnimationFrame(animateHand);
@@ -177,15 +202,20 @@ function setupDesignerControls() {
   handControlDiv.className = "ring-control";
   handControlDiv.style.borderLeftColor = "#ffffff";
   handControlDiv.innerHTML = `
-    <h4 style="margin: 0 0 10px 0; color: #ffffff;">⏱️ Rotating Hand</h4>
+    <h4 style="margin: 0 0 10px 0; color: #ffffff;">⏱️ Ticking Hand</h4>
     <label>
       <input type="checkbox" ${handSettings.enabled ? 'checked' : ''} 
              onchange="updateHandParameter('enabled', this.checked)"> Enable Hand
     </label>
     <label>
-      Speed: <span id="hand-speed-val">${handSettings.rotationSpeed}s</span>
-      <input type="range" min="0.5" max="10" step="0.1" value="${handSettings.rotationSpeed}" 
-             oninput="updateHandParameter('rotationSpeed', parseFloat(this.value)); document.getElementById('hand-speed-val').textContent = this.value + 's';">
+      Tick Interval: <span id="hand-tick-val">${handSettings.tickInterval}s</span>
+      <input type="range" min="1" max="60" step="1" value="${handSettings.tickInterval}" 
+             oninput="updateHandParameter('tickInterval', parseInt(this.value)); document.getElementById('hand-tick-val').textContent = this.value + 's';">
+    </label>
+    <label>
+      Current Point: <span id="current-point-val">${currentPoint}</span>
+      <input type="range" min="0" max="${handSettings.totalPoints - 1}" value="${currentPoint}" 
+             oninput="updateHandParameter('currentPoint', parseInt(this.value)); document.getElementById('current-point-val').textContent = this.value;">
     </label>
     <label>
       Length: <span id="hand-length-val">${handSettings.handLength}</span>
@@ -241,10 +271,15 @@ function updateRingParameter(ringIndex, parameter, value) {
 }
 
 function updateHandParameter(parameter, value) {
-  handSettings[parameter] = value;
+  if (parameter === 'currentPoint') {
+    currentPoint = value;
+  } else {
+    handSettings[parameter] = value;
+  }
   
   if (parameter === 'enabled') {
     if (value) {
+      lastTickTime = 0; // Reset timer
       startHandAnimation();
     } else {
       stopHandAnimation();
@@ -253,6 +288,30 @@ function updateHandParameter(parameter, value) {
   } else {
     drawDesignerBoard();
   }
+}
+
+// Event handler for when hand lands on a point
+function onHandLandedOnPoint(pointData) {
+  // This function will be called every time the hand moves to a new point
+  // You can add your game logic here
+  console.log(`🎯 Hand landed on ${pointData.ring} Ring, Point ${pointData.pointIndex}`);
+  
+  // Example: Flash the current point
+  const svg = document.getElementById("designerBoard");
+  const pointElement = svg.querySelector(`[data-point-index="${pointData.globalIndex}"]`);
+  if (pointElement) {
+    pointElement.style.transition = "r 0.2s ease";
+    pointElement.setAttribute("r", "8");
+    setTimeout(() => {
+      pointElement.setAttribute("r", "5");
+    }, 200);
+  }
+  
+  // Add your custom event logic here:
+  // - Trigger card draws
+  // - Update player stats
+  // - Display notifications
+  // - Save game state
 }
 
 function resetHandPosition() {
@@ -307,13 +366,14 @@ const RINGS = [
 ${designerRings.map(ring => `  { label: "${ring.label}", cusps: ${ring.cusps}, R: ${ring.R}, color: "${ring.color}" }`).join(',\n')}
 ];
 
-// Rotating Hand Configuration
+// Ticking Hand Configuration
 const HAND_SETTINGS = {
-  rotationSpeed: ${handSettings.rotationSpeed}, // seconds per full rotation
+  tickInterval: ${handSettings.tickInterval},   // seconds between point movements
   handLength: ${handSettings.handLength},       // length of the hand
   handColor: "${handSettings.handColor}",       // hand color
   handWidth: ${handSettings.handWidth},         // hand thickness
-  enabled: ${handSettings.enabled}              // hand animation enabled
+  enabled: ${handSettings.enabled},             // hand animation enabled
+  totalPoints: ${handSettings.totalPoints}      // total points on board
 };
 
 // Hypocycloid generation function
@@ -329,18 +389,24 @@ function generateHypocycloid(R, cusps, steps = 720) {
   return pts;
 }
 
-// Hand animation logic
-function animateHand(currentTime, handRotation, lastTime) {
-  if (!lastTime) lastTime = currentTime;
-  const deltaTime = currentTime - lastTime;
+// Hand tick logic
+function animateHand(currentTime, currentPoint, lastTickTime, boardPoints) {
+  if (!lastTickTime) lastTickTime = currentTime;
+  const deltaTime = currentTime - lastTickTime;
   
-  if (HAND_SETTINGS.enabled && HAND_SETTINGS.rotationSpeed > 0) {
-    const degreesPerSecond = 360 / HAND_SETTINGS.rotationSpeed;
-    const increment = (degreesPerSecond * deltaTime) / 1000;
-    handRotation = (handRotation + increment) % 360;
+  if (HAND_SETTINGS.enabled && HAND_SETTINGS.tickInterval > 0) {
+    if (deltaTime >= HAND_SETTINGS.tickInterval * 1000) {
+      currentPoint = (currentPoint + 1) % HAND_SETTINGS.totalPoints;
+      lastTickTime = currentTime;
+      
+      // Trigger event when hand lands on point
+      if (boardPoints[currentPoint]) {
+        onHandLandedOnPoint(boardPoints[currentPoint]);
+      }
+    }
   }
   
-  return { handRotation, lastTime: currentTime };
+  return { currentPoint, lastTickTime };
 }
 
 // Mathematical ratios for current configuration:
