@@ -3,9 +3,9 @@
 // Interactive tool for fine-tuning Reality Check board parameters
 
 const DEFAULT_RINGS = [
-  { label: "Career", cusps: 3, R: 120, color: "#ff6b6b" },
-  { label: "Health", cusps: 4, R: 130, color: "#feca57" },
-  { label: "Social", cusps: 5, R: 140, color: "#48dbfb" },
+  { label: "Career", cusps: 3, R: 142, color: "#ff6b6b" },
+  { label: "Health", cusps: 4, R: 99, color: "#feca57" },
+  { label: "Social", cusps: 5, R: 47, color: "#48dbfb" },
   { label: "Personal", cusps: 6, R: 150, color: "#1dd1a1" },
   { label: "BabelEvents", cusps: 2, R: 160, color: "#5f27cd" },
 ];
@@ -16,12 +16,12 @@ const DESIGNER_STEPS = 360;
 
 // Rotating hand parameters
 let handSettings = {
-  tickInterval: 20,    // seconds between movements
-  handLength: 140,     // length of the hand
+  tickInterval: 1,     // seconds between movements
+  handLength: 178,     // length of the hand
   handColor: "#ffffff",
-  handWidth: 3,
+  handWidth: 1,
   enabled: true,
-  rotationSpeed: 18    // degrees per tick (360/20 = full rotation in 20 ticks)
+  rotationSpeed: 1     // degrees per tick
 };
 
 let handRotation = 0;  // current angle in degrees
