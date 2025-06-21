@@ -31,6 +31,12 @@ let boardPoints = [];  // Will store all point positions and data
 let countdownInterval = null;
 let currentPoint = 0;  // current point index for hand tracking
 
+// Manual point placement system
+let manualPointMode = false;
+let pointEditMode = false;
+let customPointPositions = {}; // ring -> [custom positions]
+let draggedPoint = null;
+
 // Generate hypocycloid points for designer
 function generateDesignerHypocycloid(R, cusps, steps) {
   const r = R / cusps;
@@ -76,8 +82,9 @@ function drawDesignerBoard() {
 
     // Add tile markers and store point data
     for (let i = 0; i < DESIGNER_SEGMENTS; i++) {
-      const idx = Math.floor((pts.length / DESIGNER_SEGMENTS) * i);
-      const [x, y] = pts[idx];
+      const position = getPointPosition(ring, i);
+      const x = position.x;
+      const y = position.y;
       
       // Store point data for hand targeting
       const pointData = {
@@ -309,6 +316,24 @@ function setupDesignerControls() {
       <button onclick="resetHandPosition()" style="font-size: 12px; padding: 5px 10px;">Reset Position</button>
       <button onclick="simulatePlayerTurn()" style="font-size: 12px; padding: 5px 10px;">Simulate Turn</button>
     </div>
+    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px;">
+      <h4 style="margin: 0 0 10px 0; color: #ffffff;">🎯 Point Placement</h4>
+      <label>
+        <input type="checkbox" ${manualPointMode ? 'checked' : ''} 
+               onchange="toggleManualPointMode(this.checked)"> Manual Point Placement
+      </label>
+      <div id="manual-controls" style="display: ${manualPointMode ? 'block' : 'none'}; margin-top: 10px;">
+        <button onclick="enterPointEditMode()" style="font-size: 12px; padding: 5px 10px;">Edit Points</button>
+        <button onclick="resetToMathematicalPoints()" style="font-size: 12px; padding: 5px 10px;">Reset to Math</button>
+        <button onclick="randomizePoints()" style="font-size: 12px; padding: 5px 10px;">Randomize</button>
+      </div>
+    </div>
+    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px;">
+      <h4 style="margin: 0 0 10px 0; color: #ffffff;">📊 Math Tools</h4>
+      <button onclick="calculateProbabilities()" style="font-size: 12px; padding: 5px 10px;">Event Probabilities</button>
+      <button onclick="analyzePlayerPaths()" style="font-size: 12px; padding: 5px 10px;">Path Analysis</button>
+      <button onclick="showNetworkTheory()" style="font-size: 12px; padding: 5px 10px;">Network Effects</button>
+    </div>
   `;
   container.appendChild(handControlDiv);
   
@@ -510,6 +535,240 @@ function copyCode() {
     button.textContent = originalText;
     button.style.background = "#ff6b6b";
   }, 1000);
+}
+
+// Manual Point Placement Functions
+function toggleManualPointMode(enabled) {
+  manualPointMode = enabled;
+  const manualControls = document.getElementById("manual-controls");
+  if (manualControls) {
+    manualControls.style.display = enabled ? 'block' : 'none';
+  }
+  drawDesignerBoard();
+  setupDesignerControls();
+}
+
+function enterPointEditMode() {
+  pointEditMode = !pointEditMode;
+  if (pointEditMode) {
+    enablePointDragging();
+    alert("Point Edit Mode: Click and drag points to reposition them!");
+  } else {
+    disablePointDragging();
+  }
+  drawDesignerBoard();
+}
+
+function enablePointDragging() {
+  const svg = document.getElementById("designerBoard");
+  svg.style.cursor = "crosshair";
+  
+  svg.addEventListener('mousedown', startPointDrag);
+  svg.addEventListener('mousemove', dragPoint);
+  svg.addEventListener('mouseup', endPointDrag);
+}
+
+function disablePointDragging() {
+  const svg = document.getElementById("designerBoard");
+  svg.style.cursor = "default";
+  
+  svg.removeEventListener('mousedown', startPointDrag);
+  svg.removeEventListener('mousemove', dragPoint);
+  svg.removeEventListener('mouseup', endPointDrag);
+}
+
+function startPointDrag(event) {
+  if (!pointEditMode) return;
+  
+  const svg = document.getElementById("designerBoard");
+  const rect = svg.getBoundingClientRect();
+  const x = event.clientX - rect.left - rect.width/2;
+  const y = event.clientY - rect.top - rect.height/2;
+  
+  // Find nearest point
+  let nearestPoint = null;
+  let minDistance = Infinity;
+  
+  boardPoints.forEach(point => {
+    const distance = Math.sqrt((x - point.x)**2 + (y - point.y)**2);
+    if (distance < 20 && distance < minDistance) {
+      minDistance = distance;
+      nearestPoint = point;
+    }
+  });
+  
+  if (nearestPoint) {
+    draggedPoint = nearestPoint;
+    svg.style.cursor = "grabbing";
+  }
+}
+
+function dragPoint(event) {
+  if (!draggedPoint) return;
+  
+  const svg = document.getElementById("designerBoard");
+  const rect = svg.getBoundingClientRect();
+  const x = event.clientX - rect.left - rect.width/2;
+  const y = event.clientY - rect.top - rect.height/2;
+  
+  // Update point position
+  draggedPoint.x = x;
+  draggedPoint.y = y;
+  
+  // Store custom position
+  const ringLabel = draggedPoint.ring;
+  if (!customPointPositions[ringLabel]) {
+    customPointPositions[ringLabel] = {};
+  }
+  customPointPositions[ringLabel][draggedPoint.pointIndex] = {x, y};
+  
+  drawDesignerBoard();
+}
+
+function endPointDrag() {
+  if (draggedPoint) {
+    draggedPoint = null;
+    const svg = document.getElementById("designerBoard");
+    svg.style.cursor = "crosshair";
+  }
+}
+
+function resetToMathematicalPoints() {
+  customPointPositions = {};
+  drawDesignerBoard();
+}
+
+function randomizePoints() {
+  designerRings.forEach(ring => {
+    customPointPositions[ring.label] = {};
+    for (let i = 0; i < DESIGNER_SEGMENTS; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = ring.R * (0.7 + Math.random() * 0.6); // ±30% variance
+      customPointPositions[ring.label][i] = {
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius
+      };
+    }
+  });
+  drawDesignerBoard();
+}
+
+// Mathematical Analysis Tools
+function calculateProbabilities() {
+  const analysis = {
+    handLandingProbs: {},
+    alignmentPatterns: [],
+    chaosMetrics: {}
+  };
+  
+  // Calculate probability of landing on each ring
+  designerRings.forEach(ring => {
+    const ringPoints = boardPoints.filter(p => p.ring === ring.label);
+    analysis.handLandingProbs[ring.label] = (ringPoints.length / boardPoints.length * 100).toFixed(1) + '%';
+  });
+  
+  // Find alignment patterns (points that line up)
+  for (let angle = 0; angle < 360; angle += 5) {
+    const alignedPoints = boardPoints.filter(point => 
+      Math.abs(point.angle - angle) < 2 || Math.abs(point.angle - angle + 360) < 2
+    );
+    if (alignedPoints.length > 2) {
+      analysis.alignmentPatterns.push({
+        angle: angle,
+        points: alignedPoints.length,
+        rings: [...new Set(alignedPoints.map(p => p.ring))]
+      });
+    }
+  }
+  
+  console.log("📊 Probability Analysis:", analysis);
+  alert(`Ring Landing Probabilities:\n${Object.entries(analysis.handLandingProbs).map(([ring, prob]) => `${ring}: ${prob}`).join('\n')}\n\nAlignment Patterns: ${analysis.alignmentPatterns.length} found`);
+}
+
+function analyzePlayerPaths() {
+  // Simulate player movement patterns
+  const pathAnalysis = {
+    averageDistance: 0,
+    ringTransitions: {},
+    hotSpots: []
+  };
+  
+  // Calculate average distance between consecutive points
+  let totalDistance = 0;
+  for (let i = 0; i < boardPoints.length; i++) {
+    const current = boardPoints[i];
+    const next = boardPoints[(i + 1) % boardPoints.length];
+    totalDistance += Math.sqrt((next.x - current.x)**2 + (next.y - current.y)**2);
+  }
+  pathAnalysis.averageDistance = (totalDistance / boardPoints.length).toFixed(1);
+  
+  // Find points with high intersection potential
+  boardPoints.forEach(point => {
+    const nearbyPoints = boardPoints.filter(p => 
+      p !== point && Math.sqrt((p.x - point.x)**2 + (p.y - point.y)**2) < 30
+    );
+    if (nearbyPoints.length > 2) {
+      pathAnalysis.hotSpots.push({
+        point: point.globalIndex,
+        ring: point.ring,
+        nearby: nearbyPoints.length
+      });
+    }
+  });
+  
+  console.log("🗺️ Path Analysis:", pathAnalysis);
+  alert(`Average point distance: ${pathAnalysis.averageDistance}px\nHot spots found: ${pathAnalysis.hotSpots.length}`);
+}
+
+function showNetworkTheory() {
+  // Calculate network properties of the board
+  const networkMetrics = {
+    clustering: 0,
+    centrality: {},
+    smallWorld: false
+  };
+  
+  // Calculate clustering coefficient (how connected nearby points are)
+  let totalClustering = 0;
+  boardPoints.forEach(point => {
+    const neighbors = boardPoints.filter(p => 
+      Math.sqrt((p.x - point.x)**2 + (p.y - point.y)**2) < 50
+    );
+    
+    if (neighbors.length > 1) {
+      let connections = 0;
+      for (let i = 0; i < neighbors.length; i++) {
+        for (let j = i + 1; j < neighbors.length; j++) {
+          const dist = Math.sqrt(
+            (neighbors[i].x - neighbors[j].x)**2 + 
+            (neighbors[i].y - neighbors[j].y)**2
+          );
+          if (dist < 50) connections++;
+        }
+      }
+      const maxConnections = neighbors.length * (neighbors.length - 1) / 2;
+      totalClustering += connections / maxConnections;
+    }
+  });
+  
+  networkMetrics.clustering = (totalClustering / boardPoints.length).toFixed(3);
+  networkMetrics.smallWorld = networkMetrics.clustering > 0.1;
+  
+  console.log("🕸️ Network Theory Analysis:", networkMetrics);
+  alert(`Clustering coefficient: ${networkMetrics.clustering}\nSmall world network: ${networkMetrics.smallWorld ? 'Yes' : 'No'}`);
+}
+
+// Modified drawDesignerBoard to use custom points when available
+function getPointPosition(ring, pointIndex) {
+  if (manualPointMode && customPointPositions[ring.label] && customPointPositions[ring.label][pointIndex]) {
+    return customPointPositions[ring.label][pointIndex];
+  }
+  
+  // Default mathematical position
+  const pts = generateDesignerHypocycloid(ring.R, ring.cusps, DESIGNER_STEPS);
+  const idx = Math.floor((pts.length / DESIGNER_SEGMENTS) * pointIndex);
+  const [x, y] = pts[idx];
+  return { x, y };
 }
 
 // Initialize designer when page loads
