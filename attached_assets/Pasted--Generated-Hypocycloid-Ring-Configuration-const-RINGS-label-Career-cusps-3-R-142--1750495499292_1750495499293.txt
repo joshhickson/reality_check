@@ -1,0 +1,120 @@
+// Generated Hypocycloid Ring Configuration
+const RINGS = [
+  { label: "Career", cusps: 3, R: 142, color: "#ff6b6b" },
+  { label: "Health", cusps: 4, R: 99, color: "#feca57" },
+  { label: "Social", cusps: 5, R: 47, color: "#48dbfb" },
+  { label: "Personal", cusps: 6, R: 150, color: "#1dd1a1" },
+  { label: "BabelEvents", cusps: 2, R: 160, color: "#5f27cd" }
+];
+
+// Ticking Hand Configuration
+const HAND_SETTINGS = {
+  tickInterval: 1,   // seconds between movements
+  handLength: 178,       // length of the hand
+  handColor: "#ffffff",       // hand color
+  handWidth: 1,         // hand thickness
+  enabled: true,             // hand animation enabled
+  rotationSpeed: 1, // degrees per tick
+  currentRotation: 33  // current hand position
+};
+// Custom Point Counts
+const POINT_COUNTS = {
+  "Career": 6,
+  "Health": 4,
+  "Social": 5,
+  "Personal": 6,
+  "BabelEvents": 2
+};
+
+// Point Management Configuration
+const POINT_MANAGEMENT = {
+  manualPointMode: false,
+  selectedRing: null,
+  defaultSegments: 10
+};
+
+// Hypocycloid generation function
+function generateHypocycloid(R, cusps, steps = 720) {
+  const r = R / cusps;
+  const pts = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = (Math.PI * 2 * i) / steps;
+    const x = (R - r) * Math.cos(t) + r * Math.cos(((R - r) / r) * t);
+    const y = (R - r) * Math.sin(t) - r * Math.sin(((R - r) / r) * t);
+    pts.push([x, y]);
+  }
+  return pts;
+}
+
+// Point positioning with custom support
+function getPointPosition(ring, pointIndex, totalPoints, precomputedPts = null) {
+  // Check for custom positions first
+  if (POINT_MANAGEMENT.manualPointMode && CUSTOM_POINT_POSITIONS[ring.label] && CUSTOM_POINT_POSITIONS[ring.label][pointIndex]) {
+    const customPos = CUSTOM_POINT_POSITIONS[ring.label][pointIndex];
+    return { x: customPos.x, y: customPos.y, curveParam: customPos.curveParam || 0 };
+  }
+  
+  // Default mathematical position along curve
+  const pts = precomputedPts || generateHypocycloid(ring.R, ring.cusps, 360);
+  const curveParam = pointIndex / totalPoints;
+  const idx = Math.floor((pts.length - 1) * curveParam);
+  const [x, y] = pts[idx];
+  
+  return { x, y, curveParam, curveIndex: idx };
+}
+
+// Hand tick logic
+function animateHand(currentTime, currentPoint, lastTickTime, boardPoints) {
+  if (!lastTickTime) lastTickTime = currentTime;
+  const deltaTime = currentTime - lastTickTime;
+  
+  if (HAND_SETTINGS.enabled && HAND_SETTINGS.tickInterval > 0) {
+    if (deltaTime >= HAND_SETTINGS.tickInterval * 1000) {
+      currentPoint = (currentPoint + 1) % boardPoints.length;
+      lastTickTime = currentTime;
+      
+      // Trigger event when hand lands on point
+      if (boardPoints[currentPoint]) {
+        onHandLandedOnPoint(boardPoints[currentPoint]);
+      }
+    }
+  }
+  
+  return { currentPoint, lastTickTime };
+}
+
+// Board generation with custom point support
+function generateBoard() {
+  const boardPoints = [];
+  
+  RINGS.forEach((ring, ringIndex) => {
+    const pts = generateHypocycloid(ring.R, ring.cusps, 360);
+    const pointCount = POINT_COUNTS[ring.label] || POINT_MANAGEMENT.defaultSegments;
+    
+    for (let i = 0; i < pointCount; i++) {
+      const position = getPointPosition(ring, i, pointCount, pts);
+      boardPoints.push({
+        x: position.x,
+        y: position.y,
+        ring: ring.label,
+        ringIndex: ringIndex,
+        pointIndex: i,
+        globalIndex: boardPoints.length,
+        color: ring.color,
+        angle: Math.atan2(position.y, position.x) * 180 / Math.PI,
+        curveParam: position.curveParam
+      });
+    }
+  });
+  
+  return boardPoints;
+}
+
+// Mathematical ratios for current configuration:
+// Career: R:r = 3:1 (3-cusp hypocycloid)
+// Health: R:r = 4:1 (4-cusp hypocycloid)
+// Social: R:r = 5:1 (5-cusp hypocycloid)
+// Personal: R:r = 6:1 (6-cusp hypocycloid)
+// BabelEvents: R:r = 2:1 (2-cusp hypocycloid)
+// Total board points: 23
+// Custom point counts: Career=6, Health=4, Social=5, Personal=6, BabelEvents=2
