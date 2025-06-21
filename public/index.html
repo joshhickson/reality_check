@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -147,7 +146,7 @@
             padding: 3px;
             font-size: 12px;
         }
-        
+
         /* Console Styles */
         .console-window {
             position: fixed;
@@ -162,7 +161,7 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .console-header {
             background: #333;
             padding: 8px 12px;
@@ -172,13 +171,13 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .console-close {
             cursor: pointer;
             color: #ff6b6b;
             font-weight: bold;
         }
-        
+
         .console-content {
             flex: 1;
             padding: 8px;
@@ -188,7 +187,7 @@
             color: #00ff00;
             line-height: 1.4;
         }
-        
+
         .console-info { color: #00ff00; }
         .console-warning { color: #feca57; }
         .console-error { color: #ff6b6b; }
@@ -200,7 +199,7 @@
         .console-global { color: #eb4d4b; }
         .console-math { color: #6c5ce7; }
         .console-perf { color: #a29bfe; }
-        
+
         .timestamp {
             color: #666;
             font-size: 10px;
@@ -213,12 +212,13 @@
             <div style="font-size: 18px; font-weight: bold;">🎲 Reality Check</div>
             <div>
                 <a href="about.html" style="color: white; text-decoration: none; padding: 8px 16px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; transition: background 0.3s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">About</a>
+		<a href="development.html" style="color: white; text-decoration: none; padding: 8px 16px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; transition: background 0.3s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">Development</a>
             </div>
         </nav>
-        
+
         <h1>🎲 Reality Check: The Game</h1>
         <p>The only board game where your dog might get TikTok famous, your crypto side hustle triggers an IRS raid, and you still have to split rent with your emotionally unavailable ex.</p>
-        
+
         <div id="gameSetup">
             <h2>Game Setup</h2>
             <div>
@@ -230,142 +230,6 @@
                 <button onclick="joinGame()">Join Game</button>
             </div>
             <div id="gamesList"></div>
-        </div>
-
-        <!-- Collapsible Board Designer -->
-        <div id="boardDesigner" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
-            <h2 onclick="toggleSection('boardDesignerContent')" style="cursor: pointer; margin: 0;">🎨 Hypocycloid Board Designer <span id="boardDesignerToggle">▼</span></h2>
-            <div id="boardDesignerContent" style="display: flex; gap: 20px; align-items: flex-start; margin-top: 20px;">
-                <div style="flex: 1;">
-                    <h3>Live Preview</h3>
-                    <svg id="designerBoard" width="400" height="400" viewBox="-200 -200 400 400" style="background: #1a1a2e; border-radius: 10px;"></svg>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Ring Parameters</h3>
-                    <div id="ringControls" style="display: grid; gap: 15px;">
-                        <!-- Ring controls will be inserted here -->
-                    </div>
-                    <button onclick="resetToDefaults()" style="margin-top: 15px;">Reset to Defaults</button>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Generated Code</h3>
-                    <textarea id="codeOutput" readonly style="width: 100%; height: 300px; background: #2a2a2a; color: #00ff00; font-family: monospace; font-size: 12px; border: 1px solid #555; border-radius: 5px; padding: 10px;"></textarea>
-                    <button onclick="copyCode()" style="margin-top: 10px;">Copy Code</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Collapsible Card System Testing -->
-        <div id="cardSystem" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
-            <h2 onclick="toggleSection('cardSystemContent')" style="cursor: pointer; margin: 0;">🃏 Card System Testing <span id="cardSystemToggle">▼</span></h2>
-            <div id="cardSystemContent" style="display: flex; gap: 20px; margin-top: 20px;">
-                <div style="flex: 1;">
-                    <h3>Card Parser</h3>
-                    <button onclick="loadCardData()">Load Card Data</button>
-                    <button onclick="shuffleDeck()">Shuffle Deck</button>
-                    <div id="deckInfo" style="margin: 10px 0; font-size: 14px;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Draw Cards</h3>
-                    <button onclick="drawCard('sin')">Draw Sin Card</button>
-                    <button onclick="drawCard('virtue')">Draw Virtue Card</button>
-                    <button onclick="drawCard('random')">Draw Random</button>
-                    <div id="drawnCard" style="margin-top: 15px;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Card Effects</h3>
-                    <div id="cardEffects" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; font-family: monospace; min-height: 150px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Collapsible Skin System Testing -->
-        <div id="skinSystem" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
-            <h2 onclick="toggleSection('skinSystemContent')" style="cursor: pointer; margin: 0;">🎭 Skin System Testing <span id="skinSystemToggle">▼</span></h2>
-            <div id="skinSystemContent" style="display: none; gap: 20px; margin-top: 20px;">
-                <div style="flex: 1;">
-                    <h3>Card Skins</h3>
-                    <select id="cardSkinSelect" onchange="previewCardSkin()">
-                        <option value="default">Default Skin</option>
-                        <option value="minimal">Minimal Skin</option>
-                        <option value="retro">Retro Skin</option>
-                    </select>
-                    <div id="cardSkinPreview" style="margin: 15px 0;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Avatar Skins</h3>
-                    <select id="avatarSkinSelect" onchange="previewAvatarSkin()">
-                        <option value="default">Default Avatar</option>
-                        <option value="pixel">Pixel Avatar</option>
-                        <option value="abstract">Abstract Avatar</option>
-                    </select>
-                    <div id="avatarSkinPreview" style="margin: 15px 0;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Skin Configuration</h3>
-                    <label>Card Theme:</label>
-                    <input type="color" id="cardThemeColor" value="#ff6b6b" onchange="updateSkinTheme()">
-                    <label>Avatar Style:</label>
-                    <input type="range" id="avatarStyleSlider" min="1" max="5" value="3" onchange="updateAvatarStyle()">
-                    <div id="skinConfig" style="font-size: 12px; margin-top: 10px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Collapsible Game Engine Testing -->
-        <div id="gameEngine" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
-            <h2 onclick="toggleSection('gameEngineContent')" style="cursor: pointer; margin: 0;">⚙️ Game Engine Testing <span id="gameEngineToggle">▼</span></h2>
-            <div id="gameEngineContent" style="display: none; gap: 20px; margin-top: 20px;">
-                <div style="flex: 1;">
-                    <h3>State Machine</h3>
-                    <div id="currentState" style="font-weight: bold; margin: 10px 0;">State: SETUP</div>
-                    <button onclick="advanceState()">Advance State</button>
-                    <button onclick="resetGameState()">Reset State</button>
-                    <div id="stateHistory" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 100px; overflow-y: auto;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Timer System</h3>
-                    <div id="timerDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">30:00</div>
-                    <button onclick="startTimer()">Start Timer</button>
-                    <button onclick="pauseTimer()">Pause Timer</button>
-                    <button onclick="resetTimer()">Reset Timer</button>
-                    <input type="range" id="timerSpeed" min="0.1" max="5" step="0.1" value="1" onchange="updateTimerSpeed()">
-                    <label for="timerSpeed">Speed: <span id="speedDisplay">1x</span></label>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Event Scheduler</h3>
-                    <button onclick="scheduleEvent()">Schedule Random Event</button>
-                    <button onclick="triggerGlobalEvent()">Trigger Global Event</button>
-                    <div id="eventQueue" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 120px; overflow-y: auto;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Collapsible Hypocycloid Math Testing -->
-        <div id="mathTesting" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
-            <h2 onclick="toggleSection('mathTestingContent')" style="cursor: pointer; margin: 0;">📊 Hypocycloid Math Testing <span id="mathTestingToggle">▼</span></h2>
-            <div id="mathTestingContent" style="display: none; gap: 20px; margin-top: 20px;">
-                <div style="flex: 1;">
-                    <h3>Coordinate Generation</h3>
-                    <label>Test Ring Radius:</label>
-                    <input type="number" id="testRadius" value="150" min="50" max="300" onchange="generateTestCoordinates()">
-                    <label>Test Cusps:</label>
-                    <input type="number" id="testCusps" value="6" min="2" max="12" onchange="generateTestCoordinates()">
-                    <div id="coordinateOutput" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 11px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Collision Detection</h3>
-                    <button onclick="testCollisions()">Test Point Collisions</button>
-                    <button onclick="testRingOverlaps()">Test Ring Overlaps</button>
-                    <div id="collisionResults" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 120px; overflow-y: auto;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Performance Metrics</h3>
-                    <button onclick="benchmarkRendering()">Benchmark Rendering</button>
-                    <button onclick="memoryUsageTest()">Memory Usage Test</button>
-                    <div id="performanceMetrics" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px;"></div>
-                </div>
-            </div>
         </div>
 
         <div id="gameArea" style="display: none;">
@@ -396,11 +260,11 @@
                     </div>
                     <svg id="board" width="600" height="600" viewBox="-300 -300 600 600"></svg>
                 </div>
-                
+
                 <div class="game-controls">
                     <h3>Game Status</h3>
                     <div id="gameStatus">Waiting for players...</div>
-                    
+
                     <div id="playerInfo" class="player-card" style="display: none;">
                         <h4>Your Character</h4>
                         <div id="characterInfo"></div>
@@ -411,14 +275,14 @@
                             <div class="stat">✝️ Virtue: <span id="virtue">0</span></div>
                         </div>
                     </div>
-                    
+
                     <div id="turnControls" style="display: none;">
                         <button id="rollButton" onclick="rollDice()">Roll Dice</button>
                         <div id="rollResult"></div>
                     </div>
-                    
+
                     <div id="cardsArea"></div>
-                    
+
                     <div id="playersArea">
                         <h4>Players</h4>
                         <div id="playersList"></div>
@@ -446,7 +310,6 @@
 
     <script src="game.js"></script>
     <script src="board-render.js"></script>
-    <script src="board-designer.js"></script>
     <script>
         // Console window management
         function addToConsole(message, type = 'info') {
@@ -457,297 +320,17 @@
             messageEl.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
             console.appendChild(messageEl);
             console.scrollTop = console.scrollHeight;
-            
+
             // Keep only last 100 messages
             while (console.children.length > 100) {
                 console.removeChild(console.firstChild);
             }
         }
 
-        // Collapsible section management
-        function toggleSection(contentId) {
-            const content = document.getElementById(contentId);
-            const toggle = document.getElementById(contentId.replace('Content', 'Toggle'));
-            
-            if (content.style.display === 'none') {
-                content.style.display = 'flex';
-                toggle.textContent = '▼';
-            } else {
-                content.style.display = 'none';
-                toggle.textContent = '▶';
-            }
-        }
-
-        // Card System Testing Functions
-        let testCardData = { sin: [], virtue: [] };
-        
-        async function loadCardData() {
-            try {
-                // Simulate loading from CSV parser
-                testCardData.sin = [
-                    { id: 1, title: "Greed", effect: "Gain $500, +1 Sin", category: "Financial" },
-                    { id: 2, title: "Envy", effect: "Target player loses $200, +1 Sin", category: "Social" },
-                    { id: 3, title: "Wrath", effect: "All players lose 1 Mental Health, +2 Sin", category: "Mental" }
-                ];
-                testCardData.virtue = [
-                    { id: 1, title: "Charity", effect: "Give $300 to another player, +1 Virtue", category: "Financial" },
-                    { id: 2, title: "Patience", effect: "Gain 2 Mental Health, +1 Virtue", category: "Mental" },
-                    { id: 3, title: "Kindness", effect: "All players gain $100, +1 Virtue", category: "Social" }
-                ];
-                
-                document.getElementById('deckInfo').innerHTML = 
-                    `Loaded: ${testCardData.sin.length} Sin cards, ${testCardData.virtue.length} Virtue cards`;
-                addToConsole(`Card data loaded: ${testCardData.sin.length} Sin, ${testCardData.virtue.length} Virtue cards`, 'success');
-            } catch (error) {
-                addToConsole(`Error loading cards: ${error.message}`, 'error');
-            }
-        }
-
-        function shuffleDeck() {
-            // Shuffle both decks
-            testCardData.sin.sort(() => Math.random() - 0.5);
-            testCardData.virtue.sort(() => Math.random() - 0.5);
-            addToConsole('Card decks shuffled successfully', 'info');
-        }
-
-        function drawCard(type) {
-            let card;
-            if (type === 'random') {
-                type = Math.random() < 0.5 ? 'sin' : 'virtue';
-            }
-            
-            if (testCardData[type] && testCardData[type].length > 0) {
-                card = testCardData[type][Math.floor(Math.random() * testCardData[type].length)];
-                
-                document.getElementById('drawnCard').innerHTML = `
-                    <div class="card ${type}-card">
-                        <h4>${card.title}</h4>
-                        <p><strong>Effect:</strong> ${card.effect}</p>
-                        <p><strong>Category:</strong> ${card.category}</p>
-                    </div>
-                `;
-                
-                addToConsole(`Drew ${type.toUpperCase()} card: ${card.title} - ${card.effect}`, 'card');
-            } else {
-                addToConsole('No cards available. Load card data first.', 'warning');
-            }
-        }
-
-        // Skin System Testing Functions
-        function previewCardSkin() {
-            const skinType = document.getElementById('cardSkinSelect').value;
-            document.getElementById('cardSkinPreview').innerHTML = `
-                <div style="border: 2px solid #666; padding: 10px; border-radius: 8px; background: ${skinType === 'retro' ? '#ff9800' : skinType === 'minimal' ? '#f5f5f5' : '#fff'};">
-                    <strong>${skinType.toUpperCase()} Card Skin Preview</strong>
-                    <p>Sample card with ${skinType} styling</p>
-                </div>
-            `;
-        }
-
-        function previewAvatarSkin() {
-            const avatarType = document.getElementById('avatarSkinSelect').value;
-            document.getElementById('avatarSkinPreview').innerHTML = `
-                <div style="width: 60px; height: 60px; border-radius: ${avatarType === 'pixel' ? '0' : '50%'}; background: ${avatarType === 'abstract' ? 'linear-gradient(45deg, #ff6b6b, #4ecdc4)' : '#6c5ce7'}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                    ${avatarType === 'pixel' ? '👾' : avatarType === 'abstract' ? '◊' : '👤'}
-                </div>
-            `;
-        }
-
-        function updateSkinTheme() {
-            const color = document.getElementById('cardThemeColor').value;
-            document.getElementById('skinConfig').innerHTML = `Theme Color: ${color}`;
-        }
-
-        function updateAvatarStyle() {
-            const style = document.getElementById('avatarStyleSlider').value;
-            document.getElementById('skinConfig').innerHTML += `<br>Avatar Style Level: ${style}/5`;
-        }
-
-        // Game Engine Testing Functions
-        let testGameState = 'SETUP';
-        let testStateHistory = [];
-        let testGameTimer = null;
-        let testTimerSeconds = 30 * 60; // 30 minutes
-        let testTimerSpeed = 1;
-
-        function advanceState() {
-            const states = ['SETUP', 'WAITING', 'TURN_START', 'ROLLING', 'MOVING', 'TILE_RESOLVE', 'TURN_END'];
-            const currentIndex = states.indexOf(testGameState);
-            testGameState = states[(currentIndex + 1) % states.length];
-            
-            testStateHistory.push(`${new Date().toLocaleTimeString()}: ${testGameState}`);
-            document.getElementById('currentState').innerHTML = `State: ${testGameState}`;
-            
-            const historyEl = document.getElementById('stateHistory');
-            historyEl.innerHTML = testStateHistory.slice(-10).join('\n');
-            historyEl.scrollTop = historyEl.scrollHeight;
-            
-            addToConsole(`Game state advanced to: ${testGameState}`, 'state');
-        }
-
-        function resetGameState() {
-            testGameState = 'SETUP';
-            testStateHistory = [];
-            document.getElementById('currentState').innerHTML = `State: ${testGameState}`;
-            document.getElementById('stateHistory').innerHTML = '';
-            addToConsole('Game state reset to SETUP', 'state');
-        }
-
-        function startTimer() {
-            if (testGameTimer) clearInterval(testGameTimer);
-            testGameTimer = setInterval(() => {
-                testTimerSeconds -= testTimerSpeed;
-                if (testTimerSeconds <= 0) {
-                    testTimerSeconds = 0;
-                    clearInterval(testGameTimer);
-                    scheduleEvent('Timer expired - auto-resolve turn');
-                    addToConsole('Timer expired! Auto-resolving turn', 'warning');
-                }
-                updateTimerDisplay();
-            }, 1000 / testTimerSpeed);
-            addToConsole(`Timer started at ${testTimerSpeed}x speed`, 'timer');
-        }
-
-        function pauseTimer() {
-            if (testGameTimer) {
-                clearInterval(testGameTimer);
-                testGameTimer = null;
-                addToConsole('Timer paused', 'timer');
-            }
-        }
-
-        function resetTimer() {
-            pauseTimer();
-            testTimerSeconds = 30 * 60;
-            updateTimerDisplay();
-            addToConsole('Timer reset to 30:00', 'timer');
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(testTimerSeconds / 60);
-            const seconds = testTimerSeconds % 60;
-            document.getElementById('timerDisplay').innerHTML = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function updateTimerSpeed() {
-            testTimerSpeed = parseFloat(document.getElementById('timerSpeed').value);
-            document.getElementById('speedDisplay').innerHTML = `${testTimerSpeed}x`;
-            addToConsole(`Timer speed changed to ${testTimerSpeed}x`, 'timer');
-        }
-
-        // Event Scheduler Functions
-        let testEventQueue = [];
-
-        function scheduleEvent(eventText = null) {
-            const events = [
-                'Player rolled dice',
-                'Card effect triggered',
-                'Ring rotation event',
-                'Global chaos event',
-                'Player interaction'
-            ];
-            
-            const event = eventText || events[Math.floor(Math.random() * events.length)];
-            const delay = Math.floor(Math.random() * 5) + 1;
-            
-            testEventQueue.push({
-                event: event,
-                time: new Date().toLocaleTimeString(),
-                delay: delay
-            });
-            
-            updateEventQueue();
-            addToConsole(`Event scheduled: ${event} (${delay}s delay)`, 'event');
-            
-            // Simulate event processing
-            setTimeout(() => {
-                testEventQueue = testEventQueue.filter(e => e.event !== event);
-                updateEventQueue();
-                addToConsole(`Event processed: ${event}`, 'event');
-            }, delay * 1000);
-        }
-
-        function triggerGlobalEvent() {
-            const globalEvents = [
-                'Market Crash: All players lose 20% money',
-                'Viral Trend: Social ring effects doubled',
-                'Health Crisis: Mental health -2 for all',
-                'Economic Boom: All players gain $1000'
-            ];
-            
-            const selectedEvent = globalEvents[Math.floor(Math.random() * globalEvents.length)];
-            scheduleEvent(selectedEvent);
-            addToConsole(`Global event triggered: ${selectedEvent}`, 'global');
-        }
-
-        function updateEventQueue() {
-            const queueEl = document.getElementById('eventQueue');
-            queueEl.innerHTML = testEventQueue.map(e => 
-                `[${e.time}] ${e.event} (${e.delay}s)`
-            ).join('\n');
-        }
-
-        // Math Testing Functions
-        function generateTestCoordinates() {
-            const radius = parseInt(document.getElementById('testRadius').value);
-            const cusps = parseInt(document.getElementById('testCusps').value);
-            
-            let coordinates = [];
-            for (let i = 0; i < cusps; i++) {
-                const angle = (i * 360 / cusps) * Math.PI / 180;
-                const x = Math.cos(angle) * radius;
-                const y = Math.sin(angle) * radius;
-                coordinates.push(`Point ${i}: (${x.toFixed(2)}, ${y.toFixed(2)})`);
-            }
-            
-            document.getElementById('coordinateOutput').innerHTML = coordinates.join('\n');
-            addToConsole(`Generated ${cusps} coordinates for radius ${radius}`, 'math');
-        }
-
-        function testCollisions() {
-            const results = [
-                'Testing point collision detection...',
-                'Hand position: (45, 142)',
-                'Collision detected with Social Ring Point 2',
-                'Distance: 8.3 pixels (within threshold)',
-                'Collision confirmed ✓'
-            ];
-            
-            document.getElementById('collisionResults').innerHTML = results.join('\n');
-            addToConsole('Collision detection test completed', 'math');
-        }
-
-        function testRingOverlaps() {
-            const results = [
-                'Testing ring overlap detection...',
-                'Career Ring: R=127, Health Ring: R=137',
-                'Overlap distance: 10 pixels',
-                'No overlap detected ✓',
-                'All rings properly spaced'
-            ];
-            
-            document.getElementById('collisionResults').innerHTML = results.join('\n');
-            addToConsole('Ring overlap test completed', 'math');
-        }
-
-        function benchmarkRendering() {
-            const start = performance.now();
-            addToConsole('Starting rendering benchmark...', 'perf');
-            // Simulate rendering benchmark
-            setTimeout(() => {
-                const end = performance.now();
-                const result = `Rendering benchmark: ${(end - start).toFixed(2)}ms\nFPS: 60\nPoints rendered: 47\nMemory usage: 2.3MB`;
-                document.getElementById('performanceMetrics').innerHTML = result;
-                addToConsole(`Rendering benchmark completed: ${(end - start).toFixed(2)}ms`, 'perf');
-            }, 100);
-        }
-
-        function memoryUsageTest() {
-            const result = `Memory usage test:\nHeap used: ${Math.floor(Math.random() * 10) + 5}MB\nPoints in memory: 47\nEvent queue size: ${testEventQueue.length}\nState history: ${testStateHistory.length} entries`;
-            document.getElementById('performanceMetrics').innerHTML = result;
-            addToConsole(`Memory usage: ${Math.floor(Math.random() * 10) + 5}MB heap, ${testEventQueue.length} events queued`, 'perf');
-        }
+        // Card System Testing Functions - NOT USED, REMOVE
+        // Skin System Testing Functions - NOT USED, REMOVE
+        // Game Engine Testing Functions - NOT USED, REMOVE
+        // Math Testing Functions - NOT USED, REMOVE
 
         // Console window management
         function toggleConsole() {
@@ -760,18 +343,9 @@
             }
         }
 
-        // Initialize sections as collapsed except board designer
+        // Initialize sections as collapsed except board designer - NOT NEEDED ANYMORE, REMOVE
         document.addEventListener('DOMContentLoaded', function() {
-            toggleSection('cardSystemContent');
-            toggleSection('skinSystemContent');
-            toggleSection('gameEngineContent');
-            toggleSection('mathTestingContent');
-            
-            // Auto-load card data on startup
-            loadCardData();
-            generateTestCoordinates();
-            
-            addToConsole('Reality Check testing environment initialized', 'success');
+            addToConsole('Reality Check initialized', 'success');
         });
     </script>
 </body>
