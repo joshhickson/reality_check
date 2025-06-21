@@ -127,6 +127,26 @@
             margin: 5px;
             font-size: 16px;
         }
+        .ring-control {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .ring-control label {
+            display: block;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .ring-control input[type="range"] {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .ring-control input[type="number"] {
+            width: 60px;
+            padding: 3px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +165,28 @@
                 <button onclick="joinGame()">Join Game</button>
             </div>
             <div id="gamesList"></div>
+        </div>
+
+        <div id="boardDesigner" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
+            <h2>🎨 Hypocycloid Board Designer</h2>
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <h3>Live Preview</h3>
+                    <svg id="designerBoard" width="400" height="400" viewBox="-200 -200 400 400" style="background: #1a1a2e; border-radius: 10px;"></svg>
+                </div>
+                <div style="flex: 1;">
+                    <h3>Ring Parameters</h3>
+                    <div id="ringControls" style="display: grid; gap: 15px;">
+                        <!-- Ring controls will be inserted here -->
+                    </div>
+                    <button onclick="resetToDefaults()" style="margin-top: 15px;">Reset to Defaults</button>
+                </div>
+                <div style="flex: 1;">
+                    <h3>Generated Code</h3>
+                    <textarea id="codeOutput" readonly style="width: 100%; height: 300px; background: #2a2a2a; color: #00ff00; font-family: monospace; font-size: 12px; border: 1px solid #555; border-radius: 5px; padding: 10px;"></textarea>
+                    <button onclick="copyCode()" style="margin-top: 10px;">Copy Code</button>
+                </div>
+            </div>
         </div>
 
         <div id="gameArea" style="display: none;">
@@ -209,5 +251,6 @@
 
     <script src="game.js"></script>
     <script src="board-render.js"></script>
+    <script src="board-designer.js"></script>
 </body>
 </html>
