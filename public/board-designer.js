@@ -29,6 +29,7 @@ let lastTickTime = 0;
 let animationId = null;
 let boardPoints = [];  // Will store all point positions and data
 let countdownInterval = null;
+let currentPoint = 0;  // current point index for hand tracking
 
 // Generate hypocycloid points for designer
 function generateDesignerHypocycloid(R, cusps, steps) {
@@ -94,10 +95,10 @@ function drawDesignerBoard() {
       const tile = createDesignerSVGElement("circle", {
         cx: x,
         cy: y,
-        r: currentPoint === pointData.globalIndex ? 5 : 3,
-        fill: currentPoint === pointData.globalIndex ? "#ffff00" : ring.color,
+        r: 3,
+        fill: ring.color,
         stroke: "#fff",
-        "stroke-width": currentPoint === pointData.globalIndex ? 2 : 0.5,
+        "stroke-width": 0.5,
         "data-point-index": pointData.globalIndex
       });
       svg.appendChild(tile);
@@ -238,7 +239,7 @@ function startHandAnimation() {
   if (animationId) {
     cancelAnimationFrame(animationId);
   }
-  lastTime = 0;
+  lastTickTime = 0;
   animationId = requestAnimationFrame(animateHand);
 }
 
