@@ -31,11 +31,14 @@ let boardPoints = [];  // Will store all point positions and data
 let countdownInterval = null;
 let currentPoint = 0;  // current point index for hand tracking
 
-// Manual point placement system
+// Advanced point control system
 let manualPointMode = false;
 let pointEditMode = false;
 let customPointPositions = {}; // ring -> [custom positions]
 let draggedPoint = null;
+let selectedRing = null;
+let pointCounts = {}; // ring -> custom point count
+let overlappingPoints = []; // points currently overlapped by hand
 
 // Generate hypocycloid points for designer
 function generateDesignerHypocycloid(R, cusps, steps) {
@@ -76,13 +79,17 @@ function drawDesignerBoard() {
       fill: "none",
       stroke: ring.color,
       "stroke-width": 2,
-      opacity: 0.8
+      opacity: 0.8,
+      "data-ring": ring.label
     });
     svg.appendChild(path);
 
+    // Get point count for this ring (custom or default)
+    const pointCount = pointCounts[ring.label] || DESIGNER_SEGMENTS;
+    
     // Add tile markers and store point data
-    for (let i = 0; i < DESIGNER_SEGMENTS; i++) {
-      const position = getPointPosition(ring, i);
+    for (let i = 0; i < pointCount; i++) {
+      const position = getPointPosition(ring, i, pointCount, pts);
       const x = position.x;
       const y = position.y;
       
@@ -95,7 +102,8 @@ function drawDesignerBoard() {
         pointIndex: i,
         globalIndex: boardPoints.length,
         color: ring.color,
-        angle: Math.atan2(y, x) * 180 / Math.PI
+        angle: Math.atan2(y, x) * 180 / Math.PI,
+        curveParam: position.curveParam // parameter along curve (0-1)
       };
       boardPoints.push(pointData);
       
@@ -106,8 +114,16 @@ function drawDesignerBoard() {
         fill: ring.color,
         stroke: "#fff",
         "stroke-width": 0.5,
-        "data-point-index": pointData.globalIndex
+        "data-point-index": pointData.globalIndex,
+        "data-ring": ring.label,
+        "data-point-local": i,
+        class: selectedRing === ring.label ? "selected-ring-point" : ""
       });
+      
+      // Make points interactive for selection and editing
+      tile.style.cursor = "pointer";
+      tile.addEventListener('click', (e) => selectPoint(pointData, e));
+      
       svg.appendChild(tile);
     }
   });
@@ -126,6 +142,11 @@ function drawDesignerBoard() {
   // Draw rotating hand if enabled
   if (handSettings.enabled) {
     drawRotatingHand(svg);
+  }
+  
+  // Add ring selection highlights
+  if (selectedRing) {
+    highlightSelectedRing();
   }
   
   updateCodeOutput();
@@ -167,6 +188,7 @@ function drawRotatingHand(svg) {
 function highlightNearbyPoints(handX, handY) {
   const svg = document.getElementById("designerBoard");
   const threshold = 15; // distance threshold for "landing on" a point
+  overlappingPoints = []; // Reset overlap tracking
   
   boardPoints.forEach(point => {
     const distance = Math.sqrt((handX - point.x)**2 + (handY - point.y)**2);
@@ -174,18 +196,37 @@ function highlightNearbyPoints(handX, handY) {
     
     if (pointElement) {
       if (distance <= threshold) {
-        // Hand is near this point - highlight it
+        // Hand is near this point - highlight it and track overlap
         pointElement.setAttribute("r", "5");
         pointElement.setAttribute("fill", "#ffff00");
         pointElement.setAttribute("stroke-width", "2");
+        overlappingPoints.push(point);
       } else {
         // Reset to normal
-        pointElement.setAttribute("r", "3");
+        const baseRadius = selectedRing === point.ring ? "4" : "3";
+        pointElement.setAttribute("r", baseRadius);
         pointElement.setAttribute("fill", point.color);
         pointElement.setAttribute("stroke-width", "0.5");
       }
     }
   });
+  
+  // Update overlap display
+  updateOverlapDisplay();
+}
+
+function updateOverlapDisplay() {
+  const overlapElement = document.getElementById("overlap-counter");
+  if (overlapElement) {
+    if (overlappingPoints.length > 0) {
+      const rings = [...new Set(overlappingPoints.map(p => p.ring))];
+      overlapElement.textContent = `Overlapping ${overlappingPoints.length} point(s) across ${rings.length} ring(s): ${rings.join(', ')}`;
+      overlapElement.style.color = "#ffff00";
+    } else {
+      overlapElement.textContent = "No points overlapped";
+      overlapElement.style.color = "#888";
+    }
+  }
 }
 
 function animateHand(currentTime) {
@@ -317,15 +358,37 @@ function setupDesignerControls() {
       <button onclick="simulatePlayerTurn()" style="font-size: 12px; padding: 5px 10px;">Simulate Turn</button>
     </div>
     <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px;">
-      <h4 style="margin: 0 0 10px 0; color: #ffffff;">🎯 Point Placement</h4>
+      <h4 style="margin: 0 0 10px 0; color: #ffffff;">🎯 Point Management</h4>
+      <div id="overlap-counter" style="font-size: 12px; margin-bottom: 10px; padding: 5px; background: rgba(0,0,0,0.3); border-radius: 3px;">
+        No points overlapped
+      </div>
       <label>
-        <input type="checkbox" ${manualPointMode ? 'checked' : ''} 
-               onchange="toggleManualPointMode(this.checked)"> Manual Point Placement
+        Ring Selection:
+        <select onchange="selectRingForEditing(this.value)" style="margin-left: 5px;">
+          <option value="">Select Ring...</option>
+          ${designerRings.map(ring => `<option value="${ring.label}" ${selectedRing === ring.label ? 'selected' : ''}>${ring.label}</option>`).join('')}
+        </select>
       </label>
-      <div id="manual-controls" style="display: ${manualPointMode ? 'block' : 'none'}; margin-top: 10px;">
-        <button onclick="enterPointEditMode()" style="font-size: 12px; padding: 5px 10px;">Edit Points</button>
-        <button onclick="resetToMathematicalPoints()" style="font-size: 12px; padding: 5px 10px;">Reset to Math</button>
-        <button onclick="randomizePoints()" style="font-size: 12px; padding: 5px 10px;">Randomize</button>
+      <div id="ring-point-controls" style="margin-top: 10px; display: ${selectedRing ? 'block' : 'none'};">
+        <label>
+          Point Count: <span id="point-count-display">${selectedRing ? (pointCounts[selectedRing] || DESIGNER_SEGMENTS) : DESIGNER_SEGMENTS}</span>
+          <input type="range" min="2" max="20" value="${selectedRing ? (pointCounts[selectedRing] || DESIGNER_SEGMENTS) : DESIGNER_SEGMENTS}" 
+                 oninput="updatePointCount(this.value)" style="width: 100px;">
+        </label>
+        <div style="margin-top: 5px;">
+          <button onclick="addPointToRing()" style="font-size: 12px; padding: 3px 8px;">Add Point</button>
+          <button onclick="removePointFromRing()" style="font-size: 12px; padding: 3px 8px;">Remove Point</button>
+          <button onclick="resetRingPoints()" style="font-size: 12px; padding: 3px 8px;">Reset Ring</button>
+        </div>
+      </div>
+      <label style="margin-top: 10px; display: block;">
+        <input type="checkbox" ${manualPointMode ? 'checked' : ''} 
+               onchange="toggleManualPointMode(this.checked)"> Enable Curve Snapping
+      </label>
+      <div style="margin-top: 10px;">
+        <button onclick="enterPointEditMode()" style="font-size: 12px; padding: 5px 10px;">Edit Mode</button>
+        <button onclick="resetAllPoints()" style="font-size: 12px; padding: 5px 10px;">Reset All</button>
+        <button onclick="distributePointsEvenly()" style="font-size: 12px; padding: 5px 10px;">Even Distribution</button>
       </div>
     </div>
     <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px;">
@@ -653,6 +716,103 @@ function randomizePoints() {
   drawDesignerBoard();
 }
 
+// Point Management Functions
+function selectRingForEditing(ringLabel) {
+  selectedRing = ringLabel || null;
+  drawDesignerBoard();
+  setupDesignerControls();
+}
+
+function selectPoint(pointData, event) {
+  event.stopPropagation();
+  console.log('Selected point:', pointData);
+  
+  // Highlight selected point
+  const svg = document.getElementById("designerBoard");
+  const pointElement = svg.querySelector(`[data-point-index="${pointData.globalIndex}"]`);
+  if (pointElement) {
+    pointElement.setAttribute("stroke", "#ffff00");
+    pointElement.setAttribute("stroke-width", "3");
+  }
+}
+
+function updatePointCount(newCount) {
+  if (!selectedRing) return;
+  
+  pointCounts[selectedRing] = parseInt(newCount);
+  document.getElementById("point-count-display").textContent = newCount;
+  drawDesignerBoard();
+}
+
+function addPointToRing() {
+  if (!selectedRing) return;
+  
+  const currentCount = pointCounts[selectedRing] || DESIGNER_SEGMENTS;
+  pointCounts[selectedRing] = Math.min(currentCount + 1, 50);
+  drawDesignerBoard();
+  setupDesignerControls();
+}
+
+function removePointFromRing() {
+  if (!selectedRing) return;
+  
+  const currentCount = pointCounts[selectedRing] || DESIGNER_SEGMENTS;
+  pointCounts[selectedRing] = Math.max(currentCount - 1, 1);
+  drawDesignerBoard();
+  setupDesignerControls();
+}
+
+function resetRingPoints() {
+  if (!selectedRing) return;
+  
+  delete pointCounts[selectedRing];
+  if (customPointPositions[selectedRing]) {
+    delete customPointPositions[selectedRing];
+  }
+  drawDesignerBoard();
+  setupDesignerControls();
+}
+
+function resetAllPoints() {
+  pointCounts = {};
+  customPointPositions = {};
+  selectedRing = null;
+  drawDesignerBoard();
+  setupDesignerControls();
+}
+
+function distributePointsEvenly() {
+  if (!selectedRing) return;
+  
+  // Remove custom positions to force even mathematical distribution
+  if (customPointPositions[selectedRing]) {
+    delete customPointPositions[selectedRing];
+  }
+  drawDesignerBoard();
+}
+
+function highlightSelectedRing() {
+  if (!selectedRing) return;
+  
+  const svg = document.getElementById("designerBoard");
+  const ring = designerRings.find(r => r.label === selectedRing);
+  if (!ring) return;
+  
+  const pts = generateDesignerHypocycloid(ring.R, ring.cusps, DESIGNER_STEPS);
+  
+  const highlight = createDesignerSVGElement("path", {
+    d: pathFromDesignerPoints(pts),
+    fill: "none",
+    stroke: "#ffff00",
+    "stroke-width": 3,
+    opacity: 0.7,
+    "stroke-dasharray": "8 4",
+    class: "selected-ring-highlight"
+  });
+  
+  svg.appendChild(highlight);
+}
+
 // Mathematical Analysis Tools
 function calculateProbabilities() {
   const analysis = {
@@ -758,17 +918,50 @@ function showNetworkTheory() {
   alert(`Clustering coefficient: ${networkMetrics.clustering}\nSmall world network: ${networkMetrics.smallWorld ? 'Yes' : 'No'}`);
 }
 
-// Modified drawDesignerBoard to use custom points when available
-function getPointPosition(ring, pointIndex) {
+// Enhanced point positioning with curve parameter control
+function getPointPosition(ring, pointIndex, totalPoints, precomputedPts = null) {
+  // Check for custom positions first
   if (manualPointMode && customPointPositions[ring.label] && customPointPositions[ring.label][pointIndex]) {
-    return customPointPositions[ring.label][pointIndex];
+    const customPos = customPointPositions[ring.label][pointIndex];
+    // Snap custom position to nearest point on curve
+    return snapToNearestCurvePoint(ring, customPos.x, customPos.y);
   }
   
-  // Default mathematical position
-  const pts = generateDesignerHypocycloid(ring.R, ring.cusps, DESIGNER_STEPS);
-  const idx = Math.floor((pts.length / DESIGNER_SEGMENTS) * pointIndex);
+  // Default mathematical position along curve
+  const pts = precomputedPts || generateDesignerHypocycloid(ring.R, ring.cusps, DESIGNER_STEPS);
+  const curveParam = pointIndex / totalPoints; // parameter from 0 to 1
+  const idx = Math.floor((pts.length - 1) * curveParam);
   const [x, y] = pts[idx];
-  return { x, y };
+  
+  return { 
+    x, 
+    y, 
+    curveParam,
+    curveIndex: idx
+  };
+}
+
+function snapToNearestCurvePoint(ring, targetX, targetY) {
+  const pts = generateDesignerHypocycloid(ring.R, ring.cusps, DESIGNER_STEPS);
+  let minDistance = Infinity;
+  let bestPoint = null;
+  let bestIndex = 0;
+  
+  pts.forEach(([x, y], index) => {
+    const distance = Math.sqrt((x - targetX) ** 2 + (y - targetY) ** 2);
+    if (distance < minDistance) {
+      minDistance = distance;
+      bestPoint = { x, y };
+      bestIndex = index;
+    }
+  });
+  
+  return {
+    x: bestPoint.x,
+    y: bestPoint.y,
+    curveParam: bestIndex / (pts.length - 1),
+    curveIndex: bestIndex
+  };
 }
 
 // Initialize designer when page loads
