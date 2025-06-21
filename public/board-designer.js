@@ -16,16 +16,15 @@ const DESIGNER_STEPS = 360;
 
 // Rotating hand parameters
 let handSettings = {
-  tickInterval: 20,    // seconds between point movements
+  tickInterval: 20,    // seconds between movements
   handLength: 140,     // length of the hand
   handColor: "#ffffff",
   handWidth: 3,
   enabled: true,
-  totalPoints: 50      // total points on the board (10 per ring × 5 rings)
+  rotationSpeed: 18    // degrees per tick (360/20 = full rotation in 20 ticks)
 };
 
-let handRotation = 0;
-let currentPoint = 0;
+let handRotation = 0;  // current angle in degrees
 let lastTickTime = 0;
 let animationId = null;
 let boardPoints = [];  // Will store all point positions and data
@@ -125,11 +124,10 @@ function drawDesignerBoard() {
 }
 
 function drawRotatingHand(svg) {
-  if (boardPoints.length === 0) return;
-  
-  const targetPoint = boardPoints[currentPoint];
-  const endX = targetPoint.x;
-  const endY = targetPoint.y;
+  // Calculate hand end position based on rotation angle
+  const angleRad = (handRotation - 90) * Math.PI / 180; // -90 to start at top
+  const endX = Math.cos(angleRad) * handSettings.handLength;
+  const endY = Math.sin(angleRad) * handSettings.handLength;
   
   // Hand line
   const handLine = createDesignerSVGElement("line", {
@@ -153,6 +151,33 @@ function drawRotatingHand(svg) {
     "stroke-width": 2
   });
   svg.appendChild(handTip);
+  
+  // Check if hand is near any points and highlight them
+  highlightNearbyPoints(endX, endY);
+}
+
+function highlightNearbyPoints(handX, handY) {
+  const svg = document.getElementById("designerBoard");
+  const threshold = 15; // distance threshold for "landing on" a point
+  
+  boardPoints.forEach(point => {
+    const distance = Math.sqrt((handX - point.x)**2 + (handY - point.y)**2);
+    const pointElement = svg.querySelector(`[data-point-index="${point.globalIndex}"]`);
+    
+    if (pointElement) {
+      if (distance <= threshold) {
+        // Hand is near this point - highlight it
+        pointElement.setAttribute("r", "5");
+        pointElement.setAttribute("fill", "#ffff00");
+        pointElement.setAttribute("stroke-width", "2");
+      } else {
+        // Reset to normal
+        pointElement.setAttribute("r", "3");
+        pointElement.setAttribute("fill", point.color);
+        pointElement.setAttribute("stroke-width", "0.5");
+      }
+    }
+  });
 }
 
 function animateHand(currentTime) {
@@ -164,21 +189,33 @@ function animateHand(currentTime) {
     const timeUntilNextTick = handSettings.tickInterval - (deltaTime / 1000);
     updateCountdownDisplay(Math.max(0, timeUntilNextTick));
     
-    // Check if it's time to move to next point
+    // Check if it's time to rotate
     if (deltaTime >= handSettings.tickInterval * 1000) {
-      currentPoint = (currentPoint + 1) % handSettings.totalPoints;
+      handRotation = (handRotation + handSettings.rotationSpeed) % 360;
       lastTickTime = currentTime;
       drawDesignerBoard();
       
-      // Trigger point landed event
-      if (boardPoints[currentPoint]) {
-        console.log(`Hand landed on point ${currentPoint}:`, boardPoints[currentPoint]);
-        onHandLandedOnPoint(boardPoints[currentPoint]);
-      }
+      // Check if hand landed on any points
+      checkHandLanding();
     }
   }
   
   animationId = requestAnimationFrame(animateHand);
+}
+
+function checkHandLanding() {
+  const angleRad = (handRotation - 90) * Math.PI / 180;
+  const handX = Math.cos(angleRad) * handSettings.handLength;
+  const handY = Math.sin(angleRad) * handSettings.handLength;
+  const threshold = 15;
+  
+  boardPoints.forEach(point => {
+    const distance = Math.sqrt((handX - point.x)**2 + (handY - point.y)**2);
+    if (distance <= threshold) {
+      console.log(`Hand landed near point ${point.globalIndex}:`, point);
+      onHandLandedOnPoint(point);
+    }
+  });
 }
 
 function updateCountdownDisplay(timeRemaining) {
@@ -244,9 +281,14 @@ function setupDesignerControls() {
              oninput="updateHandParameter('tickInterval', parseInt(this.value)); document.getElementById('hand-tick-val').textContent = this.value + 's';">
     </label>
     <label>
-      Current Point: <span id="current-point-val">${currentPoint}</span>
-      <input type="range" min="0" max="${handSettings.totalPoints - 1}" value="${currentPoint}" 
-             oninput="updateHandParameter('currentPoint', parseInt(this.value)); document.getElementById('current-point-val').textContent = this.value;">
+      Rotation: <span id="hand-rotation-val">${Math.round(handRotation)}°</span>
+      <input type="range" min="0" max="359" value="${Math.round(handRotation)}" 
+             oninput="updateHandParameter('handRotation', parseInt(this.value)); document.getElementById('hand-rotation-val').textContent = this.value + '°';">
+    </label>
+    <label>
+      Speed: <span id="rotation-speed-val">${handSettings.rotationSpeed}°/tick</span>
+      <input type="range" min="1" max="36" value="${handSettings.rotationSpeed}" 
+             oninput="updateHandParameter('rotationSpeed', parseInt(this.value)); document.getElementById('rotation-speed-val').textContent = this.value + '°/tick';">
     </label>
     <label>
       Length: <span id="hand-length-val">${handSettings.handLength}</span>
@@ -302,8 +344,8 @@ function updateRingParameter(ringIndex, parameter, value) {
 }
 
 function updateHandParameter(parameter, value) {
-  if (parameter === 'currentPoint') {
-    currentPoint = value;
+  if (parameter === 'handRotation') {
+    handRotation = value;
   } else {
     handSettings[parameter] = value;
   }
@@ -347,6 +389,7 @@ function onHandLandedOnPoint(pointData) {
 
 function resetHandPosition() {
   handRotation = 0;
+  lastTickTime = 0;
   drawDesignerBoard();
 }
 
@@ -399,12 +442,12 @@ ${designerRings.map(ring => `  { label: "${ring.label}", cusps: ${ring.cusps}, R
 
 // Ticking Hand Configuration
 const HAND_SETTINGS = {
-  tickInterval: ${handSettings.tickInterval},   // seconds between point movements
+  tickInterval: ${handSettings.tickInterval},   // seconds between movements
   handLength: ${handSettings.handLength},       // length of the hand
   handColor: "${handSettings.handColor}",       // hand color
   handWidth: ${handSettings.handWidth},         // hand thickness
   enabled: ${handSettings.enabled},             // hand animation enabled
-  totalPoints: ${handSettings.totalPoints}      // total points on board
+  rotationSpeed: ${handSettings.rotationSpeed}  // degrees per tick
 };
 
 // Hypocycloid generation function
