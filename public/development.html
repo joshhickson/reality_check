@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -148,7 +147,7 @@
             padding: 3px;
             font-size: 12px;
         }
-        
+
         /* Console Styles */
         .console-window {
             position: fixed;
@@ -163,7 +162,7 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .console-header {
             background: #333;
             padding: 8px 12px;
@@ -173,13 +172,13 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .console-close {
             cursor: pointer;
             color: #ff6b6b;
             font-weight: bold;
         }
-        
+
         .console-content {
             flex: 1;
             padding: 8px;
@@ -189,7 +188,7 @@
             color: #00ff00;
             line-height: 1.4;
         }
-        
+
         .console-info { color: #00ff00; }
         .console-warning { color: #feca57; }
         .console-error { color: #ff6b6b; }
@@ -201,7 +200,7 @@
         .console-global { color: #eb4d4b; }
         .console-math { color: #6c5ce7; }
         .console-perf { color: #a29bfe; }
-        
+
         .timestamp {
             color: #666;
             font-size: 10px;
@@ -263,7 +262,7 @@
                 <a href="about.html">About</a>
             </div>
         </nav>
-        
+
         <h1>🛠️ Development & Testing Tools</h1>
         <p>Advanced tools for game development, testing, and sprite creation.</p>
 
@@ -312,7 +311,7 @@
                     <button onclick="randomizeSprite()">Randomize</button>
                     <button onclick="generateSprite()">Generate</button>
                 </div>
-                
+
                 <div class="sprite-preview">
                     <h3>Preview</h3>
                     <div class="sprite-canvas" id="spriteCanvas">
@@ -323,7 +322,7 @@
                         <button onclick="saveProfile()">Save Profile</button>
                     </div>
                 </div>
-                
+
                 <div class="sprite-controls">
                     <h3>Layer Management</h3>
                     <div id="spriteLayers">
@@ -479,7 +478,7 @@
                 <div>
                     <h3>Performance Testing</h3>
                     <button onclick="benchmarkCalculations()">Benchmark Calculations</button>
-                    <button onclick="stressTestBoard()">Stress Test Board</button>
+                    <button onclick="stressTestBoard()">Stress TestBoard</button>
                     <div id="perfResults" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
                 </div>
                 <div>
@@ -516,7 +515,7 @@
         function toggleSection(sectionId) {
             const content = document.getElementById(sectionId);
             const toggle = document.getElementById(sectionId.replace('Content', 'Toggle'));
-            
+
             if (content.style.display === 'none') {
                 content.style.display = 'flex';
                 toggle.textContent = '▲';
@@ -542,16 +541,91 @@
         }
 
         function generateSprite() {
-            const bodyType = document.getElementById('bodyType').value;
-            const hairStyle = document.getElementById('hairStyle').value;
-            const clothing = document.getElementById('clothing').value;
-            const skinTone = document.getElementById('skinTone').value;
+            const bodyType = document.getElementById('bodyType').value.toLowerCase();
+            const hairStyle = document.getElementById('hairStyle').value.toLowerCase();
+            const clothing = document.getElementById('clothing').value.toLowerCase();
+            const skinTone = document.getElementById('skinTone').value.toLowerCase();
 
-            logToConsole(`Generating sprite: ${bodyType}, ${hairStyle}, ${clothing}, ${skinTone}`, 'info');
-            
-            // TODO: Integrate with LPC generator
-            const canvas = document.getElementById('spriteCanvas');
-            canvas.innerHTML = `<div style="padding: 80px 0; color: #999;">Generated: ${bodyType} with ${hairStyle} hair</div>`;
+            // Create a canvas to composite the sprite
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+
+            // Fill with a background color for now
+            ctx.fillStyle = getSkinToneColor(skinTone);
+            ctx.fillRect(0, 0, 64, 64);
+
+            // Draw a simple character representation
+            drawSimpleCharacter(ctx, bodyType, hairStyle, clothing, skinTone);
+
+            // Display the generated sprite
+            const preview = document.getElementById('spriteCanvas');
+            preview.innerHTML = '';
+            preview.appendChild(canvas);
+            preview.style.textAlign = 'center';
+            preview.style.lineHeight = 'normal';
+        }
+
+        function getSkinToneColor(skinTone) {
+            const skinTones = {
+                'fair': '#fdbcb4',
+                'medium': '#e6ac88',
+                'dark': '#bc9582',
+            };
+            return skinTones[skinTone] || skinTones['medium'];
+        }
+
+        function drawSimpleCharacter(ctx, bodyType, hairStyle, clothing, skinTone) {
+            const skinColor = getSkinToneColor(skinTone);
+            const hairColors = {
+                'short': '#8b4513',
+                'long': '#654321',
+                'ponytail': '#4a4a4a',
+                'messy': '#daa520',
+                'parted': '#2f1b14',
+            };
+            const clothingColors = {
+                'longsleeve': '#4169e1',
+                'shortsleeve': '#2f2f2f',
+                'formal': '#c0c0c0',
+                'casual': '#800080',
+            };
+
+            // Draw head
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(16, 8, 32, 24);
+
+            // Draw hair
+            ctx.fillStyle = hairColors[hairStyle] || '#8b4513';
+            if (hairStyle === 'long') {
+                ctx.fillRect(12, 8, 40, 16);
+                ctx.fillRect(16, 24, 32, 8);
+            } else if (hairStyle === 'ponytail') {
+                ctx.fillRect(16, 8, 32, 12);
+                ctx.fillRect(44, 16, 8, 16);
+            } else {
+                ctx.fillRect(16, 8, 32, 12);
+            }
+
+            // Draw body/clothing
+            ctx.fillStyle = clothingColors[clothing] || '#4169e1';
+            ctx.fillRect(20, 32, 24, 24);
+
+            // Draw arms
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(12, 36, 8, 16);
+            ctx.fillRect(44, 36, 8, 16);
+
+            // Draw legs
+            ctx.fillRect(24, 56, 6, 8);
+            ctx.fillRect(34, 56, 6, 8);
+
+            // Add simple facial features
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(22, 16, 2, 2); // left eye
+            ctx.fillRect(40, 16, 2, 2); // right eye
+            ctx.fillRect(30, 22, 4, 1); // mouth
         }
 
         function exportSprite() {
@@ -635,7 +709,7 @@
         // Initialize development page
         document.addEventListener('DOMContentLoaded', function() {
             logToConsole('Development tools loaded', 'success');
-            
+
             // Load saved sprite profile if exists
             const savedProfile = localStorage.getItem('spriteProfile');
             if (savedProfile) {
