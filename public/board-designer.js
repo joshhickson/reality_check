@@ -524,6 +524,23 @@ function updateCodeOutput() {
   const codeTextarea = document.getElementById("codeOutput");
   if (!codeTextarea) return;
   
+  // Generate point management configuration
+  const pointCountsStr = Object.keys(pointCounts).length > 0 
+    ? `\n// Custom Point Counts\nconst POINT_COUNTS = ${JSON.stringify(pointCounts, null, 2)};\n`
+    : '';
+  
+  const customPositionsStr = Object.keys(customPointPositions).length > 0
+    ? `\n// Custom Point Positions\nconst CUSTOM_POINT_POSITIONS = ${JSON.stringify(customPointPositions, null, 2)};\n`
+    : '';
+  
+  const pointConfigStr = `
+// Point Management Configuration
+const POINT_MANAGEMENT = {
+  manualPointMode: ${manualPointMode},
+  selectedRing: ${selectedRing ? `"${selectedRing}"` : 'null'},
+  defaultSegments: ${DESIGNER_SEGMENTS}
+};`;
+
   const code = `// Generated Hypocycloid Ring Configuration
 const RINGS = [
 ${designerRings.map(ring => `  { label: "${ring.label}", cusps: ${ring.cusps}, R: ${ring.R}, color: "${ring.color}" }`).join(',\n')}
@@ -536,8 +553,9 @@ const HAND_SETTINGS = {
   handColor: "${handSettings.handColor}",       // hand color
   handWidth: ${handSettings.handWidth},         // hand thickness
   enabled: ${handSettings.enabled},             // hand animation enabled
-  rotationSpeed: ${handSettings.rotationSpeed}  // degrees per tick
-};
+  rotationSpeed: ${handSettings.rotationSpeed}, // degrees per tick
+  currentRotation: ${Math.round(handRotation)}  // current hand position
+};${pointCountsStr}${customPositionsStr}${pointConfigStr}
 
 // Hypocycloid generation function
 function generateHypocycloid(R, cusps, steps = 720) {
@@ -552,6 +570,23 @@ function generateHypocycloid(R, cusps, steps = 720) {
   return pts;
 }
 
+// Point positioning with custom support
+function getPointPosition(ring, pointIndex, totalPoints, precomputedPts = null) {
+  // Check for custom positions first
+  if (POINT_MANAGEMENT.manualPointMode && CUSTOM_POINT_POSITIONS[ring.label] && CUSTOM_POINT_POSITIONS[ring.label][pointIndex]) {
+    const customPos = CUSTOM_POINT_POSITIONS[ring.label][pointIndex];
+    return { x: customPos.x, y: customPos.y, curveParam: customPos.curveParam || 0 };
+  }
+  
+  // Default mathematical position along curve
+  const pts = precomputedPts || generateHypocycloid(ring.R, ring.cusps, 360);
+  const curveParam = pointIndex / totalPoints;
+  const idx = Math.floor((pts.length - 1) * curveParam);
+  const [x, y] = pts[idx];
+  
+  return { x, y, curveParam, curveIndex: idx };
+}
+
 // Hand tick logic
 function animateHand(currentTime, currentPoint, lastTickTime, boardPoints) {
   if (!lastTickTime) lastTickTime = currentTime;
@@ -559,7 +594,7 @@ function animateHand(currentTime, currentPoint, lastTickTime, boardPoints) {
   
   if (HAND_SETTINGS.enabled && HAND_SETTINGS.tickInterval > 0) {
     if (deltaTime >= HAND_SETTINGS.tickInterval * 1000) {
-      currentPoint = (currentPoint + 1) % HAND_SETTINGS.totalPoints;
+      currentPoint = (currentPoint + 1) % boardPoints.length;
       lastTickTime = currentTime;
       
       // Trigger event when hand lands on point
@@ -572,8 +607,37 @@ function animateHand(currentTime, currentPoint, lastTickTime, boardPoints) {
   return { currentPoint, lastTickTime };
 }
 
+// Board generation with custom point support
+function generateBoard() {
+  const boardPoints = [];
+  
+  RINGS.forEach((ring, ringIndex) => {
+    const pts = generateHypocycloid(ring.R, ring.cusps, 360);
+    const pointCount = POINT_COUNTS[ring.label] || POINT_MANAGEMENT.defaultSegments;
+    
+    for (let i = 0; i < pointCount; i++) {
+      const position = getPointPosition(ring, i, pointCount, pts);
+      boardPoints.push({
+        x: position.x,
+        y: position.y,
+        ring: ring.label,
+        ringIndex: ringIndex,
+        pointIndex: i,
+        globalIndex: boardPoints.length,
+        color: ring.color,
+        angle: Math.atan2(position.y, position.x) * 180 / Math.PI,
+        curveParam: position.curveParam
+      });
+    }
+  });
+  
+  return boardPoints;
+}
+
 // Mathematical ratios for current configuration:
-${designerRings.map(ring => `// ${ring.label}: R:r = ${ring.cusps}:1 (${ring.cusps}-cusp hypocycloid)`).join('\n')}`;
+${designerRings.map(ring => `// ${ring.label}: R:r = ${ring.cusps}:1 (${ring.cusps}-cusp hypocycloid)`).join('\n')}
+// Total board points: ${boardPoints.length}
+// Custom point counts: ${Object.keys(pointCounts).length > 0 ? Object.entries(pointCounts).map(([ring, count]) => `${ring}=${count}`).join(', ') : 'None'}`;
 
   codeTextarea.value = code;
 }
