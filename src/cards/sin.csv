@@ -10,3 +10,13 @@ sin_07,sin,immediate,"You fake a sick day to binge Netflix",0,2,1,-1,0
 sin_08,sin,immediate,"You spread gossip about your ex on social media",0,-2,2,-2,0
 sin_09,sin,delayed,"You start dropshipping counterfeit designer goods",1500,1,3,-2,2
 sin_10,sin,immediate,"You take credit for your colleague's work in the meeting",500,-1,2,-2,0
+sin_11,sin,delayed,"Crypto Cash-Out: You cash out your crypto at peak hype",6000,0,1,0,0
+sin_12,sin,immediate,"Unethical Puppy Sponsorship: Your dog becomes an influencer",2000,1,2,0,0
+sin_13,sin,delayed,"Deepfake Resume: You use AI to fake your work experience",1000,0,2,-1,1
+sin_14,sin,delayed,"Soul Advance: You literally sell your soul for quick cash",10000,0,3,0,4
+sin_15,sin,immediate,"Tax Haven TikTok: You make videos about dodging taxes",0,1,2,-1,0
+sin_16,sin,immediate,"Drive-Thru Divorce: You end your marriage via app",-3000,1,2,0,0
+sin_17,sin,immediate,"MLM But Make It Vapes: You recruit friends into vape pyramid",1000,0,3,-2,0
+sin_18,sin,delayed,"Influencer Fyre Fest: You organize a fake luxury event",4000,1,3,-1,3
+sin_19,sin,immediate,"Secret Society Wellness Retreat: You join a sketchy cult",0,1,2,0,0
+sin_20,sin,immediate,"Cancel the Competition: You destroy a rival's reputation",0,-1,1,0,0

@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Reality Check - The Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        h2 {
+            color: #ffd700;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #87ceeb;
+            margin-top: 30px;
+        }
+        .tagline {
+            text-align: center;
+            font-size: 1.3em;
+            font-style: italic;
+            margin-bottom: 40px;
+            color: #b19cd9;
+        }
+        .game-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .ring-description {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .ring {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 5px solid;
+        }
+        .ring.career { border-color: #ff6b6b; }
+        .ring.health { border-color: #feca57; }
+        .ring.social { border-color: #48dbfb; }
+        .ring.personal { border-color: #1dd1a1; }
+        .ring.babel { border-color: #5f27cd; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .warning-box {
+            background: rgba(255, 69, 0, 0.2);
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .tip-box {
+            background: rgba(50, 205, 50, 0.2);
+            border: 2px solid #32cd32;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        ul, ol {
+            line-height: 1.6;
+        }
+        li {
+            margin: 8px 0;
+        }
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">← Back to Game</button>
+    
+    <div class="container">
+        <h1>🎲 Reality Check</h1>
+        <p class="tagline">"The only board game where your dog might get TikTok famous, your crypto side hustle triggers an IRS raid, and you still have to split rent with your emotionally unavailable ex."</p>
+
+        <div class="game-section">
+            <h2>🎯 What is Reality Check?</h2>
+            <p>Reality Check is a satirical multiplayer board game that parodies modern adult life. Set in the fictional town of Babel, players navigate the chaos of careers, relationships, health, and personal growth while making moral choices that shape their destiny.</p>
+            
+            <div class="warning-box">
+                <strong>⚠️ Content Warning:</strong> This game contains dark humor, adult themes, and satirical commentary on modern life. Recommended for players 18+ who can appreciate absurd humor about real-world struggles.
+            </div>
+        </div>
+
+        <div class="game-section">
+            <h2>🎮 How to Play</h2>
+            
+            <h3>Game Setup</h3>
+            <ol>
+                <li><strong>Create or Join a Game:</strong> Enter your username and either create a new game or join an existing one</li>
+                <li><strong>Player Count:</strong> 3-5 players recommended for optimal chaos</li>
+                <li><strong>Character Creation:</strong> [TO BE FILLED] - Character generation system details</li>
+                <li><strong>Starting Resources:</strong> [TO BE FILLED] - Initial money, stats, etc.</li>
+            </ol>
+
+            <h3>Game Flow</h3>
+            <ol>
+                <li><strong>Turn Order:</strong> [TO BE FILLED] - How turn order is determined</li>
+                <li><strong>Movement:</strong> [TO BE FILLED] - How players move around the board</li>
+                <li><strong>Card Resolution:</strong> Draw cards based on which ring you land on, make choices</li>
+                <li><strong>Consequences:</strong> Face immediate and delayed effects of your choices</li>
+                <li><strong>End Game:</strong> [TO BE FILLED] - Win conditions and judgment system</li>
+            </ol>
+
+            <div class="tip-box">
+                <strong>💡 Pro Tip:</strong> There's no single "right" way to play. Sometimes the most virtuous choice isn't the most strategic one, and sometimes being a little evil pays off... until it doesn't.
+            </div>
+        </div>
+
+        <div class="game-section">
+            <h2>🌀 The Chaos Circle Board</h2>
+            <p>The game board is a mathematically-generated hypocycloid with five concentric rings representing different aspects of life:</p>
+            
+            <div class="ring-description">
+                <div class="ring career">
+                    <h4>🔴 Career Ring</h4>
+                    <p>Jobs, promotions, corporate drama, unemployment, side hustles, and the endless grind of professional life.</p>
+                </div>
+                <div class="ring health">
+                    <h4>🟡 Health Ring</h4>
+                    <p>Physical and mental wellbeing, therapy, medical bills, gym memberships you never use, and existential crises.</p>
+                </div>
+                <div class="ring social">
+                    <h4>🔵 Social Ring</h4>
+                    <p>Relationships, family drama, dating apps, social media scandals, and the complex web of human connections.</p>
+                </div>
+                <div class="ring personal">
+                    <h4>🟢 Personal Growth Ring</h4>
+                    <p>Hobbies, spirituality, self-improvement, creative pursuits, and the eternal quest for meaning.</p>
+                </div>
+                <div class="ring babel">
+                    <h4>🟣 Babel Events Ring</h4>
+                    <p>Town-wide chaos that affects everyone: market crashes, natural disasters, political upheaval, and collective madness.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-section">
+            <h2>📊 Player Stats</h2>
+            <p>Your character is tracked through four core statistics that fluctuate throughout the game:</p>
+            
+            <div class="stats-grid">
+                <div class="stat">
+                    <h4>💰 Money</h4>
+                    <p>Your financial situation. Can be positive (wealth) or negative (debt). Affects available choices and life quality.</p>
+                </div>
+                <div class="stat">
+                    <h4>🧠 Mental Health</h4>
+                    <p>Your psychological wellbeing. Low mental health can limit options and make you vulnerable to bad decisions.</p>
+                </div>
+                <div class="stat">
+                    <h4>😈 Sin</h4>
+                    <p>Your moral corruption level. High sin opens dark opportunities but comes with consequences at judgment.</p>
+                </div>
+                <div class="stat">
+                    <h4>😇 Virtue</h4>
+                    <p>Your moral goodness level. High virtue provides protection and noble opportunities, but virtue has costs.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-section">
+            <h2>🃏 Card Types</h2>
+            
+            <h3>Sin Cards (Red)</h3>
+            <p>Temptations with immediate benefits but moral costs. Examples: embezzlement, fraud, betrayal, cryptocurrency scams, and MLM schemes.</p>
+            
+            <h3>Virtue Cards (Blue)</h3>
+            <p>Opportunities for sacrifice and moral growth. Examples: charity, therapy, helping others, environmental activism, and forgiveness.</p>
+            
+            <h3>Chaos Cards (Purple)</h3>
+            <p>Random life events that test adaptability. Examples: surprise inheritance, job loss, medical emergencies, and natural disasters.</p>
+            
+            <div class="tip-box">
+                <strong>💡 Card Strategy:</strong> Many cards have delayed effects that trigger later in the game. Your choices early on can come back to haunt or help you turns later.
+            </div>
+        </div>
+
+        <div class="game-section">
+            <h2>⚖️ Moral Complexity</h2>
+            <p>Reality Check doesn't have simple good vs. evil choices. The game explores:</p>
+            <ul>
+                <li><strong>Gray Area Decisions:</strong> Reporting tax evasion vs. loyalty to friends</li>
+                <li><strong>Contextual Morality:</strong> Stealing when bankrupt vs. stealing when wealthy</li>
+                <li><strong>Unintended Consequences:</strong> Good intentions leading to bad outcomes</li>
+                <li><strong>Systemic Issues:</strong> How individual choices interact with broken systems</li>
+                <li><strong>Temporal Ethics:</strong> How past virtues can be tested by future circumstances</li>
+            </ul>
+        </div>
+
+        <div class="game-section">
+            <h2>🎯 Game Modes</h2>
+            
+            <h3>Casual Mode (Current)</h3>
+            <ul>
+                <li><strong>Duration:</strong> 30-45 minutes</li>
+                <li><strong>Players:</strong> 3-5 players</li>
+                <li><strong>Focus:</strong> Quick, accessible gameplay with satirical humor</li>
+                <li><strong>Complexity:</strong> Easy to learn, strategic depth emerges through play</li>
+            </ul>
+            
+            <h3>Advanced Mode (Future)</h3>
+            <ul>
+                <li>Extended gameplay with secrets and political mechanics</li>
+                <li>Red Line Protocol (player elimination voting system)</li>
+                <li>MetaNet AI reactions and social manipulation</li>
+                <li>Control chains and conspiracy mechanics</li>
+            </ul>
+        </div>
+
+        <div class="game-section">
+            <h2>🏆 Winning the Game</h2>
+            <p>[TO BE FILLED - End game conditions, judgment system, different victory paths]</p>
+            
+            <h3>Judgment Day</h3>
+            <p>[TO BE FILLED - How final scoring works, different paths to victory]</p>
+            
+            <h3>Victory Conditions</h3>
+            <ul>
+                <li>[TO BE FILLED] - Pure virtue path</li>
+                <li>[TO BE FILLED] - Wealth accumulation path</li>
+                <li>[TO BE FILLED] - Chaos agent path</li>
+                <li>[TO BE FILLED] - Balanced life path</li>
+            </ul>
+        </div>
+
+        <div class="game-section">
+            <h2>🎨 Design Philosophy</h2>
+            <blockquote style="font-style: italic; font-size: 1.1em; text-align: center; margin: 30px 0;">
+                "We have to laugh at life in order to see it as it truly is."
+            </blockquote>
+            
+            <p>Reality Check uses humor and absurdity to mirror real-world systems, exploring:</p>
+            <ul>
+                <li>The illusion of meritocracy in modern capitalism</li>
+                <li>How wealth affects empathy and social connections</li>
+                <li>The randomness of birth circumstances vs. personal choices</li>
+                <li>The impact of social media on perception and reality</li>
+                <li>The beautiful chaos of trying to be a good person in a complicated world</li>
+            </ul>
+        </div>
+
+        <div class="game-section">
+            <h2>💻 Technical Details</h2>
+            
+            <h3>System Requirements</h3>
+            <ul>
+                <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+                <li>Stable internet connection for multiplayer</li>
+                <li>Works on desktop, tablet, and mobile devices</li>
+            </ul>
+            
+            <h3>Multiplayer Features</h3>
+            <ul>
+                <li>Real-time synchronization across all players</li>
+                <li>Persistent game state - games can be paused and resumed</li>
+                <li>Chat and interaction systems</li>
+                <li>Spectator mode for eliminated players</li>
+            </ul>
+        </div>
+
+        <div class="game-section">
+            <h2>🤝 Credits & Community</h2>
+            <p>[TO BE FILLED - Creator credits, contributors, how to get involved]</p>
+            
+            <h3>Contributing</h3>
+            <p>[TO BE FILLED - How players can contribute cards, ideas, feedback]</p>
+            
+            <h3>Community Guidelines</h3>
+            <p>[TO BE FILLED - Expected behavior, content policies]</p>
+        </div>
+
+        <div class="game-section">
+            <h2>❓ FAQ</h2>
+            
+            <h3>Is this game appropriate for my group?</h3>
+            <p>Reality Check deals with adult themes through satirical humor. It's designed for players who can appreciate dark comedy about modern life's absurdities and contradictions.</p>
+            
+            <h3>How long does a game take?</h3>
+            <p>Casual Mode games typically last 30-45 minutes, making them perfect for lunch breaks or evening entertainment.</p>
+            
+            <h3>Can I play with strangers online?</h3>
+            <p>[TO BE FILLED - Public matchmaking vs. private games]</p>
+            
+            <h3>What if I get disconnected?</h3>
+            <p>[TO BE FILLED - Reconnection mechanics, game pause features]</p>
+            
+            <h3>Can I create my own cards?</h3>
+            <p>[TO BE FILLED - Custom content creation, modding support]</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.3);">
+            <p><em>Reality Check challenges players to examine their values while navigating the beautiful chaos of modern existence.</em></p>
+            <p style="margin-top: 30px;">
+                <button class="back-button" onclick="window.location.href='index.html'" style="position: static; font-size: 18px;">🎲 Start Playing</button>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
