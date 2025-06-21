@@ -3,11 +3,11 @@
 // Interactive tool for fine-tuning Reality Check board parameters
 
 const DEFAULT_RINGS = [
-  { label: "Career", cusps: 3, R: 127, color: "#ff6b6b" },
-  { label: "Health", cusps: 4, R: 137, color: "#feca57" },
-  { label: "Social", cusps: 5, R: 150, color: "#48dbfb" },
+  { label: "Career", cusps: 3, R: 120, color: "#ff6b6b" },
+  { label: "Health", cusps: 4, R: 130, color: "#feca57" },
+  { label: "Social", cusps: 5, R: 140, color: "#48dbfb" },
   { label: "Personal", cusps: 6, R: 150, color: "#1dd1a1" },
-  { label: "BabelEvents", cusps: 2, R: 150, color: "#5f27cd" },
+  { label: "BabelEvents", cusps: 2, R: 160, color: "#5f27cd" },
 ];
 
 let designerRings = JSON.parse(JSON.stringify(DEFAULT_RINGS));
