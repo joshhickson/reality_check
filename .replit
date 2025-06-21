@@ -5,6 +5,7 @@ channel = "stable-24_05"
 
 [deployment]
 run = ["sh", "-c", "npm start"]
+deploymentTarget = "cloudrun"
 
 [workflows]
 runButton = "Start Reality Check Server"
