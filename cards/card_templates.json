@@ -1,0 +1,215 @@
+
+{
+  "_template": {
+    "id": "unique_card_id",
+    "name": "Card Name",
+    "type": "sin|virtue|chaos|opportunity|relationship|health",
+    "category": "career|health|social|personal|babel|special",
+    "description": "What happens when this card is drawn",
+    "flavor_text": "Optional humorous or thematic text",
+    "choices": [
+      {
+        "text": "Choice description",
+        "effects": {
+          "money": 0,
+          "mental_health": 0,
+          "sin": 0,
+          "virtue": 0,
+          "public_eye": 0,
+          "legal_standing": 0
+        },
+        "conditions": {
+          "requires_money": 0,
+          "requires_mental_health": 0,
+          "player_count_min": 1,
+          "player_count_max": 8
+        },
+        "triggers": {
+          "add_tags": ["tag1", "tag2"],
+          "remove_tags": ["tag3"],
+          "spawn_card": "card_id_to_spawn_later",
+          "target_other_players": false,
+          "roll_dice": false
+        }
+      }
+    ],
+    "rarity": "common|uncommon|rare|legendary",
+    "min_round": 1,
+    "max_appearances": -1,
+    "artwork_url": "optional_image_path"
+  },
+  
+  "starter_deck": [
+    {
+      "id": "easy_money",
+      "name": "Easy Money",
+      "type": "sin",
+      "category": "career",
+      "description": "A shady contact offers you quick cash for 'no questions asked' work.",
+      "flavor_text": "It's probably fine... right?",
+      "choices": [
+        {
+          "text": "Take the job (+$2000, +2 Sin)",
+          "effects": {
+            "money": 2000,
+            "sin": 2,
+            "legal_standing": -1
+          },
+          "triggers": {
+            "add_tags": ["criminal_contact"],
+            "spawn_card": "police_investigation"
+          }
+        },
+        {
+          "text": "Walk away (Keep your conscience clean)",
+          "effects": {
+            "virtue": 1,
+            "mental_health": 1
+          }
+        }
+      ],
+      "rarity": "common",
+      "min_round": 2
+    },
+    
+    {
+      "id": "help_neighbor",
+      "name": "Help a Neighbor",
+      "type": "virtue",
+      "category": "social",
+      "description": "Your elderly neighbor needs help moving furniture.",
+      "flavor_text": "Good karma is priceless... but your back isn't.",
+      "choices": [
+        {
+          "text": "Help them out (-$100 for supplies, +2 Virtue)",
+          "effects": {
+            "money": -100,
+            "virtue": 2,
+            "mental_health": 1
+          },
+          "triggers": {
+            "add_tags": ["community_hero"]
+          }
+        },
+        {
+          "text": "Make an excuse (No cost, no benefit)",
+          "effects": {},
+          "triggers": {
+            "add_tags": ["selfish_reputation"]
+          }
+        }
+      ],
+      "rarity": "common",
+      "min_round": 1
+    },
+    
+    {
+      "id": "crypto_crash",
+      "name": "Crypto Market Chaos",
+      "type": "chaos",
+      "category": "career",
+      "description": "Your crypto portfolio just moved dramatically. Roll to see if you're rich or broke.",
+      "flavor_text": "Diamond hands or paper hands?",
+      "choices": [
+        {
+          "text": "Check your portfolio (Roll for outcome)",
+          "effects": {},
+          "triggers": {
+            "roll_dice": true,
+            "add_tags": ["crypto_trader"]
+          }
+        }
+      ],
+      "rarity": "uncommon",
+      "min_round": 3
+    },
+    
+    {
+      "id": "unexpected_vet_bill",
+      "name": "Emergency Vet Visit",
+      "type": "chaos",
+      "category": "personal",
+      "description": "Your pet needs emergency surgery. The bill is $3000.",
+      "flavor_text": "Your furry friend is counting on you.",
+      "choices": [
+        {
+          "text": "Pay the bill (-$3000, +2 Mental Health)",
+          "effects": {
+            "money": -3000,
+            "mental_health": 2,
+            "virtue": 1
+          },
+          "conditions": {
+            "requires_money": 3000
+          },
+          "triggers": {
+            "add_tags": ["pet_owner", "financially_strained"]
+          }
+        },
+        {
+          "text": "Find a cheaper vet (-$1500, -1 Mental Health)",
+          "effects": {
+            "money": -1500,
+            "mental_health": -1,
+            "sin": 1
+          },
+          "conditions": {
+            "requires_money": 1500
+          }
+        },
+        {
+          "text": "Can't afford it (-3 Mental Health, +2 Sin)",
+          "effects": {
+            "mental_health": -3,
+            "sin": 2
+          },
+          "triggers": {
+            "add_tags": ["guilt", "pet_loss"]
+          }
+        }
+      ],
+      "rarity": "uncommon",
+      "min_round": 1
+    },
+    
+    {
+      "id": "mlm_pitch",
+      "name": "MLM Opportunity",
+      "type": "opportunity",
+      "category": "career",
+      "description": "A friend wants you to join their 'life-changing business opportunity.'",
+      "flavor_text": "It's definitely not a pyramid scheme... it's a triangle!",
+      "choices": [
+        {
+          "text": "Join the scheme (-$500, potential future income)",
+          "effects": {
+            "money": -500,
+            "sin": 1
+          },
+          "triggers": {
+            "add_tags": ["mlm_victim"],
+            "spawn_card": "mlm_recruitment"
+          }
+        },
+        {
+          "text": "Politely decline (Keep your money and dignity)",
+          "effects": {
+            "virtue": 1
+          }
+        },
+        {
+          "text": "Report them to authorities (+1 Virtue, lose friend)",
+          "effects": {
+            "virtue": 1,
+            "mental_health": -1
+          },
+          "triggers": {
+            "add_tags": ["whistleblower"]
+          }
+        }
+      ],
+      "rarity": "common",
+      "min_round": 2
+    }
+  ]
+}

@@ -60,30 +60,12 @@ function rollDice() {
   document.getElementById('rollButton').disabled = true;
 }
 
-function acceptCard(cardIndex) {
-  socket.emit('card_action', {
+function makeCardChoice(cardId, choiceIndex) {
+  socket.emit('card_choice', {
     gameId,
     playerId,
-    cardIndex,
-    action: 'accept'
-  });
-}
-
-function rejectCard(cardIndex) {
-  socket.emit('card_action', {
-    gameId,
-    playerId,
-    cardIndex,
-    action: 'reject'
-  });
-}
-
-function delayCard(cardIndex) {
-  socket.emit('card_action', {
-    gameId,
-    playerId,
-    cardIndex,
-    action: 'delay'
+    cardId,
+    choiceIndex
   });
 }
 
@@ -165,6 +147,38 @@ function showPlayerInfo(player) {
 function updatePlayerStats(stats) {
   if (stats) {
     document.getElementById('money').textContent = stats.money || 5000;
+
+
+socket.on('card_resolved', (data) => {
+  console.log('Card resolved:', data);
+  
+  // Update player stats if it's our card
+  if (data.playerId === playerId) {
+    updatePlayerStats(data.newStats);
+    
+    // Show resolution message
+    const cardsArea = document.getElementById('cardsArea');
+    cardsArea.innerHTML = `
+      <div class="card-result">
+        <h4>Choice Made!</h4>
+        <p>Your choice has been processed.</p>
+        <div class="new-stats">
+          Money: $${data.newStats.money} | 
+          Mental Health: ${data.newStats.mental_health} | 
+          Sin: ${data.newStats.sin} | 
+          Virtue: ${data.newStats.virtue}
+        </div>
+      </div>
+    `;
+    
+    // Clear cards after 3 seconds
+    setTimeout(() => {
+      cardsArea.innerHTML = '';
+    }, 3000);
+  }
+});
+
+
     document.getElementById('mental').textContent = stats.mental_health || 5;
     document.getElementById('sin').textContent = stats.sin || 0;
     document.getElementById('virtue').textContent = stats.virtue || 0;
@@ -183,18 +197,27 @@ function displayCharacterInfo(character) {
 
 function displayCards(cards) {
   const cardsArea = document.getElementById('cardsArea');
-  cardsArea.innerHTML = '<h4>Your Cards</h4>';
+  cardsArea.innerHTML = '<h4>Choose Your Path</h4>';
   
-  cards.forEach((card, index) => {
+  cards.forEach((card, cardIndex) => {
     const cardDiv = document.createElement('div');
     cardDiv.className = `card ${card.type}-card`;
+    
+    let choicesHtml = '';
+    if (card.choices && card.choices.length > 0) {
+      choicesHtml = card.choices.map((choice, choiceIndex) => `
+        <button onclick="makeCardChoice('${card.id}', ${choiceIndex})" class="choice-btn">
+          ${choice.text}
+        </button>
+      `).join('');
+    }
+    
     cardDiv.innerHTML = `
-      <h5>${card.title}</h5>
+      <h5>${card.name}</h5>
       <p>${card.description}</p>
-      <div>
-        <button onclick="acceptCard(${index})">Accept</button>
-        <button onclick="rejectCard(${index})">Reject</button>
-        <button onclick="delayCard(${index})">Delay</button>
+      ${card.flavor_text ? `<em class="flavor-text">"${card.flavor_text}"</em>` : ''}
+      <div class="card-choices">
+        ${choicesHtml}
       </div>
     `;
     cardsArea.appendChild(cardDiv);

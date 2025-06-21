@@ -21,56 +21,91 @@ app.use(express.static('public'));
 // Replit Key-Value Store
 const db = new Database();
 
-// Initialize database with default cards
+// Card deck management system
+const fs = require('fs');
+const path = require('path');
+
+class CardDeckManager {
+  constructor() {
+    this.decks = new Map();
+    this.loadCards();
+  }
+
+  loadCards() {
+    try {
+      const cardPath = path.join(__dirname, 'cards', 'card_templates.json');
+      if (fs.existsSync(cardPath)) {
+        const cardData = JSON.parse(fs.readFileSync(cardPath, 'utf8'));
+        this.decks.set('starter', cardData.starter_deck);
+        console.log(`Loaded ${cardData.starter_deck.length} cards from starter deck`);
+      }
+    } catch (err) {
+      console.error('Error loading cards:', err);
+      // Fallback to hardcoded cards if file doesn't exist
+      this.createFallbackDeck();
+    }
+  }
+
+  createFallbackDeck() {
+    const fallbackCards = [
+      {
+        id: 'easy_money',
+        name: 'Easy Money',
+        type: 'sin',
+        category: 'career',
+        description: 'A shady contact offers you quick cash.',
+        choices: [
+          {
+            text: 'Take the job (+$2000, +2 Sin)',
+            effects: { money: 2000, sin: 2, legal_standing: -1 }
+          },
+          {
+            text: 'Walk away (+1 Virtue)',
+            effects: { virtue: 1 }
+          }
+        ],
+        rarity: 'common'
+      }
+    ];
+    this.decks.set('starter', fallbackCards);
+  }
+
+  getRandomCard(deckName = 'starter', filters = {}) {
+    const deck = this.decks.get(deckName);
+    if (!deck) return null;
+
+    let filteredCards = deck.filter(card => {
+      if (filters.type && card.type !== filters.type) return false;
+      if (filters.category && card.category !== filters.category) return false;
+      if (filters.minRound && card.min_round > filters.minRound) return false;
+      return true;
+    });
+
+    if (filteredCards.length === 0) filteredCards = deck;
+    
+    return filteredCards[Math.floor(Math.random() * filteredCards.length)];
+  }
+
+  getCardsByCategory(category, deckName = 'starter') {
+    const deck = this.decks.get(deckName);
+    if (!deck) return [];
+    return deck.filter(card => card.category === category);
+  }
+
+  addDeck(name, cards) {
+    this.decks.set(name, cards);
+  }
+}
+
+const cardManager = new CardDeckManager();
+
+// Initialize database with card system
 async function initDatabase() {
   try {
-    // Initialize default cards if they don't exist
+    // Initialize card system
     const cardsExist = await db.get('cards_initialized');
     if (!cardsExist) {
-      const defaultCards = [
-        {
-          id: uuidv4(),
-          type: 'sin',
-          title: 'Easy Money',
-          description: 'Accept a suspicious cash job. +$2000, +2 Sin',
-          effects: { money: 2000, sin: 2 },
-          ring_type: 'career'
-        },
-        {
-          id: uuidv4(),
-          type: 'virtue',
-          title: 'Help a Neighbor',
-          description: 'Spend your weekend helping someone move. -$100, +2 Virtue',
-          effects: { money: -100, virtue: 2 },
-          ring_type: 'social'
-        },
-        {
-          id: uuidv4(),
-          type: 'chaos',
-          title: 'Unexpected Vet Bill',
-          description: 'Your pet needs emergency surgery. -$3000, +1 Mental Health if you pay',
-          effects: { money: -3000, mental_health: 1 },
-          ring_type: 'personal'
-        },
-        {
-          id: uuidv4(),
-          type: 'chaos',
-          title: 'Divorce Papers',
-          description: 'Your spouse files for divorce. -$5000, -2 Mental Health, +3 Public Eye',
-          effects: { money: -5000, mental_health: -2, public_eye: 3 },
-          ring_type: 'personal'
-        },
-        {
-          id: uuidv4(),
-          type: 'chaos',
-          title: 'Medical Mystery',
-          description: 'Roll for diagnosis. 1-2: Cancer, 3-4: Chronic illness, 5-6: False alarm',
-          effects: { mental_health: -1 },
-          ring_type: 'health'
-        }
-      ];
-
-      await db.set('default_cards', defaultCards);
+      await db.set('card_manager_ready', true);
       await db.set('cards_initialized', true);
     }
 
@@ -162,6 +197,87 @@ io.on('connection', (socket) => {
 
       // Add player to game
       game.players.push(player);
+
+
+  socket.on('card_choice', async (data) => {
+    try {
+      const { gameId, playerId, cardId, choiceIndex } = data;
+      
+      const player = await db.get(`player:${playerId}`);
+      if (!player) return;
+
+      // Get the card from deck
+      const card = cardManager.decks.get('starter').find(c => c.id === cardId);
+      if (!card || !card.choices[choiceIndex]) return;
+
+      const choice = card.choices[choiceIndex];
+      
+      // Check if player meets conditions
+      if (choice.conditions) {
+        if (choice.conditions.requires_money && player.stats.money < choice.conditions.requires_money) {
+          socket.emit('error', { message: 'Not enough money for this choice' });
+          return;
+        }
+      }
+
+      // Apply effects
+      Object.entries(choice.effects).forEach(([stat, value]) => {
+        if (player.stats.hasOwnProperty(stat)) {
+          player.stats[stat] += value;
+        }
+      });
+
+      // Handle triggers
+      if (choice.triggers) {
+        if (choice.triggers.add_tags) {
+          if (!player.tags) player.tags = [];
+          player.tags.push(...choice.triggers.add_tags);
+        }
+        
+        if (choice.triggers.roll_dice) {
+          const rollResult = Math.floor(Math.random() * 6) + 1;
+          // Handle dice-based effects (implement specific logic per card)
+          if (cardId === 'crypto_crash') {
+            if (rollResult <= 2) {
+              player.stats.money -= 5000; // Lost everything
+            } else if (rollResult <= 4) {
+              player.stats.money += 1000; // Small gain
+            } else {
+              player.stats.money += 10000; // Big win
+            }
+          }
+        }
+      }
+
+      // Save updated player
+      await db.set(`player:${playerId}`, player);
+
+      // Log the choice
+      const choiceEvent = {
+        id: uuidv4(),
+        game_id: gameId,
+        player_id: playerId,
+        event_type: 'card_choice',
+        event_data: { cardId, choiceIndex, choice },
+        created_at: new Date().toISOString()
+      };
+      await db.set(`event:${choiceEvent.id}`, choiceEvent);
+
+      io.to(gameId).emit('card_resolved', {
+        playerId,
+        cardId,
+        choice,
+        newStats: player.stats,
+        tags: player.tags
+      });
+
+    } catch (err) {
+      console.error('Card choice error:', err);
+      socket.emit('error', { message: 'Failed to process card choice' });
+    }
+  });
+
+
       await db.set(`game:${gameId}`, game);
       await db.set(`player:${player.id}`, player);
 
@@ -180,6 +296,47 @@ io.on('connection', (socket) => {
       socket.emit('error', { message: 'Failed to join game' });
     }
   });
+
+
+
+// API endpoint to get available cards
+app.get('/api/cards/:deckName?', (req, res) => {
+  try {
+    const deckName = req.params.deckName || 'starter';
+    const deck = cardManager.decks.get(deckName);
+    
+    if (deck) {
+      res.json({
+        deck: deckName,
+        cards: deck,
+        count: deck.length
+      });
+    } else {
+      res.status(404).json({ error: 'Deck not found' });
+    }
+  } catch (err) {
+    console.error('Card fetch error:', err);
+    res.status(500).json({ error: 'Failed to fetch cards' });
+  }
+});
+
+// API endpoint to add new deck
+app.post('/api/cards/deck', express.json(), (req, res) => {
+  try {
+    const { name, cards } = req.body;
+    
+    if (!name || !cards || !Array.isArray(cards)) {
+      return res.status(400).json({ error: 'Invalid deck format' });
+    }
+    
+    cardManager.addDeck(name, cards);
+    res.json({ message: `Deck '${name}' added successfully`, cardCount: cards.length });
+  } catch (err) {
+    console.error('Add deck error:', err);
+    res.status(500).json({ error: 'Failed to add deck' });
+  }
+});
+
 
   socket.on('start_game', async (data) => {
     try {
@@ -307,21 +464,27 @@ function checkRingTriggers(gameState, currentRound) {
 }
 
 async function generateCardsForTurn(playerId, triggeredRings) {
-  // For now, return sample cards - this would integrate with your card system
-  return [
-    {
-      type: 'sin',
-      title: 'Easy Money',
-      description: 'Accept a suspicious cash job. +$2000, +2 Sin',
-      effects: { money: 2000, sin: 2 }
-    },
-    {
-      type: 'virtue',
-      title: 'Help a Neighbor',
-      description: 'Spend your weekend helping someone move. -$100, +2 Virtue',
-      effects: { money: -100, virtue: 2 }
+  const cards = [];
+  const player = await db.get(`player:${playerId}`);
+  
+  // Generate cards based on triggered rings
+  for (const ring of triggeredRings) {
+    const card = cardManager.getRandomCard('starter', { category: ring });
+    if (card) {
+      cards.push(card);
     }
-  ];
+  }
+  
+  // Always include at least one random card if no rings triggered
+  if (cards.length === 0) {
+    const randomCard = cardManager.getRandomCard('starter');
+    if (randomCard) {
+      cards.push(randomCard);
+    }
+  }
+  
+  // Limit to 3 cards max to prevent choice paralysis
+  return cards.slice(0, 3);
 }
 
 // API Routes
