@@ -10,6 +10,15 @@ const DEFAULT_RINGS = [
   { label: "BabelEvents", cusps: 2, R: 160, color: "#5f27cd" },
 ];
 
+// Default optimized point counts
+const DEFAULT_POINT_COUNTS = {
+  "Career": 6,
+  "Health": 4,
+  "Social": 5,
+  "Personal": 6,
+  "BabelEvents": 2
+};
+
 let designerRings = JSON.parse(JSON.stringify(DEFAULT_RINGS));
 const DESIGNER_SEGMENTS = 10;
 const DESIGNER_STEPS = 360;
@@ -24,7 +33,7 @@ let handSettings = {
   rotationSpeed: 1     // degrees per tick
 };
 
-let handRotation = 0;  // current angle in degrees
+let handRotation = 33;  // current angle in degrees (optimized starting position)
 let lastTickTime = 0;
 let animationId = null;
 let boardPoints = [];  // Will store all point positions and data
@@ -37,7 +46,7 @@ let pointEditMode = false;
 let customPointPositions = {}; // ring -> [custom positions]
 let draggedPoint = null;
 let selectedRing = null;
-let pointCounts = {}; // ring -> custom point count
+let pointCounts = JSON.parse(JSON.stringify(DEFAULT_POINT_COUNTS)); // ring -> custom point count (initialized with optimized defaults)
 let overlappingPoints = []; // points currently overlapped by hand
 
 // Generate hypocycloid points for designer
@@ -644,6 +653,11 @@ ${designerRings.map(ring => `// ${ring.label}: R:r = ${ring.cusps}:1 (${ring.cus
 
 function resetToDefaults() {
   designerRings = JSON.parse(JSON.stringify(DEFAULT_RINGS));
+  pointCounts = JSON.parse(JSON.stringify(DEFAULT_POINT_COUNTS));
+  handRotation = 33;
+  customPointPositions = {};
+  selectedRing = null;
+  manualPointMode = false;
   setupDesignerControls();
   drawDesignerBoard();
 }
