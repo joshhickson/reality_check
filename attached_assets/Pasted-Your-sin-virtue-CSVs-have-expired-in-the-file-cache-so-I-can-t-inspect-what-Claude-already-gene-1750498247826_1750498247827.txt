@@ -1,0 +1,42 @@
+Your **sin/virtue CSVs have expired** in the file cache, so I can’t inspect what Claude already generated—feel free to re-upload if you’d like direct feedback. Meanwhile, here’s a fresh batch of card concepts that blend the pattern you set earlier:
+
+| Deck    | Card Title                          | Immediate Effect (Turn N)                            | Delayed Hook (Turn N + k)                                                        | One-Liner Flavor                                      |
+| ------- | ----------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| **Sin** | “Crypto Cash-Out”                   | + \$6 000, +1 Sin                                    | If the Babel ring triggers “Market Crash” before game end → lose double the gain | *“Who needs fundamentals when you’ve got vibes?”*     |
+| **Sin** | “Unethical Puppy Sponsorship”       | + Public Eye, + \$2 000                              | 5 turns later roll: 1-3 = Puppy mauls neighbor (-Virtue, lawsuit)                | *“He’s #Sponsored—by chaos.”*                         |
+| **Sin** | “Deepfake Résumé”                   | Instant promotion (+ Money)                          | First Career tile after → 50 % chance of exposure (-Money, +Sin)                 | *“Thank you for your service, imaginary MIT degree.”* |
+| **Sin** | “Soul Advance”                      | + \$10 000, +3 Sin                                   | 4 turns later: “Sacrifice firstborn or pay \$15 000 in hush money”               | *“The devil takes Venmo.”*                            |
+| **Sin** | “Tax Haven TikTok”                  | Skip next tax tile                                   | Next Health tile → IRS stress ulcer (-Mental Health)                             | *“#WriteOffYourTrauma”*                               |
+| **Sin** | “Drive-Thru Divorce”                | +1 Mental Health (relief), -\$3 000                  | Social ring next 2 hits → ex publicly roasts you (-Public Eye)                   | *“Have it your way—half.”*                            |
+| **Sin** | “MLM, But Make It Vapes”            | +\$1 000 for each player who buys-in                 | Each buyer now draws a Sin mini-card every Social tile                           | *“Strawberry-flavored regret.”*                       |
+| **Sin** | “Influencer Fyre Fest”              | +Public Eye, +\$4 000                                | 3 turns: class-action suit (-\$6 000)                                            | *“It was a curated survival experience.”*             |
+| **Sin** | “Secret Society ‘Wellness’ Retreat” | +Luck token, +2 Sin                                  | Babel event “Conspiracy Leak” → 50 % Hell jump on death                          | *“Namasté… and drink the Kool-Aid.”*                  |
+| **Sin** | “Cancel the Competition”            | Pick a player: they lose Public Eye, you gain +1 Sin | If target hits Purgatory, they may haunt you twice                               | *“#AccountabilityButMakeItPetty”*                     |
+
+| Deck       | Card Title                      | Immediate Effect                        | Delayed Hook                                            | One-Liner                                       |
+| ---------- | ------------------------------- | --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------- |
+| **Virtue** | “Therapy Breakthrough”          | -\$1 000, +2 Mental Health              | Next Sin card accepted costs -1 Sin                     | *“Cried, thrived, survived.”*                   |
+| **Virtue** | “Rent-A-Room to Refugee”        | -\$2 000, +2 Virtue                     | On next Babel Crisis = +\$3 000 tax credit              | *“One spare room, two saved souls.”*            |
+| **Virtue** | “Delete the Doomscroll”         | Lose -Public Eye, +1 Mental Health      | Social tile in 3 turns → immunity to cancelation        | *“Screenshotted inner peace.”*                  |
+| **Virtue** | “Anonymous Bail Fund”           | -\$1 500, +2 Virtue                     | If any player is jailed → you gain +Public Eye (hero)   | *“They’ll never know it was you—Twitter will.”* |
+| **Virtue** | “Give Puppy to Therapy Program” | -Mental Health cost now, +Virtue        | 4 turns → random player gains Mental Health boost       | *“Who rescued whom?”*                           |
+| **Virtue** | “Pay It Forward Coffee Chain”   | -\$200, +1 Virtue                       | Chain reaction: next Social tile gives +1 Virtue to all | *“Caffeine and karma.”*                         |
+| **Virtue** | “Public Apology (and Mean It)”  | -Public Eye, -1 Sin                     | If Public Eye <50 % at Judgment → +2 Virtue             | *“Notes app redemption arc.”*                   |
+| **Virtue** | “Donate Organs… Early”          | Immediate death (Purgatory), +10 Virtue | Haunt phase: you can bless two living players           | *“Leaving on a literal high note.”*             |
+| **Virtue** | “Climate Protest Arrest”        | -\$500, +2 Virtue, +Public Eye          | If Babel ring “Heatwave” hits → skip Health penalty     | *“Cool points for a hot planet.”*               |
+| **Virtue** | “Forgive the Fraudster”         | Cancel one Sin penalty on any player    | You gain +1 Mental Health next turn                     | *“Grace is the ultimate scam.”*                 |
+
+### Pullbacks from our brainstorming (now formalized)
+
+1. **Puppy TikTok Fame → mauling lawsuit**
+2. **Crypto Crash / Cash-Out**
+3. **Cancer roll on Health tile**
+4. **Divorce split assets**
+5. **MLM Vape pyramid**
+6. **Tax Haven TikTok**
+7. **Secret Society adrenochrome perk**
+8. **War draft as Babel event**
+9. **Cancelation card with MetaNet roast**
+10. **Drive-Thru Divorce humor**
+
+Feel free to re-upload your CSVs; I can merge these into the existing deck or output ready-to-import CSV rows.
