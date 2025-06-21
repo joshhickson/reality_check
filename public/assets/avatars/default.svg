@@ -1,0 +1,22 @@
+
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="55" fill="#e9ecef" stroke="#dee2e6" stroke-width="3"/>
+  
+  <!-- Player silhouette -->
+  <circle cx="60" cy="45" r="18" fill="#6c757d"/>
+  <path d="M 30 95 Q 60 75 90 95 L 90 110 L 30 110 Z" fill="#6c757d"/>
+  
+  <!-- Name label background -->
+  <rect x="5" y="100" width="110" height="15" rx="7" fill="rgba(0,0,0,0.7)"/>
+  
+  <!-- Player name -->
+  <text x="60" y="110" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle" id="player-name">Player</text>
+  
+  <!-- Trait indicators (top right) -->
+  <circle cx="95" cy="25" r="12" fill="#ffc107" id="trait-1" opacity="0"/>
+  <text x="95" y="29" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="black" id="trait-1-text">💰</text>
+  
+  <circle cx="95" cy="45" r="12" fill="#007bff" id="trait-2" opacity="0"/>
+  <text x="95" y="49" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="white" id="trait-2-text">🧠</text>
+</svg>

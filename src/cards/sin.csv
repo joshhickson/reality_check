@@ -1,0 +1,12 @@
+
+id,deck,type,text,money,mental,sin,virtue,delay
+sin_01,sin,immediate,"You embezzle $5000 from your company's petty cash fund",-5000,2,3,-2,0
+sin_02,sin,immediate,"You ghost your therapist after they called you out on your bullshit",0,-3,2,-1,0
+sin_03,sin,delayed,"You start a pyramid scheme selling essential oils",2000,1,4,-3,2
+sin_04,sin,immediate,"You lie on your resume about having a master's degree",1000,-1,2,-2,0
+sin_05,sin,immediate,"You steal your roommate's lunch from the office fridge",0,1,1,-1,0
+sin_06,sin,delayed,"You become a cryptocurrency influencer promoting shitcoins",3000,2,3,-4,3
+sin_07,sin,immediate,"You fake a sick day to binge Netflix",0,2,1,-1,0
+sin_08,sin,immediate,"You spread gossip about your ex on social media",0,-2,2,-2,0
+sin_09,sin,delayed,"You start dropshipping counterfeit designer goods",1500,1,3,-2,2
+sin_10,sin,immediate,"You take credit for your colleague's work in the meeting",500,-1,2,-2,0
