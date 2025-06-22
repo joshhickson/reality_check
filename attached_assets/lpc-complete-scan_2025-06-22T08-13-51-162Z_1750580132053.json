@@ -1,0 +1,44 @@
+{
+  "fileTree": {
+    "/lpc-generator/spritesheets": {
+      "subdirectories": [],
+      "files": [],
+      "depth": 0,
+      "scannedAt": "2025-06-22T08:13:51.158Z"
+    }
+  },
+  "pathsByCategory": {
+    "body": [],
+    "hair": [],
+    "torso": [],
+    "legs": [],
+    "arms": [],
+    "feet": [],
+    "head": [],
+    "eyes": [],
+    "accessories": [],
+    "other": []
+  },
+  "allValidPaths": [],
+  "directoryStructure": {
+    "lpc-generator": {
+      "subdirectories": {
+        "spritesheets": {
+          "subdirectories": {},
+          "files": []
+        }
+      },
+      "files": []
+    }
+  },
+  "fileExtensions": {},
+  "scanStatistics": {
+    "totalFiles": 0,
+    "totalDirectories": 1,
+    "maxDepthReached": 0,
+    "directoriesScanned": 1,
+    "categoriesFound": 0,
+    "filesByExtension": {},
+    "scanDuration": "2025-06-22T08:13:51.159Z"
+  }
+}
