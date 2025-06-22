@@ -3,16 +3,16 @@
 // Interactive tool for fine-tuning Reality Check board parameters
 
 const DEFAULT_RINGS = [
-  { label: "Career", cusps: 3, R: 142, color: "#ff6b6b" },
-  { label: "Health", cusps: 4, R: 99, color: "#feca57" },
-  { label: "Social", cusps: 5, R: 47, color: "#48dbfb" },
+  { label: "Career", cusps: 3, R: 150, color: "#ff6b6b" },
+  { label: "Health", cusps: 4, R: 125, color: "#feca57" },
+  { label: "Social", cusps: 5, R: 150, color: "#48dbfb" },
   { label: "Personal", cusps: 6, R: 150, color: "#1dd1a1" },
   { label: "BabelEvents", cusps: 2, R: 160, color: "#5f27cd" },
 ];
 
 // Default optimized point counts
 const DEFAULT_POINT_COUNTS = {
-  "Career": 6,
+  "Career": 3,
   "Health": 4,
   "Social": 5,
   "Personal": 6,
@@ -33,7 +33,7 @@ let handSettings = {
   rotationSpeed: 1     // degrees per tick
 };
 
-let handRotation = 33;  // current angle in degrees (optimized starting position)
+let handRotation = 173;  // current angle in degrees (optimized starting position)
 let lastTickTime = 0;
 let animationId = null;
 let boardPoints = [];  // Will store all point positions and data
