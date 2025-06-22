@@ -61,16 +61,11 @@ class LPCSpriteBuilder {
         console.log('🔍 Loading LPC sprite data...');
         
         try {
-            // Try to load from cache first
-            let data = loadCachedLPCData();
-            
-            if (!data) {
-                // Extract fresh data from LPC generator
-                data = await extractLPCData();
-            }
-            
+            // Extract fresh data from LPC generator
+            const data = await window.lpcExtractor.extractFromLPCGenerator();
             this.lpcData = data;
             console.log('✅ LPC data loaded:', Object.keys(data.categories).length, 'categories');
+            console.log('📊 Available sprites:', Object.keys(data.sprites).length);
             
         } catch (error) {
             console.error('❌ Failed to load LPC data:', error);
@@ -101,22 +96,39 @@ class LPCSpriteBuilder {
     async loadCharacterFromLPCData() {
         console.log('🎨 Loading character using LPC data...');
         
-        // Load body first
-        const bodySprite = window.lpcExtractor.getSprite('Body_color', 'light', this.currentSex);
-        if (bodySprite) {
-            await this.loadLayer('body', bodySprite.activePath, bodySprite.zIndex);
-            console.log('✅ Loaded body from LPC data');
+        // Find body sprites
+        const bodySprites = Object.keys(this.lpcData.sprites).filter(name => 
+            name.toLowerCase().includes('body') && !name.toLowerCase().includes('shadow')
+        );
+        
+        if (bodySprites.length > 0) {
+            const bodyName = bodySprites[0];
+            const bodyVariants = Object.keys(this.lpcData.sprites[bodyName]);
+            if (bodyVariants.length > 0) {
+                const bodySprite = this.lpcData.sprites[bodyName][bodyVariants[0]];
+                const bodyPath = bodySprite.paths[this.currentSex] || bodySprite.paths.male;
+                if (bodyPath) {
+                    await this.loadLayer('body', bodyPath, bodySprite.zIndex);
+                    console.log('✅ Loaded body from LPC data:', bodyPath);
+                }
+            }
         }
 
-        // Load hair
-        const hairSprites = window.lpcExtractor.getSpritesByCategory('hair');
-        const firstHairType = Object.keys(hairSprites)[0];
-        if (firstHairType) {
-            const firstHairVariant = Object.keys(hairSprites[firstHairType])[0];
-            const hairSprite = window.lpcExtractor.getSprite(firstHairType, firstHairVariant, this.currentSex);
-            if (hairSprite) {
-                await this.loadLayer('hair', hairSprite.activePath, hairSprite.zIndex);
-                console.log('✅ Loaded hair from LPC data');
+        // Find hair sprites
+        const hairSprites = Object.keys(this.lpcData.sprites).filter(name => 
+            name.toLowerCase().includes('hair') && !name.toLowerCase().includes('color')
+        );
+        
+        if (hairSprites.length > 0) {
+            const hairName = hairSprites[0];
+            const hairVariants = Object.keys(this.lpcData.sprites[hairName]);
+            if (hairVariants.length > 0) {
+                const hairSprite = this.lpcData.sprites[hairName][hairVariants[0]];
+                const hairPath = hairSprite.paths[this.currentSex] || hairSprite.paths.male || hairSprite.paths.female;
+                if (hairPath) {
+                    await this.loadLayer('hair', hairPath, hairSprite.zIndex);
+                    console.log('✅ Loaded hair from LPC data:', hairPath);
+                }
             }
         }
     }
