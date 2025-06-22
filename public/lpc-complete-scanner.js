@@ -59,8 +59,13 @@ class LPCCompleteScanner {
 
         try {
             // Try to get directory listing by testing known subdirectory patterns
+            console.log(`${'  '.repeat(depth)}📁 Discovering subdirectories...`);
             const subdirectories = await this.discoverSubdirectories(currentPath);
+            console.log(`${'  '.repeat(depth)}📁 Found ${subdirectories.length} subdirectories: ${subdirectories.join(', ')}`);
+            
+            console.log(`${'  '.repeat(depth)}📄 Discovering files...`);
             const files = await this.discoverFiles(currentPath);
+            console.log(`${'  '.repeat(depth)}📄 Found ${files.length} files: ${files.join(', ')}`);
 
             // Record this directory
             this.completeFileTree.set(currentPath, {
@@ -95,43 +100,44 @@ class LPCCompleteScanner {
     }
 
     async discoverSubdirectories(parentPath) {
+        // If this is the root spritesheets directory, we know the main categories exist
+        if (parentPath === '/lpc-generator/spritesheets') {
+            const knownCategories = ['body', 'hair', 'torso', 'legs', 'arms', 'feet', 'head', 'eyes', 
+                                   'facial', 'neck', 'backpack', 'beards', 'cape', 'dress', 'hat', 
+                                   'shield', 'weapon', 'shoulders', 'bauldron', 'quiver', 'shadow'];
+            const foundCategories = [];
+            
+            for (const category of knownCategories) {
+                const testPath = `${parentPath}/${category}`;
+                if (await this.pathExists(testPath)) {
+                    foundCategories.push(category);
+                }
+            }
+            return foundCategories;
+        }
+
+        // For other directories, use the original comprehensive list
         const commonSubdirectories = [
             'male', 'female', 'child', 'teen', 'adult', 'muscular', 'pregnant',
             'hurt', 'walk', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust',
             'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit',
-            'bodies', 'hair', 'torso', 'legs', 'arms', 'feet', 'head', 'eyes',
-            'clothes', 'armor', 'armour', 'weapons', 'accessories', 'bg', 'fg',
+            'bodies', 'clothes', 'armor', 'armour', 'weapons', 'accessories', 'bg', 'fg',
             'basic', 'formal', 'casual', 'leather', 'cloth', 'metal', 'plate',
             'page', 'plain', 'ponytail', 'long', 'short', 'curly', 'straight',
             'pants', 'shorts', 'skirts', 'dress', 'shirt', 'blouse', 'vest',
             'boots', 'shoes', 'sandals', 'gloves', 'bracers', 'helmet', 'hat',
             'beard', 'mustache', 'glasses', 'earrings', 'necklace', 'cape',
-            'longsleeve', 'formal_striped', 'laced', 'thin', 'thick'
+            'longsleeve', 'formal_striped', 'laced', 'thin', 'thick',
+            'bangs', 'bob', 'braid', 'buzz', 'pixie', 'afro', 'dread'
         ];
 
         const foundSubdirectories = [];
 
+        // Test known subdirectories first
         for (const subdir of commonSubdirectories) {
             const testPath = `${parentPath}/${subdir}`;
             if (await this.pathExists(testPath)) {
                 foundSubdirectories.push(subdir);
-            }
-        }
-
-        // Also try some pattern-based discovery
-        const patterns = [
-            // Color patterns
-            'black', 'blue', 'brown', 'blonde', 'red', 'green', 'white', 'gray',
-            // Style patterns
-            'bangs', 'bob', 'braid', 'buzz', 'pixie', 'afro', 'dread',
-            // Size patterns
-            'small', 'medium', 'large', 'xl', 'xxl'
-        ];
-
-        for (const pattern of patterns) {
-            const testPath = `${parentPath}/${pattern}`;
-            if (await this.pathExists(testPath)) {
-                foundSubdirectories.push(pattern);
             }
         }
 
@@ -166,8 +172,10 @@ class LPCCompleteScanner {
 
     async pathExists(path) {
         try {
+            // For directories, we need to try accessing the directory itself
+            // Some servers return 403 for directories, which means they exist but aren't browseable
             const response = await fetch(path, { method: 'HEAD' });
-            return response.ok;
+            return response.ok || response.status === 403;
         } catch (error) {
             return false;
         }
