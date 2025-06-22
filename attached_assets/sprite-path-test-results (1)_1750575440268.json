@@ -1,0 +1,1767 @@
+{
+  "timestamp": "2025-06-22T06:56:32.055Z",
+  "totalPaths": 0,
+  "validPaths": [],
+  "invalidPaths": [
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for torso/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for torso/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for torso/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for torso/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for torso/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for torso/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for torso/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for torso/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for torso/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for torso/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for torso/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for torso/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for torso/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for torso/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for torso/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for torso/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for torso/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for torso/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for torso/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for torso/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for legs/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for legs/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for legs/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for legs/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for legs/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for legs/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for legs/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for legs/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for legs/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for legs/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for legs/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for legs/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for legs/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for legs/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for legs/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for legs/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for legs/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for legs/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for legs/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for legs/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for feet/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for feet/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for feet/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for feet/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for feet/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for feet/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for feet/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for feet/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for feet/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for feet/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for feet/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for feet/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for feet/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for feet/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for feet/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for arms/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for arms/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for arms/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for arms/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for arms/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for arms/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for arms/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for arms/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for arms/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for arms/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for arms/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for arms/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for arms/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for arms/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for arms/teen",
+      "error": "No sprite data available"
+    }
+  ],
+  "pathsByCategory": {},
+  "workingSprites": {
+    "hair": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "body": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "torso": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for torso/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "legs": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for legs/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "feet": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "head": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "arms": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/teen",
+          "error": "No sprite data available"
+        }
+      }
+    }
+  },
+  "failedTests": [],
+  "summary": {
+    "totalValidPaths": 0,
+    "totalInvalidPaths": 140,
+    "categoryCounts": {},
+    "successRate": "0.00%"
+  }
+}

@@ -1,0 +1,14 @@
+SPRITE PATH TEST SUMMARY
+Generated: 2025-06-22T06:56:32.055Z
+==================================================
+
+OVERALL RESULTS:
+Total paths found: 0
+Valid paths tested: 0
+Invalid paths: 140
+Success rate: 0.00%
+
+PATHS BY CATEGORY:
+
+COMMON ERRORS:
+No sprite data available: 140 occurrences
