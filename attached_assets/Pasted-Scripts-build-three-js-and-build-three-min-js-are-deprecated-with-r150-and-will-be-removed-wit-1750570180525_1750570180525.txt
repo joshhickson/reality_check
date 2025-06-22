@@ -1,0 +1,32 @@
+Scripts "build/three.js" and "build/three.min.js" are deprecated with r150+, and will be removed with r160. Please use ES Modules or alternatives: https://threejs.org/docs/index.html#manual/en/introduction/Installation
+Identifier 'LPCSpriteBuilder' has already been declared
+Failed to resolve module specifier "three". Relative references must start with either "/", "./", or "../".
+🚀 DOM LOADED - Checking for sprite canvas...
+✅ Found sprite canvas, initializing sprite builder...
+🎨 LPC Sprite Builder initialized
+📋 Initializing sprite builder...
+🔍 Loading LPC sprite data...
+🔍 Extracting sprite data from LPC generator...
+✅ Sprite Builder initialized successfully!
+Found 12575 sprite inputs
+✅ Extraction complete
+📊 Extracted data: 
+Object {sprites: {…}, categories: {…}, bodyTypes: Array(6)}
+✅ LPC data loaded: 8 categories
+📊 Available sprites: 611
+👤 Loading basic character...
+🎨 Loading character using LPC data...
+❌ Failed to load layer: body/bodies/male/light.png
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+❌ Failed to load basic character: 
+Error {}
+
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+🔧 Drawing test rectangle
+🎬 Animation started: walk (9 frames)
