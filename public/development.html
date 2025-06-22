@@ -210,7 +210,7 @@
         /* Sprite Builder Styles */
         .sprite-builder {
             display: grid;
-            grid-template-columns: 1fr 300px 1fr;
+            grid-template-columns: 1fr 400px 1fr;
             gap: 20px;
             margin-top: 20px;
         }
@@ -222,31 +222,83 @@
             padding: 20px;
             border-radius: 10px;
         }
-        .sprite-canvas {
-            width: 200px;
-            height: 200px;
+        .preview-container {
             background: #2a2a2a;
             border: 2px solid #555;
             border-radius: 5px;
+            padding: 10px;
             margin: 10px 0;
+        }
+        #spriteCanvas {
+            background: #1a1a2e;
+            border: 1px solid #333;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            transform: scale(3);
+            transform-origin: top left;
+            margin-bottom: 20px;
         }
         .sprite-controls {
             background: rgba(255, 255, 255, 0.1);
             padding: 15px;
             border-radius: 10px;
         }
+        .control-group {
+            margin: 15px 0;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+        }
+        .radio-group label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .control-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .animation-controls {
+            margin: 10px 0;
+        }
+        .export-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .layer-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 5px;
+        }
         .sprite-layer {
             background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
+            padding: 8px;
+            margin: 3px 0;
+            border-radius: 3px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 12px;
         }
         .layer-controls {
             display: flex;
-            gap: 5px;
+            gap: 10px;
+            margin-top: 10px;
         }
         .layer-controls button {
             padding: 5px 10px;
@@ -273,83 +325,118 @@
             <div id="spriteBuilderContent" class="sprite-builder">
                 <div class="sprite-controls">
                     <h3>Character Builder</h3>
-                    <div>
+                    
+                    <!-- Body Type Selection -->
+                    <div class="control-group">
                         <label>Body Type:</label>
-                        <select id="bodyType">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="child">Child</option>
-                            <option value="teen">Teen</option>
+                        <div class="radio-group">
+                            <input type="radio" id="sex-male" name="sex" value="male" checked>
+                            <label for="sex-male">Male</label>
+                            <input type="radio" id="sex-female" name="sex" value="female">
+                            <label for="sex-female">Female</label>
+                            <input type="radio" id="sex-teen" name="sex" value="teen">
+                            <label for="sex-teen">Teen</label>
+                            <input type="radio" id="sex-child" name="sex" value="child">
+                            <label for="sex-child">Child</label>
+                        </div>
+                    </div>
+
+                    <!-- Body Color -->
+                    <div class="control-group">
+                        <label>Body Color:</label>
+                        <select id="bodyColor" onchange="updateSprite()">
+                            <option value="light">Light</option>
+                            <option value="tanned">Tanned</option>
+                            <option value="tanned2">Tanned 2</option>
+                            <option value="dark">Dark</option>
+                            <option value="dark2">Dark 2</option>
+                            <option value="darkelf">Dark Elf</option>
+                            <option value="darkelf2">Dark Elf 2</option>
                         </select>
                     </div>
-                    <div>
+
+                    <!-- Hair Selection -->
+                    <div class="control-group">
                         <label>Hair Style:</label>
-                        <select id="hairStyle">
+                        <select id="hairStyle" onchange="updateSprite()">
+                            <option value="none">No Hair</option>
+                            <option value="page">Page</option>
+                            <option value="page2">Page 2</option>
                             <option value="parted">Parted</option>
-                            <option value="ponytail">Ponytail</option>
-                            <option value="messy">Messy</option>
+                            <option value="bangs">Bangs</option>
                             <option value="long">Long</option>
-                            <option value="short">Short</option>
+                            <option value="ponytail">Ponytail</option>
+                            <option value="pixie">Pixie</option>
+                            <option value="messy1">Messy</option>
+                        </select>
+                        <select id="hairColor" onchange="updateSprite()">
+                            <option value="brunette">Brunette</option>
+                            <option value="blonde">Blonde</option>
+                            <option value="redhead">Redhead</option>
+                            <option value="black">Black</option>
+                            <option value="gray">Gray</option>
+                            <option value="white">White</option>
                         </select>
                     </div>
-                    <div>
+
+                    <!-- Clothing Selection -->
+                    <div class="control-group">
                         <label>Clothing:</label>
-                        <select id="clothing">
+                        <select id="clothingTop" onchange="updateSprite()">
+                            <option value="none">Bare</option>
+                            <option value="shirt_white">White Shirt</option>
                             <option value="longsleeve">Long Sleeve</option>
                             <option value="shortsleeve">Short Sleeve</option>
-                            <option value="formal">Formal</option>
-                            <option value="casual">Casual</option>
+                            <option value="sleeveless">Sleeveless</option>
+                            <option value="robe">Robe</option>
+                        </select>
+                        <select id="clothingBottom" onchange="updateSprite()">
+                            <option value="none">Bare</option>
+                            <option value="pants">Pants</option>
+                            <option value="shorts">Shorts</option>
+                            <option value="skirt">Skirt</option>
                         </select>
                     </div>
-                    <div>
-                        <label>Skin Tone:</label>
-                        <select id="skinTone">
-                            <option value="fair">Fair</option>
-                            <option value="medium">Medium</option>
-                            <option value="dark">Dark</option>
-                        </select>
+
+                    <div class="control-buttons">
+                        <button onclick="randomizeCharacter()">Randomize</button>
+                        <button onclick="resetCharacter()">Reset</button>
                     </div>
-                    <button onclick="randomizeSprite()">Randomize</button>
-                    <button onclick="generateSprite()">Generate</button>
                 </div>
 
                 <div class="sprite-preview">
                     <h3>Preview</h3>
-                    <canvas class="sprite-canvas" id="spriteCanvas" width="200" height="200">
-                        <!-- Sprite preview will be rendered here -->
-                    </canvas>
-                    <div>
-                        <button onclick="exportSprite()">Export PNG</button>
-                        <button onclick="saveProfile()">Save Profile</button>
+                    <div class="preview-container">
+                        <canvas id="spriteCanvas" width="256" height="64"></canvas>
+                        <canvas id="fullSpriteSheet" width="832" height="1344" style="display: none;"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <label>Animation:</label>
+                        <select id="animationSelect" onchange="changeAnimation()">
+                            <option value="walk">Walk</option>
+                            <option value="spellcast">Spellcast</option>
+                            <option value="thrust">Thrust</option>
+                            <option value="slash">Slash</option>
+                            <option value="shoot">Shoot</option>
+                            <option value="hurt">Hurt</option>
+                        </select>
+                    </div>
+                    <div class="export-controls">
+                        <button onclick="exportCurrentFrame()">Export Frame</button>
+                        <button onclick="exportSpriteSheet()">Export Full Sheet</button>
+                        <button onclick="saveCharacterProfile()">Save Profile</button>
                     </div>
                 </div>
 
                 <div class="sprite-controls">
                     <h3>Layer Management</h3>
-                    <div id="spriteLayers">
-                        <div class="sprite-layer">
-                            <span>Body</span>
-                            <div class="layer-controls">
-                                <button onclick="toggleLayer('body')">👁️</button>
-                                <button onclick="editLayer('body')">✏️</button>
-                            </div>
-                        </div>
-                        <div class="sprite-layer">
-                            <span>Hair</span>
-                            <div class="layer-controls">
-                                <button onclick="toggleLayer('hair')">👁️</button>
-                                <button onclick="editLayer('hair')">✏️</button>
-                            </div>
-                        </div>
-                        <div class="sprite-layer">
-                            <span>Clothing</span>
-                            <div class="layer-controls">
-                                <button onclick="toggleLayer('clothing')">👁️</button>
-                                <button onclick="editLayer('clothing')">✏️</button>
-                            </div>
-                        </div>
+                    <div id="layerList" class="layer-list">
+                        <!-- Layers will be populated dynamically -->
                     </div>
-                    <button onclick="addLayer()">Add Layer</button>
+                    <div class="layer-controls">
+                        <button onclick="toggleAllLayers()">Toggle All</button>
+                        <button onclick="reorderLayers()">Reorder</button>
+                    </div>
                 </div>
             </div>
         </div>
