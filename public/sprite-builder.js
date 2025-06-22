@@ -96,17 +96,28 @@ class LPCSpriteBuilder {
     async loadCharacterFromLPCData() {
         console.log('🎨 Loading character using LPC data...');
         
+        // DEBUG: Show structure of extracted data
+        console.log('🔍 DEBUG: First 3 sprite entries:', Object.keys(this.lpcData.sprites).slice(0, 3));
+        
         // Find body sprites
         const bodySprites = Object.keys(this.lpcData.sprites).filter(name => 
             name.toLowerCase().includes('body') && !name.toLowerCase().includes('shadow')
         );
         
+        console.log('🔍 DEBUG: Found body sprites:', bodySprites);
+        
         if (bodySprites.length > 0) {
             const bodyName = bodySprites[0];
             const bodyVariants = Object.keys(this.lpcData.sprites[bodyName]);
+            console.log('🔍 DEBUG: Body variants for', bodyName, ':', bodyVariants);
+            
             if (bodyVariants.length > 0) {
                 const bodySprite = this.lpcData.sprites[bodyName][bodyVariants[0]];
+                console.log('🔍 DEBUG: Full body sprite object:', bodySprite);
+                
                 const bodyPath = bodySprite.paths[this.currentSex] || bodySprite.paths.male;
+                console.log('🔍 DEBUG: Resolved body path:', bodyPath);
+                
                 if (bodyPath) {
                     await this.loadLayer('body', bodyPath, bodySprite.zIndex);
                     console.log('✅ Loaded body from LPC data:', bodyPath);
