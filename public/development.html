@@ -603,8 +603,9 @@
         </div>
     </div>
 
+    <script type="module" src="board-render.js"></script>
     <script src="board-designer.js"></script>
-    <script src="game.js"></script>
+    <script src="sprite-builder.js"></script>
     <script>
         // Section toggle functionality
         function toggleSection(sectionId) {
@@ -750,7 +751,7 @@
         function addLayer() {
             logToConsole('Adding new layer...', 'info');
         }
-        
+
         function debugSprites() {
             logToConsole('Debugging sprites...', 'info');
             // Add debug logic here

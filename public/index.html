@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reality Check - The Game</title>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+            }
+        }
+    </script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -309,7 +315,7 @@
     </div>
 
     <script src="game.js"></script>
-    <script src="board-render.js"></script>
+    <script type="module" src="board-render.js"></script>
     <script>
         // Console window management
         function addToConsole(message, type = 'info') {

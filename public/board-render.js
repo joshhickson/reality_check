@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 
 // Reality Check – Casual Mode Board Renderer (Vanilla JS + SVG)
 // Enhanced with player tracking and interactive elements
@@ -12,6 +13,15 @@ const RINGS = [
 
 const SEGMENTS = 10; // tiles per ring
 const STEPS_PER_RING = 720; // resolution of curve
+
+let current3DParams = {
+  R: 120,
+  r: 40,
+  d: 60,
+  steps: 800,
+  color: 0x48dbfb
+};
+let currentRenderer = null;
 
 // Generate hypocycloid points
 function generateHypocycloid(R, r, steps) {
@@ -46,7 +56,7 @@ function drawBoard() {
   RINGS.forEach((ring, ringIndex) => {
     const r = ring.R / ring.cusps;
     const pts = generateHypocycloid(ring.R, r, STEPS_PER_RING);
-    
+
     // Draw the ring path
     const path = createSVGElement("path", {
       d: pathFromPoints(pts),
@@ -61,7 +71,7 @@ function drawBoard() {
     for (let i = 0; i < SEGMENTS; i++) {
       const idx = Math.floor((pts.length / SEGMENTS) * i);
       const [x, y] = pts[idx];
-      
+
       const tile = createSVGElement("circle", {
         cx: x,
         cy: y,
@@ -74,7 +84,7 @@ function drawBoard() {
         "data-tile": i
       });
       svg.appendChild(tile);
-      
+
       // Store tile position for player movement
       tilePositions.push({
         x: x,
@@ -97,7 +107,7 @@ function drawBoard() {
     class: "start-tile"
   });
   svg.appendChild(centerTile);
-  
+
   const startLabel = createSVGElement("text", {
     x: 0,
     y: 25,
@@ -113,15 +123,15 @@ function drawBoard() {
 // Render player overlay with personal modifiers
 function renderPlayerOverlay(mods, color = "#ffffff44") {
   const svg = document.getElementById("board");
-  
+
   Object.entries(mods).forEach(([label, mult]) => {
     const base = RINGS.find((r) => r.label === label);
     if (!base) return;
-    
+
     const newR = base.R * mult;
     const r = newR / base.cusps;
     const pts = generateHypocycloid(newR, r, STEPS_PER_RING);
-    
+
     svg.appendChild(
       createSVGElement("path", {
         d: pathFromPoints(pts),
@@ -138,21 +148,21 @@ function renderPlayerOverlay(mods, color = "#ffffff44") {
 // Player movement and visualization
 function movePlayerToPosition(playerId, position) {
   const svg = document.getElementById("board");
-  
+
   // Remove existing player marker
   const existingMarker = svg.querySelector(`#player-${playerId}`);
   if (existingMarker) {
     existingMarker.remove();
   }
-  
+
   // Calculate position on board
   let targetPos = { x: 0, y: 0 }; // default to center
-  
+
   if (position > 0 && position <= tilePositions.length) {
     const tilePos = tilePositions[position - 1];
     targetPos = { x: tilePos.x, y: tilePos.y };
   }
-  
+
   // Create player marker
   const playerMarker = createSVGElement("circle", {
     id: `player-${playerId}`,
@@ -164,9 +174,9 @@ function movePlayerToPosition(playerId, position) {
     "stroke-width": 2,
     class: "player-marker"
   });
-  
+
   svg.appendChild(playerMarker);
-  
+
   // Add player label
   const playerLabel = createSVGElement("text", {
     x: targetPos.x,
@@ -192,18 +202,18 @@ function getPlayerColor(playerId) {
 
 function highlightRingEvents(triggeredRings) {
   const svg = document.getElementById("board");
-  
+
   // Reset all ring highlights
   svg.querySelectorAll('.ring-highlight').forEach(el => el.remove());
-  
+
   // Highlight triggered rings
   triggeredRings.forEach(ringName => {
     const ring = RINGS.find(r => r.label === ringName);
     if (!ring) return;
-    
+
     const r = ring.R / ring.cusps;
     const pts = generateHypocycloid(ring.R, r, STEPS_PER_RING);
-    
+
     const highlight = createSVGElement("path", {
       d: pathFromPoints(pts),
       fill: "none",
@@ -213,7 +223,7 @@ function highlightRingEvents(triggeredRings) {
       class: "ring-highlight",
       style: "animation: pulse 1s infinite"
     });
-    
+
     svg.appendChild(highlight);
   });
 }
@@ -221,7 +231,7 @@ function highlightRingEvents(triggeredRings) {
 // Initialize board when page loads
 document.addEventListener('DOMContentLoaded', () => {
   drawBoard();
-  
+
   // Add CSS for animations
   const style = document.createElement('style');
   style.textContent = `
