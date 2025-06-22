@@ -87,15 +87,16 @@
         <div class="status info">
             <strong>Instructions:</strong>
             <ol>
-                <li>Click "Load LPC Data" to initialize the LPC sprite data extractor</li>
-                <li>Click "Test All Paths" to run comprehensive path testing</li>
+                <li><strong>FIRST:</strong> Click "SCAN LPC FILES FIRST" to discover actual sprite files</li>
+                <li>Then click "Load LPC Data" to initialize the LPC sprite data extractor</li>
+                <li>Finally click "Test All Paths" to run comprehensive path testing</li>
                 <li>Download the generated reports for analysis</li>
             </ol>
         </div>
 
         <div class="button-group">
+            <button id="scanFilesBtn" onclick="runFileScan()" style="background-color: #006600; font-weight: bold;">📁 SCAN LPC FILES FIRST</button>
             <button id="loadLPCBtn" onclick="loadLPCData()">🔄 Load LPC Data</button>
-            <button id="scanFilesBtn" onclick="runFileScan()">📁 Scan LPC Files</button>
             <button id="testPathsBtn" onclick="runPathTest()" disabled>🧪 Test All Paths</button>
             <button id="quickTestBtn" onclick="runQuickTest()" disabled>⚡ Quick Test</button>
             <button id="clearConsoleBtn" onclick="clearConsole()">🗑️ Clear Console</button>

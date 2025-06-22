@@ -90,8 +90,8 @@ class LPCFileScanner {
     }
 
     async scanBodyCategory() {
-        const bodyTypes = ['male', 'female', 'child', 'teen', 'muscular', 'pregnant'];
-        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust'];
+        const bodyTypes = ['male', 'female', 'child', 'teen', 'muscular', 'pregnant', 'skeleton', 'zombie'];
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
         
         for (const bodyType of bodyTypes) {
             for (const animation of animations) {
@@ -104,9 +104,15 @@ class LPCFileScanner {
     async scanHairCategory() {
         const hairStyles = [
             'page', 'ponytail', 'long', 'bangs', 'curly_short', 'plain', 
-            'parted', 'messy1', 'bob', 'princess', 'sara'
+            'parted', 'messy1', 'bob', 'princess', 'sara', 'afro', 'balding',
+            'bangs_bun', 'bangslong', 'bangsshort', 'bedhead', 'bob_side_part',
+            'buzzcut', 'cornrows', 'cowlick', 'curly_long', 'curly_short2',
+            'curtains', 'dreadlocks_long', 'flat_top_fade', 'jewfro', 'lob',
+            'long_band', 'long_messy', 'long_straight', 'loose', 'mop',
+            'natural', 'page2', 'parted2', 'pixie', 'relm_short', 'shoulderl',
+            'shoulderr', 'spiked', 'swoop', 'unkempt', 'xlong'
         ];
-        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust'];
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
         
         for (const style of hairStyles) {
             for (const animation of animations) {
@@ -114,62 +120,182 @@ class LPCFileScanner {
                 await this.testAndRecordPath('hair', path, { style, animation });
             }
         }
+        
+        // Also scan hair styles with bg/fg structure
+        const bgFgStyles = ['ponytail', 'ponytail2', 'princess', 'braid', 'bunches', 'high_ponytail', 'long_band', 'long_center_part', 'long_tied', 'single'];
+        for (const style of bgFgStyles) {
+            for (const layer of ['bg', 'fg']) {
+                const path = `/lpc-generator/spritesheets/hair/${style}/adult/${layer}.png`;
+                await this.testAndRecordPath('hair', path, { style, animation: layer, layer });
+            }
+        }
     }
 
     async scanTorsoCategory() {
-        // Based on your screenshot, scan the clothes subdirectories
-        const clothingTypes = ['longsleeve', 'shortsleeve', 'tunic', 'vest', 'blouse'];
         const bodyTypes = ['male', 'female'];
-        const animations = ['walk', 'hurt', 'shoot', 'slash', 'spellcast', 'thrust'];
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
+        
+        // Scan clothes subcategory
+        const clothingTypes = [
+            'blouse', 'blouse_longsleeve', 'corset', 'longsleeve', 'robe', 
+            'shirt', 'shortsleeve', 'sleeveless', 'tunic', 'tunic_sara', 
+            'vest', 'vest_open'
+        ];
         
         for (const clothingType of clothingTypes) {
             for (const bodyType of bodyTypes) {
                 for (const animation of animations) {
-                    // Try different path patterns
-                    const patterns = [
-                        `/lpc-generator/spritesheets/torso/clothes/${clothingType}/${bodyType}/${animation}.png`,
-                        `/lpc-generator/spritesheets/torso/${clothingType}/${bodyType}/${animation}.png`
-                    ];
-                    
-                    for (const path of patterns) {
-                        await this.testAndRecordPath('torso', path, { clothingType, bodyType, animation });
-                    }
+                    const path = `/lpc-generator/spritesheets/torso/clothes/${clothingType}/${bodyType}/${animation}.png`;
+                    await this.testAndRecordPath('torso', path, { clothingType, bodyType, animation });
+                }
+            }
+        }
+        
+        // Scan armor subcategory
+        const armorTypes = ['leather', 'legion', 'plate'];
+        for (const armorType of armorTypes) {
+            for (const bodyType of bodyTypes) {
+                for (const animation of animations) {
+                    const path = `/lpc-generator/spritesheets/torso/armour/${armorType}/${bodyType}/${animation}.png`;
+                    await this.testAndRecordPath('torso', path, { armorType, bodyType, animation });
+                }
+            }
+        }
+        
+        // Scan bandage, chainmail
+        const simpleTypes = ['bandage', 'chainmail'];
+        for (const type of simpleTypes) {
+            for (const bodyType of bodyTypes) {
+                for (const animation of animations) {
+                    const path = `/lpc-generator/spritesheets/torso/${type}/${bodyType}/${animation}.png`;
+                    await this.testAndRecordPath('torso', path, { type, bodyType, animation });
                 }
             }
         }
     }
 
     async scanLegsCategory() {
-        const legTypes = ['pants', 'leggings', 'shorts', 'skirts'];
-        const bodyTypes = ['male', 'female', 'child', 'teen'];
-        const animations = ['walk', 'hurt', 'shoot', 'slash', 'spellcast', 'thrust'];
+        const bodyTypes = ['male', 'female', 'child', 'teen', 'muscular', 'pregnant', 'thin'];
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
+        
+        // Scan pants
+        for (const bodyType of bodyTypes) {
+            for (const animation of animations) {
+                const path = `/lpc-generator/spritesheets/legs/pants/${bodyType}/${animation}.png`;
+                await this.testAndRecordPath('legs', path, { legType: 'pants', bodyType, animation });
+            }
+        }
+        
+        // Scan other leg types
+        const legTypes = [
+            'cuffed', 'formal', 'formal_striped', 'fur', 'hose', 
+            'leggings', 'leggings2', 'pantaloons', 'pants2'
+        ];
         
         for (const legType of legTypes) {
-            for (const bodyType of bodyTypes) {
+            for (const bodyType of ['male', 'female', 'thin', 'muscular']) {
                 for (const animation of animations) {
                     const path = `/lpc-generator/spritesheets/legs/${legType}/${bodyType}/${animation}.png`;
                     await this.testAndRecordPath('legs', path, { legType, bodyType, animation });
                 }
             }
         }
+        
+        // Scan skirts (female only)
+        const skirtTypes = ['belle', 'child', 'legion', 'overskirt', 'plain', 'slit', 'straight'];
+        for (const skirtType of skirtTypes) {
+            for (const animation of animations) {
+                const path = `/lpc-generator/spritesheets/legs/skirts/${skirtType}/female/${animation}.png`;
+                await this.testAndRecordPath('legs', path, { legType: 'skirts', skirtType, bodyType: 'female', animation });
+            }
+        }
     }
 
     async scanGenericCategory(category) {
-        // Generic scanning for other categories
-        const bodyTypes = ['male', 'female'];
-        const animations = ['walk', 'hurt', 'shoot', 'slash', 'spellcast', 'thrust'];
+        const bodyTypes = ['male', 'female', 'child', 'teen', 'adult', 'thin'];
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
         
+        // Category-specific scanning
+        if (category === 'feet') {
+            await this.scanFeetCategory();
+        } else if (category === 'arms') {
+            await this.scanArmsCategory();
+        } else if (category === 'head') {
+            await this.scanHeadCategory();
+        } else {
+            // Generic scanning for unknown categories
+            for (const bodyType of bodyTypes) {
+                for (const animation of animations) {
+                    const patterns = [
+                        `/lpc-generator/spritesheets/${category}/${bodyType}/${animation}.png`,
+                        `/lpc-generator/spritesheets/${category}/basic/${bodyType}/${animation}.png`,
+                        `/lpc-generator/spritesheets/${category}/default/${bodyType}/${animation}.png`,
+                        `/lpc-generator/spritesheets/${category}/adult/${animation}.png`
+                    ];
+                    
+                    for (const path of patterns) {
+                        await this.testAndRecordPath(category, path, { bodyType, animation });
+                    }
+                }
+            }
+        }
+    }
+    
+    async scanFeetCategory() {
+        const bodyTypes = ['male', 'female', 'thin'];
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
+        
+        const footwearTypes = [
+            'boots/basic', 'boots/fold', 'boots/revised', 'boots/rimmed',
+            'sandals', 'shoes/basic', 'shoes/ghillies', 'shoes/revised', 'shoes/sara',
+            'slippers', 'socks/ankle', 'socks/high', 'socks/tabi'
+        ];
+        
+        for (const footwearType of footwearTypes) {
+            for (const bodyType of bodyTypes) {
+                for (const animation of animations) {
+                    const path = `/lpc-generator/spritesheets/feet/${footwearType}/${bodyType}/${animation}.png`;
+                    await this.testAndRecordPath('feet', path, { footwearType, bodyType, animation });
+                }
+            }
+        }
+    }
+    
+    async scanArmsCategory() {
+        const bodyTypes = ['male', 'female'];
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
+        
+        // Scan gloves
         for (const bodyType of bodyTypes) {
             for (const animation of animations) {
-                const patterns = [
-                    `/lpc-generator/spritesheets/${category}/${bodyType}/${animation}.png`,
-                    `/lpc-generator/spritesheets/${category}/basic/${bodyType}/${animation}.png`,
-                    `/lpc-generator/spritesheets/${category}/default/${bodyType}/${animation}.png`
-                ];
-                
-                for (const path of patterns) {
-                    await this.testAndRecordPath(category, path, { bodyType, animation });
-                }
+                const path = `/lpc-generator/spritesheets/arms/gloves/${bodyType}/${animation}.png`;
+                await this.testAndRecordPath('arms', path, { armType: 'gloves', bodyType, animation });
+            }
+        }
+        
+        // Scan bracers
+        for (const bodyType of bodyTypes) {
+            for (const animation of ['hurt', 'shoot', 'slash', 'spellcast', 'thrust']) {
+                const path = `/lpc-generator/spritesheets/arms/bracers/${bodyType}/${animation}.png`;
+                await this.testAndRecordPath('arms', path, { armType: 'bracers', bodyType, animation });
+            }
+        }
+    }
+    
+    async scanHeadCategory() {
+        const animations = ['walk', 'hurt', 'idle', 'run', 'shoot', 'slash', 'spellcast', 'thrust', 'backslash', 'climb', 'combat_idle', 'emote', 'halfslash', 'jump', 'sit'];
+        
+        // Scan different head types
+        const headTypes = [
+            'heads/human/male', 'heads/human/female', 'heads/human/child',
+            'heads/alien/adult', 'heads/goblin/adult', 'heads/orc/adult',
+            'heads/skeleton/adult'
+        ];
+        
+        for (const headType of headTypes) {
+            for (const animation of animations) {
+                const path = `/lpc-generator/spritesheets/head/${headType}/${animation}.png`;
+                await this.testAndRecordPath('head', path, { headType, animation });
             }
         }
     }
