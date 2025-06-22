@@ -526,73 +526,89 @@ class LPCSpriteBuilder {
     }
 
     debugSprites() {
-        console.log('🔧 Debug Sprites clicked');
-
-        // Create debug panel if it doesn't exist
-        let debugPanel = document.getElementById('spriteDebugPanel');
-        if (!debugPanel) {
-            debugPanel = document.createElement('div');
-            debugPanel.id = 'spriteDebugPanel';
-            debugPanel.style.cssText = `
-                position: fixed;
-                top: 50px;
-                left: 50px;
-                width: 600px;
-                height: 500px;
-                background: rgba(0, 0, 0, 0.9);
-                color: white;
-                border: 2px solid #00ff00;
-                border-radius: 8px;
-                z-index: 9999;
-                font-family: 'Courier New', monospace;
-                font-size: 12px;
-                display: block;
-                overflow: hidden;
-            `;
-            debugPanel.innerHTML = `
-                <div style="background: #333; padding: 8px 12px; border-radius: 6px 6px 0 0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold;">
-                    <span>🔧 Sprite Builder Debug Panel</span>
-                    <button onclick="this.parentElement.parentElement.style.display='none'" style="background: #ff6b6b; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">✕</button>
-                </div>
-                <div style="padding: 12px; height: calc(100% - 50px); overflow-y: auto;">
-                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
-                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">LPC Data Status</h4>
-                        <div id="lpcDataStatus" style="color: #feca57;">Loading...</div>
-                    </div>
-                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
-                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">Loaded Layers</h4>
-                        <div id="debugLayerList" style="color: #ff9800;">No layers loaded</div>
-                    </div>
-                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
-                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">Failed Sprite Paths</h4>
-                        <div id="debugFailedPaths" style="color: #ff6b6b; font-size: 10px; max-height: 100px; overflow-y: auto;">None yet</div>
-                    </div>
-                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
-                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">Test Functions</h4>
-                        <button onclick="spriteBuilder.testImagePaths()" style="background: #6c5ce7; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Test Sprite Paths</button>
-                        <button onclick="spriteBuilder.loadCharacterFallback()" style="background: #a29bfe; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Load Fallback Character</button>
-                        <button onclick="spriteBuilder.parseLPCDataDirect()" style="background: #fd79a8; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Parse LPC Data</button>
-                        <button onclick="spriteBuilder.logCurrentState()" style="background: #00b894; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Log Current State</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(debugPanel);
+        // Find the sprite controls section where layer management is
+        const spriteControlsSection = document.querySelector('.sprite-controls h3');
+        if (!spriteControlsSection || spriteControlsSection.textContent !== 'Layer Management') {
+            console.error('Could not find Layer Management section');
+            return;
         }
 
-        // Show the panel with animation
-        debugPanel.style.display = 'block';
-        debugPanel.style.opacity = '0';
-        debugPanel.style.transform = 'scale(0.8)';
-        setTimeout(() => {
-            debugPanel.style.transition = 'all 0.3s ease';
-            debugPanel.style.opacity = '1';
-            debugPanel.style.transform = 'scale(1)';
-        }, 10);
+        // Find the parent container (the right column of sprite controls)
+        const layerManagementContainer = spriteControlsSection.parentElement;
+
+        // Replace the layer management content with debug panel
+        layerManagementContainer.innerHTML = `
+            <h3>🔧 Sprite Debug Panel</h3>
+
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; margin-bottom: 10px; font-family: 'Courier New', monospace; font-size: 12px;">
+                <div style="margin-bottom: 10px;">
+                    <strong style="color: #00ff00;">LPC Data Status:</strong>
+                    <div id="lpcDataStatus" style="margin-left: 10px; color: #ffff00;"></div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <strong style="color: #00ff00;">Current Layers:</strong>
+                    <div id="debugLayerInfo" style="margin-left: 10px; color: #00ffff;"></div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <strong style="color: #00ff00;">Animation Status:</strong>
+                    <div id="debugAnimationInfo" style="margin-left: 10px; color: #ff00ff;"></div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <strong style="color: #00ff00;">Failed Paths:</strong>
+                    <div id="debugFailedPaths" style="margin-left: 10px; color: #ff6666; max-height: 150px; overflow-y: auto; font-size: 10px; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 3px;"></div>
+                </div>
+
+                <div class="control-buttons">
+                    <button onclick="spriteBuilder.testSpritePaths()">Test Paths</button>
+                    <button onclick="spriteBuilder.clearDebugLog()">Clear Log</button>
+                    <button onclick="spriteBuilder.restoreLayerManagement()">Back to Layers</button>
+                </div>
+            </div>
+        `;
 
         // Update debug info immediately
         this.updateDebugInfo();
 
-        console.log('✅ Debug panel created and displayed');
+        console.log('🔧 Debug panel opened in sprite controls');
+    }
+
+    closeDebugPanel() {
+        const debugPanel = document.getElementById('spriteDebugPanel');
+        if (debugPanel) {
+            debugPanel.remove();
+        }
+        console.log('🔧 Debug panel closed');
+    }
+
+    restoreLayerManagement() {
+        // Find the sprite controls section
+        const spriteControlsSection = document.querySelector('.sprite-controls h3');
+        if (!spriteControlsSection) {
+            console.error('Could not find sprite controls section');
+            return;
+        }
+
+        const layerManagementContainer = spriteControlsSection.parentElement;
+
+        // Restore original layer management content
+        layerManagementContainer.innerHTML = `
+            <h3>Layer Management</h3>
+            <div id="layerList" class="layer-list">
+                <div style="color: #666; padding: 10px;">No layers loaded</div>
+            </div>
+            <div class="layer-controls">
+                <button onclick="spriteBuilder.generateFullSpriteSheet()">Generate Full Sheet</button>
+                <button onclick="spriteBuilder.debugSprites()">Debug Sprites</button>
+            </div>
+        `;
+
+        // Update the layer list with current layers
+        this.updateLayerList();
+
+        console.log('🔧 Restored layer management');
     }
 }
 
