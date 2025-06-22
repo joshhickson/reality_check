@@ -4,6 +4,7 @@ const socketIo = require('socket.io');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const Database = require('@replit/database');
+const { Client } = require('pg');
 
 const app = express();
 const server = http.createServer(app);
@@ -23,6 +24,51 @@ app.use('/lpc-generator', express.static('lpc-generator'));
 
 // Replit Key-Value Store
 const db = new Database();
+
+// PostgreSQL Database for sprite path caching
+const pgClient = new Client({
+  connectionString: process.env.DATABASE_URL
+});
+
+// Initialize PostgreSQL connection
+async function initPostgreSQL() {
+  try {
+    await pgClient.connect();
+    console.log('PostgreSQL connected successfully');
+    
+    // Create sprite_paths table if it doesn't exist
+    await pgClient.query(`
+      CREATE TABLE IF NOT EXISTS sprite_paths (
+        id SERIAL PRIMARY KEY,
+        category VARCHAR(50) NOT NULL,
+        body_type VARCHAR(20) NOT NULL,
+        animation VARCHAR(30) NOT NULL,
+        style VARCHAR(50),
+        file_path TEXT NOT NULL,
+        is_valid BOOLEAN DEFAULT true,
+        last_verified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(category, body_type, animation, style, file_path)
+      )
+    `);
+    
+    // Create indexes for faster lookups
+    await pgClient.query(`
+      CREATE INDEX IF NOT EXISTS idx_sprite_category_body 
+      ON sprite_paths(category, body_type)
+    `);
+    
+    await pgClient.query(`
+      CREATE INDEX IF NOT EXISTS idx_sprite_valid 
+      ON sprite_paths(is_valid) WHERE is_valid = true
+    `);
+    
+    console.log('Sprite paths table initialized');
+    
+  } catch (error) {
+    console.error('PostgreSQL initialization error:', error);
+  }
+}
 
 // Card deck management system
 const fs = require('fs');
@@ -102,9 +148,72 @@ class CardDeckManager {
 
 const cardManager = new CardDeckManager();
 
+// Sprite path caching functions
+async function cacheSpritePath(category, bodyType, animation, style, filePath, isValid = true) {
+  try {
+    await pgClient.query(`
+      INSERT INTO sprite_paths (category, body_type, animation, style, file_path, is_valid)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      ON CONFLICT (category, body_type, animation, style, file_path) 
+      DO UPDATE SET 
+        is_valid = $6,
+        last_verified = CURRENT_TIMESTAMP
+    `, [category, bodyType, animation, style, filePath, isValid]);
+  } catch (error) {
+    console.error('Error caching sprite path:', error);
+  }
+}
+
+async function getValidSpritePaths(category, bodyType, animation) {
+  try {
+    const result = await pgClient.query(`
+      SELECT file_path, style, last_verified 
+      FROM sprite_paths 
+      WHERE category = $1 AND body_type = $2 AND animation = $3 AND is_valid = true
+      ORDER BY last_verified DESC
+    `, [category, bodyType, animation]);
+    
+    return result.rows;
+  } catch (error) {
+    console.error('Error getting sprite paths:', error);
+    return [];
+  }
+}
+
+async function getAllValidSpritePaths() {
+  try {
+    const result = await pgClient.query(`
+      SELECT category, body_type, animation, style, file_path 
+      FROM sprite_paths 
+      WHERE is_valid = true
+      ORDER BY category, body_type, animation
+    `);
+    
+    return result.rows;
+  } catch (error) {
+    console.error('Error getting all sprite paths:', error);
+    return [];
+  }
+}
+
+async function markSpritePathInvalid(filePath) {
+  try {
+    await pgClient.query(`
+      UPDATE sprite_paths 
+      SET is_valid = false, last_verified = CURRENT_TIMESTAMP
+      WHERE file_path = $1
+    `, [filePath]);
+  } catch (error) {
+    console.error('Error marking sprite path invalid:', error);
+  }
+}
+
 // Initialize database with card system
 async function initDatabase() {
   try {
+    // Initialize PostgreSQL first
+    await initPostgreSQL();
+    
     // Initialize card system
     const cardsExist = await db.get('cards_initialized');
     if (!cardsExist) {
@@ -337,6 +446,101 @@ app.post('/api/cards/deck', express.json(), (req, res) => {
   } catch (err) {
     console.error('Add deck error:', err);
     res.status(500).json({ error: 'Failed to add deck' });
+  }
+});
+
+// Sprite path management endpoints
+app.get('/api/sprites/paths/:category/:bodyType/:animation', async (req, res) => {
+  try {
+    const { category, bodyType, animation } = req.params;
+    const paths = await getValidSpritePaths(category, bodyType, animation);
+    res.json({ paths, count: paths.length });
+  } catch (error) {
+    console.error('Get sprite paths error:', error);
+    res.status(500).json({ error: 'Failed to get sprite paths' });
+  }
+});
+
+app.get('/api/sprites/paths/all', async (req, res) => {
+  try {
+    const paths = await getAllValidSpritePaths();
+    const pathsByCategory = {};
+    
+    paths.forEach(path => {
+      if (!pathsByCategory[path.category]) {
+        pathsByCategory[path.category] = {};
+      }
+      if (!pathsByCategory[path.category][path.body_type]) {
+        pathsByCategory[path.category][path.body_type] = {};
+      }
+      if (!pathsByCategory[path.category][path.body_type][path.animation]) {
+        pathsByCategory[path.category][path.body_type][path.animation] = [];
+      }
+      pathsByCategory[path.category][path.body_type][path.animation].push({
+        path: path.file_path,
+        style: path.style
+      });
+    });
+    
+    res.json({ 
+      pathsByCategory, 
+      totalPaths: paths.length,
+      categories: Object.keys(pathsByCategory).length
+    });
+  } catch (error) {
+    console.error('Get all sprite paths error:', error);
+    res.status(500).json({ error: 'Failed to get all sprite paths' });
+  }
+});
+
+app.post('/api/sprites/paths/cache', express.json(), async (req, res) => {
+  try {
+    const { category, bodyType, animation, style, filePath, isValid } = req.body;
+    
+    if (!category || !bodyType || !animation || !filePath) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    await cacheSpritePath(category, bodyType, animation, style || null, filePath, isValid !== false);
+    res.json({ message: 'Sprite path cached successfully' });
+  } catch (error) {
+    console.error('Cache sprite path error:', error);
+    res.status(500).json({ error: 'Failed to cache sprite path' });
+  }
+});
+
+app.post('/api/sprites/paths/bulk-cache', express.json(), async (req, res) => {
+  try {
+    const { paths } = req.body;
+    
+    if (!Array.isArray(paths)) {
+      return res.status(400).json({ error: 'Paths must be an array' });
+    }
+    
+    let cached = 0;
+    for (const pathData of paths) {
+      const { category, bodyType, animation, style, filePath, isValid } = pathData;
+      if (category && bodyType && animation && filePath) {
+        await cacheSpritePath(category, bodyType, animation, style || null, filePath, isValid !== false);
+        cached++;
+      }
+    }
+    
+    res.json({ message: `${cached} sprite paths cached successfully` });
+  } catch (error) {
+    console.error('Bulk cache sprite paths error:', error);
+    res.status(500).json({ error: 'Failed to bulk cache sprite paths' });
+  }
+});
+
+app.delete('/api/sprites/paths/invalid/:path', async (req, res) => {
+  try {
+    const filePath = decodeURIComponent(req.params.path);
+    await markSpritePathInvalid(filePath);
+    res.json({ message: 'Sprite path marked as invalid' });
+  } catch (error) {
+    console.error('Mark sprite path invalid error:', error);
+    res.status(500).json({ error: 'Failed to mark sprite path invalid' });
   }
 });
 
