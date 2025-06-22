@@ -325,7 +325,7 @@
             <div id="spriteBuilderContent" class="sprite-builder">
                 <div class="sprite-controls">
                     <h3>Character Builder</h3>
-                    
+
                     <!-- Body Type Selection -->
                     <div class="control-group">
                         <label>Body Type:</label>
@@ -401,6 +401,7 @@
                     <div class="control-buttons">
                         <button onclick="randomizeCharacter()">Randomize</button>
                         <button onclick="resetCharacter()">Reset</button>
+                        <button onclick="debugSprites()">Debug Sprites</button>
                     </div>
                 </div>
 
@@ -742,6 +743,11 @@
 
         function addLayer() {
             logToConsole('Adding new layer...', 'info');
+        }
+        
+        function debugSprites() {
+            logToConsole('Debugging sprites...', 'info');
+            // Add debug logic here
         }
 
         // Console Functions

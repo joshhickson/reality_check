@@ -96,31 +96,37 @@ class LPCSpriteBuilder {
         const doc = parser.parseFromString(html, 'text/html');
         
         this.lpcData = {
-            body: {},
+            sex: {},
             hair: {},
             torso: {},
             legs: {}
         };
         
-        // Extract available options from radio buttons
+        // Extract available options from radio buttons and their data attributes
         const radioButtons = doc.querySelectorAll('input[type="radio"]');
         radioButtons.forEach(radio => {
             const name = radio.name;
-            const value = radio.value;
+            const value = radio.value || radio.id;
+            
+            if (!name) return;
+            
             const dataAttrs = {};
             
-            // Extract data attributes
+            // Extract all data attributes
             for (let attr of radio.attributes) {
                 if (attr.name.startsWith('data-')) {
                     dataAttrs[attr.name] = attr.value;
                 }
             }
             
+            // Store the data
             if (!this.lpcData[name]) {
                 this.lpcData[name] = {};
             }
             this.lpcData[name][value] = dataAttrs;
         });
+        
+        console.log('Parsed LPC data:', this.lpcData);
     }
     
     bindEventListeners() {
@@ -147,24 +153,60 @@ class LPCSpriteBuilder {
         
         try {
             const sex = this.currentConfig.sex;
+            console.log('Loading character for sex:', sex);
+            console.log('Available LPC data keys:', Object.keys(this.lpcData));
             
-            // Load body - use actual LPC data if available
-            const bodyData = this.lpcData?.body?.[sex];
-            if (bodyData) {
-                const bodyPath = this.extractImagePath(bodyData, sex, 'walk');
-                if (bodyPath) {
-                    await this.loadLayer('body', bodyPath, 0);
+            // Try to find body data using the sex selection
+            let bodyPath = null;
+            if (this.lpcData.sex && this.lpcData.sex[sex]) {
+                bodyPath = this.extractImagePath(this.lpcData.sex[sex], sex, 'walk');
+            }
+            
+            // If no body path found, try some hardcoded paths
+            if (!bodyPath) {
+                const bodyPaths = [
+                    `/lpc-generator/spritesheets/body/bodies/${sex}/walk.png`,
+                    `/lpc-generator/spritesheets/body/bodies/male/walk.png`
+                ];
+                
+                for (const path of bodyPaths) {
+                    if (await this.testImageExists(path)) {
+                        bodyPath = path;
+                        break;
+                    }
                 }
             }
             
-            // Load hair if available
+            if (bodyPath) {
+                await this.loadLayer('body', bodyPath, 0);
+            }
+            
+            // Try to load hair
             if (this.currentConfig.hairStyle !== 'none') {
-                const hairData = this.lpcData?.hair?.[this.currentConfig.hairStyle];
-                if (hairData) {
-                    const hairPath = this.extractImagePath(hairData, sex, 'walk');
-                    if (hairPath) {
-                        await this.loadLayer('hair', hairPath, 10);
+                let hairPath = null;
+                
+                // Look for hair data in LPC data
+                if (this.lpcData.hair && this.lpcData.hair[this.currentConfig.hairStyle]) {
+                    hairPath = this.extractImagePath(this.lpcData.hair[this.currentConfig.hairStyle], sex, 'walk');
+                }
+                
+                // Fallback hair paths
+                if (!hairPath) {
+                    const hairPaths = [
+                        `/lpc-generator/spritesheets/hair/${this.currentConfig.hairStyle}/adult/walk.png`,
+                        `/lpc-generator/spritesheets/hair/page/adult/walk.png`
+                    ];
+                    
+                    for (const path of hairPaths) {
+                        if (await this.testImageExists(path)) {
+                            hairPath = path;
+                            break;
+                        }
                     }
+                }
+                
+                if (hairPath) {
+                    await this.loadLayer('hair', hairPath, 10);
                 }
             }
             
@@ -178,17 +220,42 @@ class LPCSpriteBuilder {
     }
     
     extractImagePath(dataAttrs, sex, animation) {
-        // Extract image path from LPC data attributes
-        const sexDataKey = `data-layer_1_${sex}`;
-        if (dataAttrs[sexDataKey]) {
-            let path = dataAttrs[sexDataKey];
-            // Clean up the path (remove quotes, etc.)
-            path = path.replace(/"/g, '').trim();
-            if (path && !path.startsWith('/')) {
-                path = '/lpc-generator/spritesheets/' + path;
+        // Try different possible data attribute keys
+        const possibleKeys = [
+            `data-layer_1_${sex}`,
+            `data-${sex}`,
+            'data-layer_1',
+            'data-src'
+        ];
+        
+        for (const key of possibleKeys) {
+            if (dataAttrs[key]) {
+                let path = dataAttrs[key];
+                // Clean up the path
+                path = path.replace(/['"]/g, '').trim();
+                
+                if (path) {
+                    // Ensure path starts with LPC generator prefix
+                    if (!path.startsWith('/lpc-generator/')) {
+                        if (path.startsWith('/')) {
+                            path = '/lpc-generator' + path;
+                        } else {
+                            path = '/lpc-generator/spritesheets/' + path;
+                        }
+                    }
+                    
+                    // If path doesn't end with .png, append animation and .png
+                    if (!path.endsWith('.png')) {
+                        path = path + '/' + animation + '.png';
+                    }
+                    
+                    console.log(`Extracted path for ${sex} ${animation}:`, path);
+                    return path;
+                }
             }
-            return path;
         }
+        
+        console.warn('No valid path found in data attributes:', dataAttrs);
         return null;
     }
     
@@ -402,14 +469,24 @@ class LPCSpriteBuilder {
             '/lpc-generator/spritesheets/body/bodies/male/walk.png',
             '/lpc-generator/spritesheets/body/bodies/female/walk.png',
             '/lpc-generator/spritesheets/hair/page/adult/walk.png',
+            '/lpc-generator/spritesheets/hair/parted/adult/walk.png',
             '/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/walk.png',
-            '/lpc-generator/spritesheets/legs/pants/male/walk.png'
+            '/lpc-generator/spritesheets/legs/pants/male/walk.png',
+            '/lpc-generator/index.html'
         ];
         
         console.log('Testing sprite paths...');
         for (const path of testPaths) {
             const exists = await this.testImageExists(path);
             console.log(`${path}: ${exists ? 'EXISTS' : 'NOT FOUND'}`);
+        }
+        
+        // Also test if we can load the LPC generator page
+        try {
+            const response = await fetch('/lpc-generator/');
+            console.log('LPC generator directory response:', response.status);
+        } catch (error) {
+            console.error('Failed to access LPC generator directory:', error);
         }
     }
 }
