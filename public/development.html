@@ -226,8 +226,13 @@
             background: #2a2a2a;
             border: 2px solid #555;
             border-radius: 5px;
-            padding: 10px;
+            padding: 20px;
             margin: 10px 0;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         #spriteCanvas {
             background: #1a1a2e;
@@ -235,9 +240,10 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            transform: scale(3);
-            transform-origin: top left;
-            margin-bottom: 20px;
+            transform: scale(2);
+            transform-origin: center;
+            margin: 10px auto;
+            display: block;
         }
         .sprite-controls {
             background: rgba(255, 255, 255, 0.1);
@@ -408,7 +414,7 @@
                 <div class="sprite-preview">
                     <h3>Preview</h3>
                     <div class="preview-container">
-                        <canvas id="spriteCanvas" width="256" height="64"></canvas>
+                        <canvas id="spriteCanvas" width="64" height="64"></canvas>
                         <canvas id="fullSpriteSheet" width="832" height="1344" style="display: none;"></canvas>
                     </div>
                     <div class="animation-controls">
