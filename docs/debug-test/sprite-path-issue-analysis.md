@@ -1,4 +1,3 @@
-
 # Sprite Path Issue Analysis & Fix Plan
 *Created: June 21, 2025*
 
@@ -70,9 +69,36 @@ Should be:   legs/pants/male/walk.png
 
 ## Fix Plan: 9-Phase Approach with Testing & Validation
 
-### Phase 1: Setup Testing Infrastructure (Priority: CRITICAL)
-**Goal**: Establish comprehensive testing and validation framework
-**Timeline**: 2-3 hours
+## Implementation Plan
+
+### Phase 0: File System Audit (Priority: CRITICAL)
+**Goal**: Verify what sprite files actually exist before fixing anything
+**Timeline**: 30 minutes
+
+#### Step 0.1: Physical File Investigation
+- Navigate to `/lpc-generator/spritesheets/` directory
+- Document actual directory structure vs. expected paths
+- List available .png files in key directories (body, hair, torso, legs)
+- Check specific failing paths: 
+  - `/lpc-generator/spritesheets/torso/clothes/longsleeve/male/walk.png`
+  - `/lpc-generator/spritesheets/hair/page/adult/walk.png`
+  - `/lpc-generator/spritesheets/body/bodies/male/walk.png`
+
+#### Step 0.2: Path Reality Check
+- Compare console error paths with actual file locations
+- Identify missing files vs. incorrect path construction
+- Document file naming patterns (walk.png, hurt.png, etc.)
+- Note any directory structure differences from expectations
+
+#### Step 0.3: Create File Inventory
+- Generate list of confirmed working sprite paths
+- Document broken path patterns for fixing
+- Establish baseline of what actually exists vs. what we're trying to load
+- **Critical**: Don't fix paths until we know files exist!
+
+### Phase 1: Linting & Testing Setup (Priority: HIGH)
+**Goal**: Prevent similar path construction errors through automated validation
+**Timeline**: 1 hour
 
 #### Step 1.1: Install Testing Tools
 ```bash
@@ -188,7 +214,7 @@ describe('Sprite Path Construction', () => {
     const path = buildSpritePath('body', 'male', 'walk');
     expect(path).toBe('/lpc-generator/spritesheets/body/bodies/male/walk.png');
   });
-  
+
   test('should handle color variants separately from paths', () => {
     const sprite = loadSprite('body', 'male', 'walk', 'light');
     expect(sprite.basePath).toBe('/lpc-generator/spritesheets/body/bodies/male/walk.png');
