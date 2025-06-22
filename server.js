@@ -18,6 +18,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Serve LPC sprite assets
+app.use('/lpc-generator', express.static('lpc-generator'));
+
 // Replit Key-Value Store
 const db = new Database();
 
@@ -82,7 +85,7 @@ class CardDeckManager {
     });
 
     if (filteredCards.length === 0) filteredCards = deck;
-    
+
     return filteredCards[Math.floor(Math.random() * filteredCards.length)];
   }
 
@@ -202,7 +205,7 @@ io.on('connection', (socket) => {
   socket.on('card_choice', async (data) => {
     try {
       const { gameId, playerId, cardId, choiceIndex } = data;
-      
+
       const player = await db.get(`player:${playerId}`);
       if (!player) return;
 
@@ -211,7 +214,7 @@ io.on('connection', (socket) => {
       if (!card || !card.choices[choiceIndex]) return;
 
       const choice = card.choices[choiceIndex];
-      
+
       // Check if player meets conditions
       if (choice.conditions) {
         if (choice.conditions.requires_money && player.stats.money < choice.conditions.requires_money) {
@@ -233,7 +236,7 @@ io.on('connection', (socket) => {
           if (!player.tags) player.tags = [];
           player.tags.push(...choice.triggers.add_tags);
         }
-        
+
         if (choice.triggers.roll_dice) {
           const rollResult = Math.floor(Math.random() * 6) + 1;
           // Handle dice-based effects (implement specific logic per card)
@@ -304,7 +307,7 @@ app.get('/api/cards/:deckName?', (req, res) => {
   try {
     const deckName = req.params.deckName || 'starter';
     const deck = cardManager.decks.get(deckName);
-    
+
     if (deck) {
       res.json({
         deck: deckName,
@@ -324,11 +327,11 @@ app.get('/api/cards/:deckName?', (req, res) => {
 app.post('/api/cards/deck', express.json(), (req, res) => {
   try {
     const { name, cards } = req.body;
-    
+
     if (!name || !cards || !Array.isArray(cards)) {
       return res.status(400).json({ error: 'Invalid deck format' });
     }
-    
+
     cardManager.addDeck(name, cards);
     res.json({ message: `Deck '${name}' added successfully`, cardCount: cards.length });
   } catch (err) {
@@ -466,7 +469,7 @@ function checkRingTriggers(gameState, currentRound) {
 async function generateCardsForTurn(playerId, triggeredRings) {
   const cards = [];
   const player = await db.get(`player:${playerId}`);
-  
+
   // Generate cards based on triggered rings
   for (const ring of triggeredRings) {
     const card = cardManager.getRandomCard('starter', { category: ring });
@@ -474,7 +477,7 @@ async function generateCardsForTurn(playerId, triggeredRings) {
       cards.push(card);
     }
   }
-  
+
   // Always include at least one random card if no rings triggered
   if (cards.length === 0) {
     const randomCard = cardManager.getRandomCard('starter');
@@ -482,7 +485,7 @@ async function generateCardsForTurn(playerId, triggeredRings) {
       cards.push(randomCard);
     }
   }
-  
+
   // Limit to 3 cards max to prevent choice paralysis
   return cards.slice(0, 3);
 }

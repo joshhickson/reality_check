@@ -6,6 +6,7 @@
     <title>Reality Check - Development Tools</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="sprite-builder.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -314,9 +315,9 @@
 
                 <div class="sprite-preview">
                     <h3>Preview</h3>
-                    <div class="sprite-canvas" id="spriteCanvas">
+                    <canvas class="sprite-canvas" id="spriteCanvas" width="200" height="200">
                         <!-- Sprite preview will be rendered here -->
-                    </div>
+                    </canvas>
                     <div>
                         <button onclick="exportSprite()">Export PNG</button>
                         <button onclick="saveProfile()">Save Profile</button>
