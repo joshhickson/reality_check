@@ -493,13 +493,17 @@ async function generateCardsForTurn(playerId, triggeredRings) {
 // API Routes
 app.get('/api/games', async (req, res) => {
   try {
-    const gameKeys = await db.list('game:');
+    // Get all keys from the database
+    const allKeys = await db.list();
     const games = [];
 
-    for (const key of gameKeys) {
-      const game = await db.get(key);
-      if (game && game.status === 'waiting') {
-        games.push(game);
+    // Filter for game keys and get game data
+    for (const key of allKeys) {
+      if (key.startsWith('game:')) {
+        const game = await db.get(key);
+        if (game && game.status === 'waiting') {
+          games.push(game);
+        }
       }
     }
 
