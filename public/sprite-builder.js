@@ -212,6 +212,9 @@ class LPCSpriteBuilder {
                 }
             }
 
+            // Try to load basic clothing
+            await this.loadBasicClothing(sex);
+
             this.updateLayerList();
             this.startAnimation();
 
@@ -246,9 +249,23 @@ class LPCSpriteBuilder {
                         }
                     }
 
-                    // If path doesn't end with .png, append animation and .png
+                    // Fix common path issues
+                    // Remove duplicate directory names (e.g., longsleeve/longsleeve -> longsleeve)
+                    path = path.replace(/\/([^\/]+)\/\1(?=\/)/g, '/$1');
+                    
+                    // Replace child/teen with appropriate sex for clothing
+                    if (path.includes('/child/') || path.includes('/teen/')) {
+                        path = path.replace(/\/(child|teen)\//g, `/${sex}/`);
+                    }
+
+                    // If path doesn't end with .png, append sex/animation structure
                     if (!path.endsWith('.png')) {
-                        path = path + '/' + animation + '.png';
+                        // Check if we need to add sex subdirectory
+                        if (!path.includes(`/${sex}/`)) {
+                            path = path + `/${sex}/${animation}.png`;
+                        } else {
+                            path = path + `/${animation}.png`;
+                        }
                     }
 
                     console.log(`Extracted path for ${sex} ${animation}:`, path);
@@ -312,6 +329,52 @@ class LPCSpriteBuilder {
             img.onerror = () => resolve(false);
             img.src = url;
         });
+    }
+
+    async loadBasicClothing(sex) {
+        // Try to load basic shirt/torso
+        const shirtPaths = [
+            `/lpc-generator/spritesheets/torso/clothes/longsleeve/${sex}/walk.png`,
+            `/lpc-generator/spritesheets/torso/clothes/shirt/${sex}/walk.png`,
+            `/lpc-generator/spritesheets/torso/clothes/sleeveless/${sex}/walk.png`,
+            `/lpc-generator/spritesheets/torso/clothes/longsleeve/male/walk.png`, // fallback to male
+        ];
+
+        for (const path of shirtPaths) {
+            if (await this.testImageExists(path)) {
+                await this.loadLayer('shirt', path, 5);
+                console.log('✅ Loaded shirt from:', path);
+                break;
+            }
+        }
+
+        // Try to load basic pants/legs
+        const pantsPaths = [
+            `/lpc-generator/spritesheets/legs/pants/${sex}/walk.png`,
+            `/lpc-generator/spritesheets/legs/pants/male/walk.png`, // fallback to male
+        ];
+
+        for (const path of pantsPaths) {
+            if (await this.testImageExists(path)) {
+                await this.loadLayer('pants', path, 3);
+                console.log('✅ Loaded pants from:', path);
+                break;
+            }
+        }
+
+        // Try to load basic shoes
+        const shoesPaths = [
+            `/lpc-generator/spritesheets/feet/shoes/basic/${sex}/walk.png`,
+            `/lpc-generator/spritesheets/feet/shoes/basic/male/walk.png`, // fallback to male
+        ];
+
+        for (const path of shoesPaths) {
+            if (await this.testImageExists(path)) {
+                await this.loadLayer('shoes', path, 2);
+                console.log('✅ Loaded shoes from:', path);
+                break;
+            }
+        }
     }
 
     async loadLayer(name, path, zIndex) {
