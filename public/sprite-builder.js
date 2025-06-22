@@ -47,30 +47,92 @@ class LPCSpriteBuilder {
     }
 
     async init() {
-        console.log('📋 Loading basic character...');
+        console.log('📋 Initializing sprite builder...');
+        
+        // First, extract or load LPC data
+        await this.loadLPCData();
+        
+        // Then load basic character
         await this.loadBasicCharacter();
         this.startAnimation();
+    }
+
+    async loadLPCData() {
+        console.log('🔍 Loading LPC sprite data...');
+        
+        try {
+            // Try to load from cache first
+            let data = loadCachedLPCData();
+            
+            if (!data) {
+                // Extract fresh data from LPC generator
+                data = await extractLPCData();
+            }
+            
+            this.lpcData = data;
+            console.log('✅ LPC data loaded:', Object.keys(data.categories).length, 'categories');
+            
+        } catch (error) {
+            console.error('❌ Failed to load LPC data:', error);
+            // Continue with basic functionality even if LPC data fails
+            this.lpcData = null;
+        }
     }
 
     async loadBasicCharacter() {
         console.log('👤 Loading basic character...');
 
         try {
-            // Load known working sprites from LPC generator
-            const bodyPath = `/lpc-generator/spritesheets/body/bodies/${this.currentSex}/walk.png`;
-            await this.loadLayer('body', bodyPath, 1);
-            console.log('✅ Loaded body');
-
-            // Try to load hair
-            const hairPath = `/lpc-generator/spritesheets/hair/page/adult/walk.png`;
-            await this.loadLayer('hair', hairPath, 10);
-            console.log('✅ Loaded hair');
+            if (this.lpcData) {
+                // Use extracted LPC data
+                await this.loadCharacterFromLPCData();
+            } else {
+                // Fallback to hardcoded paths
+                await this.loadCharacterFallback();
+            }
 
         } catch (error) {
             console.error('❌ Failed to load basic character:', error);
             // Load a simple test rectangle if sprites fail
             this.drawTestRectangle();
         }
+    }
+
+    async loadCharacterFromLPCData() {
+        console.log('🎨 Loading character using LPC data...');
+        
+        // Load body first
+        const bodySprite = window.lpcExtractor.getSprite('Body_color', 'light', this.currentSex);
+        if (bodySprite) {
+            await this.loadLayer('body', bodySprite.activePath, bodySprite.zIndex);
+            console.log('✅ Loaded body from LPC data');
+        }
+
+        // Load hair
+        const hairSprites = window.lpcExtractor.getSpritesByCategory('hair');
+        const firstHairType = Object.keys(hairSprites)[0];
+        if (firstHairType) {
+            const firstHairVariant = Object.keys(hairSprites[firstHairType])[0];
+            const hairSprite = window.lpcExtractor.getSprite(firstHairType, firstHairVariant, this.currentSex);
+            if (hairSprite) {
+                await this.loadLayer('hair', hairSprite.activePath, hairSprite.zIndex);
+                console.log('✅ Loaded hair from LPC data');
+            }
+        }
+    }
+
+    async loadCharacterFallback() {
+        console.log('⚠️ Using fallback sprite loading...');
+        
+        // Load known working sprites from LPC generator
+        const bodyPath = `/lpc-generator/spritesheets/body/bodies/${this.currentSex}/walk.png`;
+        await this.loadLayer('body', bodyPath, 1);
+        console.log('✅ Loaded body (fallback)');
+
+        // Try to load hair
+        const hairPath = `/lpc-generator/spritesheets/hair/page/adult/walk.png`;
+        await this.loadLayer('hair', hairPath, 10);
+        console.log('✅ Loaded hair (fallback)');
     }
 
     drawTestRectangle() {
