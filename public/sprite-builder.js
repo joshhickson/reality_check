@@ -449,19 +449,41 @@ class LPCSpriteBuilder {
         this.drawCurrentFrame();
     }
 
+    testFunction() {
+        // Force multiple logging methods
+        const message = '🧪 TEST FUNCTION CALLED - Sprite Builder is working!';
+        console.log(message);
+        console.warn(message);
+        console.error(message);
+        alert('TEST FUNCTION CALLED! Sprite Builder object is accessible.');
+
+        // Log object details
+        console.log('Current spriteBuilder config:', this.currentConfig);
+        console.log('Canvas element:', this.canvas);
+        console.log('Context:', this.ctx);
+
+        // Also try to log to page console if it exists
+        if (typeof addToConsole === 'function') {
+            addToConsole('TEST FUNCTION CALLED - spriteBuilder working', 'success');
+        }
+
+        return 'Test function executed successfully!';
+    }
+
     showError(message) {
         const previewDiv = document.querySelector('.preview-container');
         if (previewDiv) {
             previewDiv.innerHTML = `<div style="color: red; padding: 20px;">${message}</div>`;
         }
         console.error('Sprite Builder Error:', message);
+        alert('ERROR: ' + message); // Force visibility
 
         // Also show in debug panel if open
         const debugPanel = document.getElementById('spriteDebugPanel');
         if (debugPanel && debugPanel.style.display !== 'none') {
             const failedPaths = document.getElementById('debugFailedPaths');
             if (failedPaths) {
-                failedPaths.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+                failedPaths.innerHTML += `<div style="color: red;">${message}</div>`;
             }
         }
     }
@@ -526,143 +548,36 @@ class LPCSpriteBuilder {
     }
 
     debugSprites() {
-        console.log('🔧 =========================');
-        console.log('🔧 DEBUG SPRITES CALLED');
-        console.log('🔧 =========================');
-        console.log('🔧 Function execution started');
-        console.log('🔧 this context:', this);
-        console.log('🔧 document.body exists:', !!document.body);
-        console.log('🔧 Current page URL:', window.location.href);
+        // Force multiple logging methods
+        const message = '🐛 DEBUG SPRITES CALLED - Starting sprite debug session';
+        console.log(message);
+        console.warn(message);
+        console.error(message);
+        alert('DEBUG SPRITES FUNCTION CALLED!');
 
-        // Remove existing debug panel if it exists
-        const existingPanel = document.getElementById('spriteDebugPanel');
-        console.log('🔧 Existing panel found:', !!existingPanel);
-        if (existingPanel) {
-            existingPanel.remove();
-            console.log('🔧 Removed existing debug panel');
+        // Also try to log to page console if it exists
+        if (typeof addToConsole === 'function') {
+            addToConsole('DEBUG SPRITES CALLED', 'warning');
         }
 
-        console.log('🔧 About to create debug panel element...');
+        // Create debug panel if it doesn't exist
+        if (!document.getElementById('spriteDebugPanel')) {
+            console.log('Creating debug panel...');
+            this.createDebugPanel();
+        }
 
-        // Create debug panel with inline styles for maximum visibility
-        const debugPanel = document.createElement('div');
-        console.log('🔧 Debug panel div created:', debugPanel);
+        // Show debug panel
+        const debugPanel = document.getElementById('spriteDebugPanel');
+        if (debugPanel) {
+            debugPanel.style.display = 'block';
+            console.log('✅ Debug panel displayed');
+            alert('Debug panel should now be visible!');
+        } else {
+            console.error('❌ Failed to create or find debug panel');
+            alert('ERROR: Failed to create debug panel!');
+        }
 
-        debugPanel.id = 'spriteDebugPanel';
-        console.log('🔧 ID set to:', debugPanel.id);
-
-        debugPanel.style.cssText = `
-            position: fixed !important;
-            top: 50px !important;
-            right: 50px !important;
-            width: 400px !important;
-            height: 500px !important;
-            background: rgba(0, 0, 0, 0.95) !important;
-            border: 2px solid #00ff00 !important;
-            border-radius: 8px !important;
-            z-index: 99999 !important;
-            color: #00ff00 !important;
-            font-family: 'Courier New', monospace !important;
-            font-size: 12px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5) !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        `;
-        console.log('🔧 Styles applied via cssText');
-
-        debugPanel.innerHTML = `
-            <div style="background: #333; padding: 10px; border-radius: 6px 6px 0 0; border-bottom: 1px solid #00ff00; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: bold;">🔧 Sprite Debug Panel</span>
-                <span onclick="document.getElementById('spriteDebugPanel').remove()" style="cursor: pointer; color: #ff6b6b; font-weight: bold; padding: 2px 6px; background: rgba(255, 107, 107, 0.2); border-radius: 3px;">✕</span>
-            </div>
-            <div style="flex: 1; padding: 10px; overflow-y: auto;">
-                <div style="margin-bottom: 15px;">
-                    <div style="color: #feca57; font-weight: bold; margin-bottom: 5px;">📊 Panel Created Successfully!</div>
-                    <div>Time: ${new Date().toLocaleTimeString()}</div>
-                    <div>Browser: ${navigator.userAgent.split(' ').slice(-1)}</div>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <div style="color: #ff6b6b; font-weight: bold; margin-bottom: 5px;">❌ Failed Paths:</div>
-                    <div id="debugFailedPaths" style="max-height: 100px; overflow-y: auto; background: rgba(255, 107, 107, 0.1); padding: 5px; border-radius: 3px;">None yet</div>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <div style="color: #1dd1a1; font-weight: bold; margin-bottom: 5px;">✅ Loaded Paths:</div>
-                    <div id="debugLoadedPaths" style="max-height: 100px; overflow-y: auto; background: rgba(29, 209, 161, 0.1); padding: 5px; border-radius: 3px;">None yet</div>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <div style="color: #48dbfb; font-weight: bold; margin-bottom: 5px;">🧪 Test Functions:</div>
-                    <button onclick="console.log('Test button clicked!')" style="background: #48dbfb; color: black; border: none; padding: 5px 10px; margin: 2px; border-radius: 3px; cursor: pointer; font-size: 10px;">Test Console Log</button>
-                    <button onclick="alert('Button works!')" style="background: #9c88ff; color: white; border: none; padding: 5px 10px; margin: 2px; border-radius: 3px; cursor: pointer; font-size: 10px;">Test Alert</button>
-                </div>
-            </div>
-        `;
-        console.log('🔧 innerHTML set');
-
-        console.log('🔧 About to append to document.body...');
-        console.log('🔧 document.body children before:', document.body.children.length);
-
-        // Add panel to body
-        document.body.appendChild(debugPanel);
-        console.log('🔧 appendChild completed');
-        console.log('🔧 document.body children after:', document.body.children.length);
-
-        console.log('🔧 Immediate post-append checks:');
-        console.log('🔧 Panel in DOM:', !!document.getElementById('spriteDebugPanel'));
-        console.log('🔧 Panel parent:', debugPanel.parentNode === document.body);
-        console.log('🔧 Panel offsetWidth:', debugPanel.offsetWidth);
-        console.log('🔧 Panel offsetHeight:', debugPanel.offsetHeight);
-        console.log('🔧 Panel clientWidth:', debugPanel.clientWidth);
-        console.log('🔧 Panel clientHeight:', debugPanel.clientHeight);
-        console.log('🔧 Panel scrollWidth:', debugPanel.scrollWidth);
-        console.log('🔧 Panel scrollHeight:', debugPanel.scrollHeight);
-
-        const computedStyle = window.getComputedStyle(debugPanel);
-        console.log('🔧 Computed styles:');
-        console.log('🔧   display:', computedStyle.display);
-        console.log('🔧   visibility:', computedStyle.visibility);
-        console.log('🔧   opacity:', computedStyle.opacity);
-        console.log('🔧   position:', computedStyle.position);
-        console.log('🔧   z-index:', computedStyle.zIndex);
-        console.log('🔧   top:', computedStyle.top);
-        console.log('🔧   right:', computedStyle.right);
-        console.log('🔧   width:', computedStyle.width);
-        console.log('🔧   height:', computedStyle.height);
-
-        // Test if element is visible in viewport
-        const rect = debugPanel.getBoundingClientRect();
-        console.log('🔧 Element bounds:', rect);
-        console.log('🔧 Viewport dimensions:', {
-            width: window.innerWidth,
-            height: window.innerHeight
-        });
-        console.log('🔧 Element in viewport:', 
-            rect.top >= 0 && 
-            rect.left >= 0 && 
-            rect.bottom <= window.innerHeight && 
-            rect.right <= window.innerWidth
-        );
-
-        // Test multiple ways to verify the element exists
-        setTimeout(() => {
-            console.log('🔧 =========================');
-            console.log('🔧 100ms LATER CHECK');
-            console.log('🔧 =========================');
-            const panel = document.getElementById('spriteDebugPanel');
-            console.log('🔧 getElementById result:', panel);
-            console.log('🔧 querySelector result:', document.querySelector('#spriteDebugPanel'));
-            console.log('🔧 querySelectorAll result:', document.querySelectorAll('#spriteDebugPanel'));
-            console.log('🔧 Body contains panel:', document.body.contains(panel));
-
-            if (panel) {
-                console.log('🔧 Panel still has styles:', !!panel.style.cssText);
-                console.log('🔧 Panel cssText:', panel.style.cssText);
-            }
-        }, 100);
-
-        console.log('🔧 debugSprites function completed');
-        console.log('🔧 =========================');
+        this.runDiagnostics();
     }
 
     closeDebugPanel() {
@@ -702,104 +617,86 @@ class LPCSpriteBuilder {
     }
 }
 
-// Global sprite builder instance
-let spriteBuilder;
+// Global instance for easy access from HTML buttons
+let spriteBuilder = null;
 
-// Global functions for UI interaction
-function updateSprite() {
-    if (!spriteBuilder) return;
-
-    // Update config from form controls
-    spriteBuilder.currentConfig.bodyColor = document.getElementById('bodyColor')?.value || 'light';
-    spriteBuilder.currentConfig.hairStyle = document.getElementById('hairStyle')?.value || 'page';
-    spriteBuilder.currentConfig.hairColor = document.getElementById('hairColor')?.value || 'brunette';
-    spriteBuilder.currentConfig.clothingTop = document.getElementById('clothingTop')?.value || 'shirt_white';
-    spriteBuilder.currentConfig.clothingBottom = document.getElementById('clothingBottom')?.value || 'pants';
-
-    spriteBuilder.loadCharacter();
+// Force logging everywhere
+function forceLog(message) {
+    console.log(message);
+    console.warn(message);
+    console.error(message);
+    if (typeof addToConsole === 'function') {
+        addToConsole(message, 'warning');
+    }
 }
 
-function changeAnimation() {
-    if (!spriteBuilder) return;
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    forceLog('🚀 DOM LOADED - Checking for sprite canvas...');
 
-    const animSelect = document.getElementById('animationSelect');
-    if (animSelect) {
-        spriteBuilder.currentAnimation = animSelect.value;
-        spriteBuilder.startAnimation();
+    // Only initialize if we're on the development page
+    const canvas = document.getElementById('spriteCanvas');
+    if (canvas) {
+        forceLog('✅ Found sprite canvas, initializing sprite builder...');
+        try {
+            spriteBuilder = new LPCSpriteBuilder();
+            forceLog('✅ Sprite Builder initialized successfully!');
+            forceLog('spriteBuilder object: ' + typeof spriteBuilder);
+
+            // Test that functions exist
+            forceLog('debugSprites function exists: ' + (typeof spriteBuilder.debugSprites === 'function'));
+            forceLog('testFunction exists: ' + (typeof spriteBuilder.testFunction === 'function'));
+
+        } catch (error) {
+            forceLog('❌ ERROR initializing sprite builder: ' + error.message);
+            console.error('Full error:', error);
+        }
+    } else {
+        forceLog('❌ No sprite canvas found - not on development page?');
+    }
+});
+
+// Global functions for HTML buttons to call
+function debugSprites() {
+    forceLog('🔧 Global debugSprites() called');
+    if (spriteBuilder && typeof spriteBuilder.debugSprites === 'function') {
+        spriteBuilder.debugSprites();
+    } else {
+        const error = 'ERROR: spriteBuilder not initialized or debugSprites not found';
+        forceLog(error);
+        alert(error);
     }
 }
 
 function randomizeCharacter() {
-    if (!spriteBuilder) return;
-
-    // Random selections
-    const sexOptions = ['male', 'female'];
-    const hairStyles = ['page', 'parted', 'bangs', 'long', 'pixie', 'messy1'];
-
-    // Update form controls
-    const randomSex = sexOptions[Math.floor(Math.random() * sexOptions.length)];
-    const randomHair = hairStyles[Math.floor(Math.random() * hairStyles.length)];
-
-    const sexRadio = document.querySelector(`input[name="sex"][value="${randomSex}"]`);
-    if (sexRadio) sexRadio.checked = true;
-
-    const hairSelect = document.getElementById('hairStyle');
-    if (hairSelect) hairSelect.value = randomHair;
-
-    spriteBuilder.currentConfig.sex = randomSex;
-    spriteBuilder.currentConfig.hairStyle = randomHair;
-
-    updateSprite();
+    forceLog('🎲 Global randomizeCharacter() called');
+    if (spriteBuilder && typeof spriteBuilder.randomizeCharacter === 'function') {
+        spriteBuilder.randomizeCharacter();
+    } else {
+        const error = 'ERROR: spriteBuilder not initialized or randomizeCharacter not found';
+        forceLog(error);
+        alert(error);
+    }
 }
 
 function resetCharacter() {
-    if (!spriteBuilder) return;
-
-    // Reset to defaults
-    const maleRadio = document.querySelector('input[name="sex"][value="male"]');
-    if (maleRadio) maleRadio.checked = true;
-
-    const hairSelect = document.getElementById('hairStyle');
-    if (hairSelect) hairSelect.value = 'page';
-
-    spriteBuilder.currentConfig = {
-        sex: 'male',
-        bodyColor: 'light',
-        hairStyle: 'page',
-        hairColor: 'brunette',
-        clothingTop: 'shirt_white',
-        clothingBottom: 'pants'
-    };
-
-    updateSprite();
+    forceLog('🔄 Global resetCharacter() called');
+    if (spriteBuilder && typeof spriteBuilder.resetCharacter === 'function') {
+        spriteBuilder.resetCharacter();
+    } else {
+        const error = 'ERROR: spriteBuilder not initialized or resetCharacter not found';
+        forceLog(error);
+        alert(error);
+    }
 }
 
-function exportCurrentFrame() {
-    if (!spriteBuilder || !spriteBuilder.canvas) return;
-
-    const link = document.createElement('a');
-    link.download = `character_frame_${Date.now()}.png`;
-    link.href = spriteBuilder.canvas.toDataURL();
-    link.click();
+function updateSprite() {
+    forceLog('🔄 Global updateSprite() called');
+    if (spriteBuilder && typeof spriteBuilder.loadCharacter === 'function') {
+        spriteBuilder.loadCharacter();
+    } else {
+        const error = 'ERROR: spriteBuilder not initialized or loadCharacter not found';
+        forceLog(error);
+        alert(error);
+    }
 }
-
-function exportSpriteSheet() {
-    if (!spriteBuilder) return;
-
-    spriteBuilder.generateFullSpriteSheet();
-    const link = document.createElement('a');
-    link.download = `character_spritesheet_${Date.now()}.png`;
-    link.href = spriteBuilder.fullCanvas.toDataURL();
-    link.click();
-}
-
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit for the DOM to be fully ready
-    setTimeout(() => {
-        spriteBuilder = new LPCSpriteBuilder();
-
-        // Add debug button
-        console.log('Sprite builder initialized. Call debugSprites() to test available sprite paths.');
-    }, 100);
-});

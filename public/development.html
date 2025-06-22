@@ -409,7 +409,8 @@
                         <button onclick="randomizeCharacter()">Randomize</button>
                         <button onclick="resetCharacter()">Reset</button>
                         <button onclick="debugSprites()">Debug Sprites</button>
-                        <button onclick="console.log('🧪 spriteBuilder object:', typeof spriteBuilder, spriteBuilder); if(spriteBuilder && spriteBuilder.testFunction) spriteBuilder.testFunction(); else console.error('spriteBuilder not found!');" style="background: #ff9800; color: white;">Test Object</button>
+                        <button onclick="alert('Test button clicked!'); console.log('🧪 spriteBuilder object:', typeof spriteBuilder, spriteBuilder); if(spriteBuilder && spriteBuilder.testFunction) { spriteBuilder.testFunction(); } else { const msg = 'spriteBuilder not found or testFunction missing!'; console.error(msg); alert(msg); }" style="background: #ff9800; color: white;">Test Object</button>
+                        <button onclick="alert('Force log test'); console.log('FORCE LOG TEST'); console.warn('FORCE LOG TEST'); console.error('FORCE LOG TEST');" style="background: #ff0000; color: white;">Force Log Test</button>
                     </div>
                 </div>
 
