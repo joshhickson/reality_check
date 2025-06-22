@@ -48,10 +48,10 @@ class LPCSpriteBuilder {
 
     async init() {
         console.log('📋 Initializing sprite builder...');
-        
+
         // First, extract or load LPC data
         await this.loadLPCData();
-        
+
         // Then load basic character
         await this.loadBasicCharacter();
         this.startAnimation();
@@ -59,14 +59,14 @@ class LPCSpriteBuilder {
 
     async loadLPCData() {
         console.log('🔍 Loading LPC sprite data...');
-        
+
         try {
             // Extract fresh data from LPC generator
             const data = await window.lpcExtractor.extractFromLPCGenerator();
             this.lpcData = data;
             console.log('✅ LPC data loaded:', Object.keys(data.categories).length, 'categories');
             console.log('📊 Available sprites:', Object.keys(data.sprites).length);
-            
+
         } catch (error) {
             console.error('❌ Failed to load LPC data:', error);
             // Continue with basic functionality even if LPC data fails
@@ -95,29 +95,29 @@ class LPCSpriteBuilder {
 
     async loadCharacterFromLPCData() {
         console.log('🎨 Loading character using LPC data...');
-        
+
         // DEBUG: Show structure of extracted data
         console.log('🔍 DEBUG: First 3 sprite entries:', Object.keys(this.lpcData.sprites).slice(0, 3));
-        
+
         // Find body sprites
         const bodySprites = Object.keys(this.lpcData.sprites).filter(name => 
             name.toLowerCase().includes('body') && !name.toLowerCase().includes('shadow')
         );
-        
+
         console.log('🔍 DEBUG: Found body sprites:', bodySprites);
-        
+
         if (bodySprites.length > 0) {
             const bodyName = bodySprites[0];
             const bodyVariants = Object.keys(this.lpcData.sprites[bodyName]);
             console.log('🔍 DEBUG: Body variants for', bodyName, ':', bodyVariants);
-            
+
             if (bodyVariants.length > 0) {
                 const bodySprite = this.lpcData.sprites[bodyName][bodyVariants[0]];
                 console.log('🔍 DEBUG: Full body sprite object:', bodySprite);
-                
+
                 const bodyPath = bodySprite.paths[this.currentSex] || bodySprite.paths.male;
                 console.log('🔍 DEBUG: Resolved body path:', bodyPath);
-                
+
                 if (bodyPath) {
                     await this.loadLayer('body', bodyPath, bodySprite.zIndex);
                     console.log('✅ Loaded body from LPC data:', bodyPath);
@@ -129,7 +129,7 @@ class LPCSpriteBuilder {
         const hairSprites = Object.keys(this.lpcData.sprites).filter(name => 
             name.toLowerCase().includes('hair') && !name.toLowerCase().includes('color')
         );
-        
+
         if (hairSprites.length > 0) {
             const hairName = hairSprites[0];
             const hairVariants = Object.keys(this.lpcData.sprites[hairName]);
@@ -146,7 +146,7 @@ class LPCSpriteBuilder {
 
     async loadCharacterFallback() {
         console.log('⚠️ Using fallback sprite loading...');
-        
+
         // Load known working sprites from LPC generator
         const bodyPath = `/lpc-generator/spritesheets/body/bodies/${this.currentSex}/walk.png`;
         await this.loadLayer('body', bodyPath, 1);
