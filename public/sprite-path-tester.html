@@ -95,6 +95,7 @@
 
         <div class="button-group">
             <button id="loadLPCBtn" onclick="loadLPCData()">🔄 Load LPC Data</button>
+            <button id="scanFilesBtn" onclick="runFileScan()">📁 Scan LPC Files</button>
             <button id="testPathsBtn" onclick="runPathTest()" disabled>🧪 Test All Paths</button>
             <button id="quickTestBtn" onclick="runQuickTest()" disabled>⚡ Quick Test</button>
             <button id="clearConsoleBtn" onclick="clearConsole()">🗑️ Clear Console</button>
@@ -109,12 +110,19 @@
 
     <!-- Load required scripts in proper order -->
     <script src="lpc-data-extractor.js"></script>
+    <script src="lpc-file-scanner.js"></script>
     <script>
         // Ensure LPCDataExtractor is loaded before proceeding
         if (typeof LPCDataExtractor === 'undefined') {
             console.error('❌ LPCDataExtractor failed to load');
         } else {
             console.log('✅ LPCDataExtractor loaded successfully');
+        }
+        
+        if (typeof LPCFileScanner === 'undefined') {
+            console.error('❌ LPCFileScanner failed to load');
+        } else {
+            console.log('✅ LPCFileScanner loaded successfully');
         }
     </script>
     <script src="test-paths.js"></script>
@@ -224,6 +232,39 @@
                 setTimeout(() => {
                     testBtn.disabled = false;
                     testBtn.textContent = '🧪 Test All Paths';
+                }, 3000);
+            }
+        }
+
+        async function runFileScan() {
+            const scanBtn = document.getElementById('scanFilesBtn');
+            scanBtn.disabled = true;
+            scanBtn.textContent = '📁 Scanning...';
+
+            try {
+                updateProgress(20);
+                console.log('📁 Starting comprehensive file scan...');
+
+                const results = await runLPCScan();
+                
+                updateProgress(100);
+                console.log('✅ File scan completed!');
+                console.log(`📊 Found ${results.summary.totalValidPaths} valid sprite paths`);
+                console.log('📁 Results downloaded automatically');
+
+                scanBtn.textContent = '✅ Scan Complete';
+
+                // Enable other buttons now that we have real file data
+                document.getElementById('testPathsBtn').disabled = false;
+                document.getElementById('quickTestBtn').disabled = false;
+
+            } catch (error) {
+                console.error('❌ File scan failed:', error);
+                scanBtn.textContent = '❌ Scan Failed';
+            } finally {
+                setTimeout(() => {
+                    scanBtn.disabled = false;
+                    scanBtn.textContent = '📁 Scan LPC Files';
                 }, 3000);
             }
         }
