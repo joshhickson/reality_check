@@ -1,0 +1,17 @@
+spriteBuilder.testFunction is not a function
+spriteBuilder.loadCharacter is not a function
+spriteBuilder.updateDebugPanel is not a function
+spriteBuilder.testFunction is not a function
+exportCurrentFrame is not defined
+exportSpriteSheet is not defined
+saveCharacterProfile is not defined
+resetCharacter is not defined
+🔍 Sprite Data Debug:
+Categories: 
+(611) ["shadow", "body_color", "zombie", "skeleton", "arm", "brain", "ribs", "left_eye", "right_eye", "mouth", "hook_hand", "peg_leg", "wheelchair", "wolf_tail", "fluffy_wolf_tail", "cat_tail", "lizard_tail_(alt_colors)", "feathered_wings", "bat_wings", "lizard_wings_(alt_colors)", "monarch_wings", "monarch_wings_edge", "monarch_wings_dots", "pixie_wings", "transparent_pixie_wings", "lunar_wings", "dragonfly_wings", "transparent_dragonfly_wings", "lizard_wings", "batlike_lizard_wings", "lizard_tail", "human_female", "human_male", "human_female_elderly", "human_male_elderly", "human_male_plump", "human_male_gaunt", "human_male_small", "human_female_small", "human_elderly_small", "boarman", "pig", "sheep", "minotaur", "minotaur_female", "wartotaur", "wolf_female", "wolf_male", "rabbit", "rat", "mouse", "lizard_female", "lizard_male", "orc_female", "orc_male", "goblin", "alien", "troll", "jack_o_lantern", "vampire", "frankenstein", "neutral", "closing_eyes", "closed_eyes", "looking_right", "looking_left", "rolling_eyes", "shock", "angry", "angry_alt", "sad", "sad_alt", "happy", "happy_alt", "blush", "shame", "tears", "eye_color", "cyclops_eyes", "big_ears", "elven_ears", "long_ears", "medium_elven_ears", "hanging_elven_ears", "downward_elven_ears", "dragon_ears", "cat_ears", "cat_ears_skintone", "wolf_ears", "wolf_ears_skintone", "side_wolf_ears", "side_wolf_ears_skintone", "side_cat_ears", "side_cat_ears_skintone", "feather_ears", "feather_ears_skintone", "big_nose", "button_nose", "straight_nose", "elderly_nose", …]
+Male assets: 
+Object {shadow: {…}, body_color: {…}, zombie: {…}, skeleton: {…}, arm: {…}, …}
+Female assets: 
+Object {shadow: {…}, body_color: {…}, zombie: {…}, skeleton: {…}, arm: {…}, …}
+Current layers: 
+Array []
