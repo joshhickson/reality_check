@@ -1,6 +1,5 @@
 
-
-// Advanced LPC Sprite Builder adapted from the LPC Character Generator
+// Advanced LPC Sprite Builder that integrates with the LPC Character Generator
 class LPCSpriteBuilder {
     constructor() {
         this.canvas = document.getElementById('spriteCanvas');
@@ -44,6 +43,9 @@ class LPCSpriteBuilder {
             hurt: { row: 20, frames: 6, frameWidth: 64, frameHeight: 64 }
         };
         
+        // LPC data cache
+        this.lpcData = null;
+        
         this.init();
     }
     
@@ -61,11 +63,64 @@ class LPCSpriteBuilder {
             this.fullCtx.mozImageSmoothingEnabled = false;
         }
         
-        // Bind event listeners
-        this.bindEventListeners();
+        // Try to load LPC data
+        this.loadLPCData().then(() => {
+            this.bindEventListeners();
+            this.loadCharacter();
+        }).catch(() => {
+            // Fallback to simple hardcoded sprite loading
+            this.bindEventListeners();
+            this.loadCharacterFallback();
+        });
+    }
+    
+    async loadLPCData() {
+        try {
+            // Try to fetch the LPC generator index.html to parse available options
+            const response = await fetch('/lpc-generator/index.html');
+            if (response.ok) {
+                const html = await response.text();
+                this.parseLPCData(html);
+            } else {
+                throw new Error('Could not load LPC data');
+            }
+        } catch (error) {
+            console.warn('Failed to load LPC data, using fallback');
+            throw error;
+        }
+    }
+    
+    parseLPCData(html) {
+        // Parse the LPC generator HTML to extract available sprite options
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
         
-        // Load initial character
-        this.loadCharacter();
+        this.lpcData = {
+            body: {},
+            hair: {},
+            torso: {},
+            legs: {}
+        };
+        
+        // Extract available options from radio buttons
+        const radioButtons = doc.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(radio => {
+            const name = radio.name;
+            const value = radio.value;
+            const dataAttrs = {};
+            
+            // Extract data attributes
+            for (let attr of radio.attributes) {
+                if (attr.name.startsWith('data-')) {
+                    dataAttrs[attr.name] = attr.value;
+                }
+            }
+            
+            if (!this.lpcData[name]) {
+                this.lpcData[name] = {};
+            }
+            this.lpcData[name][value] = dataAttrs;
+        });
     }
     
     bindEventListeners() {
@@ -77,42 +132,117 @@ class LPCSpriteBuilder {
                 this.loadCharacter();
             });
         });
-        
-        // Other controls are handled by onchange attributes in HTML
     }
     
     async loadCharacter() {
-        const basePath = '/lpc-generator/spritesheets';
+        if (this.lpcData) {
+            await this.loadCharacterFromLPCData();
+        } else {
+            await this.loadCharacterFallback();
+        }
+    }
+    
+    async loadCharacterFromLPCData() {
         this.layers = [];
         
         try {
-            // Load body
-            await this.loadLayer('body', `${basePath}/body/bodies/${this.currentConfig.sex}/walk.png`, 0);
+            const sex = this.currentConfig.sex;
             
-            // Load hair if not "none"
+            // Load body - use actual LPC data if available
+            const bodyData = this.lpcData?.body?.[sex];
+            if (bodyData) {
+                const bodyPath = this.extractImagePath(bodyData, sex, 'walk');
+                if (bodyPath) {
+                    await this.loadLayer('body', bodyPath, 0);
+                }
+            }
+            
+            // Load hair if available
             if (this.currentConfig.hairStyle !== 'none') {
-                await this.loadLayer('hair', `${basePath}/hair/${this.currentConfig.hairStyle}/adult/walk.png`, 10);
+                const hairData = this.lpcData?.hair?.[this.currentConfig.hairStyle];
+                if (hairData) {
+                    const hairPath = this.extractImagePath(hairData, sex, 'walk');
+                    if (hairPath) {
+                        await this.loadLayer('hair', hairPath, 10);
+                    }
+                }
             }
             
-            // Load clothing
-            if (this.currentConfig.clothingTop !== 'none') {
-                await this.loadLayer('clothing_top', `${basePath}/torso/clothes/longsleeve/longsleeve/walk.png`, 5);
-            }
-            
-            if (this.currentConfig.clothingBottom !== 'none') {
-                await this.loadLayer('clothing_bottom', `${basePath}/legs/pants/${this.currentConfig.sex}/walk.png`, 3);
-            }
-            
-            // Update layer list display
             this.updateLayerList();
-            
-            // Start animation
             this.startAnimation();
             
         } catch (error) {
-            console.error('Error loading character:', error);
-            this.showError('Failed to load character sprites');
+            console.error('Error loading character from LPC data:', error);
+            await this.loadCharacterFallback();
         }
+    }
+    
+    extractImagePath(dataAttrs, sex, animation) {
+        // Extract image path from LPC data attributes
+        const sexDataKey = `data-layer_1_${sex}`;
+        if (dataAttrs[sexDataKey]) {
+            let path = dataAttrs[sexDataKey];
+            // Clean up the path (remove quotes, etc.)
+            path = path.replace(/"/g, '').trim();
+            if (path && !path.startsWith('/')) {
+                path = '/lpc-generator/spritesheets/' + path;
+            }
+            return path;
+        }
+        return null;
+    }
+    
+    async loadCharacterFallback() {
+        // Fallback to known good paths in the LPC generator
+        this.layers = [];
+        
+        try {
+            const sex = this.currentConfig.sex;
+            
+            // Try known body paths
+            const bodyPaths = [
+                `/lpc-generator/spritesheets/body/bodies/${sex}/walk.png`,
+                `/lpc-generator/spritesheets/body/bodies/male/walk.png`  // fallback
+            ];
+            
+            for (const path of bodyPaths) {
+                if (await this.testImageExists(path)) {
+                    await this.loadLayer('body', path, 0);
+                    break;
+                }
+            }
+            
+            // Try known hair paths
+            if (this.currentConfig.hairStyle !== 'none') {
+                const hairPaths = [
+                    `/lpc-generator/spritesheets/hair/${this.currentConfig.hairStyle}/adult/walk.png`,
+                    `/lpc-generator/spritesheets/hair/page/adult/walk.png`  // fallback
+                ];
+                
+                for (const path of hairPaths) {
+                    if (await this.testImageExists(path)) {
+                        await this.loadLayer('hair', path, 10);
+                        break;
+                    }
+                }
+            }
+            
+            this.updateLayerList();
+            this.startAnimation();
+            
+        } catch (error) {
+            console.error('Error loading character fallback:', error);
+            this.showError('Failed to load character sprites. Check that LPC generator files are available.');
+        }
+    }
+    
+    async testImageExists(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = url;
+        });
     }
     
     async loadLayer(name, path, zIndex) {
@@ -133,12 +263,12 @@ class LPCSpriteBuilder {
                 this.layers.sort((a, b) => a.zIndex - b.zIndex);
                 this.visibleLayers[name] = true;
                 
+                console.log(`Successfully loaded layer: ${name} from ${path}`);
                 resolve(img);
             };
             
             img.onerror = () => {
                 console.warn(`Failed to load layer: ${path}`);
-                // Don't reject, just continue without this layer
                 resolve(null);
             };
             
@@ -181,7 +311,7 @@ class LPCSpriteBuilder {
         // Draw each visible layer
         this.layers.forEach(layer => {
             if (layer.visible && layer.image && this.visibleLayers[layer.name]) {
-                // Draw all 4 directions, but focus on south (front-facing)
+                // Draw south-facing direction (front view)
                 this.ctx.drawImage(
                     layer.image,
                     sourceX, sourceY + (2 * anim.frameHeight), // South direction
@@ -212,6 +342,11 @@ class LPCSpriteBuilder {
         if (!layerList) return;
         
         layerList.innerHTML = '';
+        
+        if (this.layers.length === 0) {
+            layerList.innerHTML = '<div style="color: #666; padding: 10px;">No layers loaded</div>';
+            return;
+        }
         
         this.layers.forEach((layer, index) => {
             const layerDiv = document.createElement('div');
@@ -258,6 +393,24 @@ class LPCSpriteBuilder {
             errorDiv.textContent = message;
             previewDiv.appendChild(errorDiv);
         }
+        console.error(message);
+    }
+    
+    // Debug method to list available sprites
+    async debugListAvailableSprites() {
+        const testPaths = [
+            '/lpc-generator/spritesheets/body/bodies/male/walk.png',
+            '/lpc-generator/spritesheets/body/bodies/female/walk.png',
+            '/lpc-generator/spritesheets/hair/page/adult/walk.png',
+            '/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/walk.png',
+            '/lpc-generator/spritesheets/legs/pants/male/walk.png'
+        ];
+        
+        console.log('Testing sprite paths...');
+        for (const path of testPaths) {
+            const exists = await this.testImageExists(path);
+            console.log(`${path}: ${exists ? 'EXISTS' : 'NOT FOUND'}`);
+        }
     }
 }
 
@@ -292,24 +445,22 @@ function randomizeCharacter() {
     if (!spriteBuilder) return;
     
     // Random selections
-    const sexOptions = ['male', 'female', 'teen', 'child'];
-    const bodyColors = ['light', 'tanned', 'tanned2', 'dark', 'dark2', 'darkelf', 'darkelf2'];
-    const hairStyles = ['page', 'page2', 'parted', 'bangs', 'long', 'ponytail', 'pixie', 'messy1'];
-    const hairColors = ['brunette', 'blonde', 'redhead', 'black', 'gray', 'white'];
-    const topClothing = ['shirt_white', 'longsleeve', 'shortsleeve', 'sleeveless', 'robe'];
-    const bottomClothing = ['pants', 'shorts', 'skirt'];
+    const sexOptions = ['male', 'female'];
+    const hairStyles = ['page', 'parted', 'bangs', 'long', 'pixie', 'messy1'];
     
     // Update form controls
     const randomSex = sexOptions[Math.floor(Math.random() * sexOptions.length)];
-    document.querySelector(`input[name="sex"][value="${randomSex}"]`).checked = true;
+    const randomHair = hairStyles[Math.floor(Math.random() * hairStyles.length)];
     
-    document.getElementById('bodyColor').value = bodyColors[Math.floor(Math.random() * bodyColors.length)];
-    document.getElementById('hairStyle').value = hairStyles[Math.floor(Math.random() * hairStyles.length)];
-    document.getElementById('hairColor').value = hairColors[Math.floor(Math.random() * hairColors.length)];
-    document.getElementById('clothingTop').value = topClothing[Math.floor(Math.random() * topClothing.length)];
-    document.getElementById('clothingBottom').value = bottomClothing[Math.floor(Math.random() * bottomClothing.length)];
+    const sexRadio = document.querySelector(`input[name="sex"][value="${randomSex}"]`);
+    if (sexRadio) sexRadio.checked = true;
+    
+    const hairSelect = document.getElementById('hairStyle');
+    if (hairSelect) hairSelect.value = randomHair;
     
     spriteBuilder.currentConfig.sex = randomSex;
+    spriteBuilder.currentConfig.hairStyle = randomHair;
+    
     updateSprite();
 }
 
@@ -317,12 +468,11 @@ function resetCharacter() {
     if (!spriteBuilder) return;
     
     // Reset to defaults
-    document.querySelector('input[name="sex"][value="male"]').checked = true;
-    document.getElementById('bodyColor').value = 'light';
-    document.getElementById('hairStyle').value = 'page';
-    document.getElementById('hairColor').value = 'brunette';
-    document.getElementById('clothingTop').value = 'shirt_white';
-    document.getElementById('clothingBottom').value = 'pants';
+    const maleRadio = document.querySelector('input[name="sex"][value="male"]');
+    if (maleRadio) maleRadio.checked = true;
+    
+    const hairSelect = document.getElementById('hairStyle');
+    if (hairSelect) hairSelect.value = 'page';
     
     spriteBuilder.currentConfig = {
         sex: 'male',
@@ -355,47 +505,10 @@ function exportSpriteSheet() {
     link.click();
 }
 
-function saveCharacterProfile() {
-    if (!spriteBuilder) return;
-    
-    const profile = {
-        config: spriteBuilder.currentConfig,
-        layers: spriteBuilder.layers.map(layer => ({
-            name: layer.name,
-            zIndex: layer.zIndex,
-            visible: layer.visible,
-            path: layer.path
-        })),
-        timestamp: new Date().toISOString()
-    };
-    
-    const blob = new Blob([JSON.stringify(profile, null, 2)], { type: 'application/json' });
-    const link = document.createElement('a');
-    link.download = `character_profile_${Date.now()}.json`;
-    link.href = URL.createObjectURL(blob);
-    link.click();
-}
-
-function toggleAllLayers() {
-    if (!spriteBuilder) return;
-    
-    const allVisible = spriteBuilder.layers.every(layer => layer.visible);
-    spriteBuilder.layers.forEach(layer => {
-        layer.visible = !allVisible;
-        spriteBuilder.visibleLayers[layer.name] = !allVisible;
-    });
-    
-    spriteBuilder.updateLayerList();
-    spriteBuilder.drawCurrentFrame();
-}
-
-function reorderLayers() {
-    if (!spriteBuilder) return;
-    
-    // Simple random reorder for demo
-    spriteBuilder.layers.sort(() => Math.random() - 0.5);
-    spriteBuilder.updateLayerList();
-    spriteBuilder.drawCurrentFrame();
+function debugSprites() {
+    if (spriteBuilder) {
+        spriteBuilder.debugListAvailableSprites();
+    }
 }
 
 // Initialize when page loads
@@ -403,6 +516,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Wait a bit for the DOM to be fully ready
     setTimeout(() => {
         spriteBuilder = new LPCSpriteBuilder();
+        
+        // Add debug button
+        console.log('Sprite builder initialized. Call debugSprites() to test available sprite paths.');
     }, 100);
 });
-
