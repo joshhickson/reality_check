@@ -55,6 +55,23 @@
 
 ---
 
+## Reference Implementation
+
+### LPC Generator Functionality
+**Status**: ✅ **Working as intended**
+
+The `/lpc-generator/index.html` serves as the gold standard reference implementation. This generator:
+- Functions exactly as desired with full character customization
+- Provides proper sprite preview and animation controls
+- Has complete asset management and layer handling
+- Demonstrates the target functionality we want to replicate in the development page
+
+**Key Difference**: The development page sprite builder should implement the same core functionality as the LPC generator but with different UI styling to match the development page's design aesthetic.
+
+**Implementation Goal**: Replicate LPC generator's robust functionality while adapting the UI components to fit the development page's visual style and layout structure.
+
+---
+
 ## User Notes Section
 *Please add your observations and additional issues below:*
 
