@@ -98,8 +98,17 @@ async function testPathExtraction() {
 // Test individual sprite loading
 async function testSpriteLoad(category, bodyType, animation) {
     try {
+        // Check if LPC extractor is available and has data
+        if (!window.lpcExtractor || !window.lpcExtractor.spriteData) {
+            return {
+                success: false,
+                attemptedPath: `LPC extractor not initialized`,
+                error: 'LPC data not loaded'
+            };
+        }
+
         // Try to find a working sprite path using LPC data
-        const sprite = window.lpcExtractor?.getSprite(category, 'default', bodyType);
+        const sprite = window.lpcExtractor.getSprite(category, null, bodyType);
         if (!sprite || !sprite.activePath) {
             return {
                 success: false,
@@ -108,7 +117,18 @@ async function testSpriteLoad(category, bodyType, animation) {
             };
         }
 
-        // Construct the expected path with animation
+        // Test the original sprite path first
+        const originalResponse = await fetch(sprite.activePath, { method: 'HEAD' });
+        if (originalResponse.ok) {
+            return {
+                success: true,
+                path: sprite.activePath,
+                status: originalResponse.status,
+                note: 'Using original sprite path'
+            };
+        }
+
+        // Try to construct path with different animation
         const basePath = sprite.activePath.replace(/\/[^/]+\.png$/, '');
         const testPath = `${basePath}/${animation}.png`;
 
@@ -125,7 +145,9 @@ async function testSpriteLoad(category, bodyType, animation) {
             return {
                 success: false,
                 attemptedPath: testPath,
-                error: `HTTP ${response.status}: ${response.statusText}`
+                error: `HTTP ${response.status}: ${response.statusText}`,
+                originalPath: sprite.activePath,
+                originalStatus: originalResponse.status
             };
         }
 
