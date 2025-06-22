@@ -75,14 +75,22 @@ Should be:   legs/pants/male/walk.png
 **Goal**: Verify what sprite files actually exist before fixing anything
 **Timeline**: 30 minutes
 
-#### Step 0.1: Physical File Investigation
-- Navigate to `/lpc-generator/spritesheets/` directory
-- Document actual directory structure vs. expected paths
-- List available .png files in key directories (body, hair, torso, legs)
-- Check specific failing paths: 
-  - `/lpc-generator/spritesheets/torso/clothes/longsleeve/male/walk.png`
-  - `/lpc-generator/spritesheets/hair/page/adult/walk.png`
-  - `/lpc-generator/spritesheets/body/bodies/male/walk.png`
+#### Step 0.1: Physical File Investigation ✅ COMPLETED
+**Findings from directory structure audit:**
+
+**Actual LPC Directory Structure:**
+- `/lpc-generator/spritesheets/torso/clothes/longsleeve/` contains:
+  - `formal/`, `formal_striped/`, `laced/` subdirectories
+  - NOT direct `male/walk.png` files
+- `/lpc-generator/spritesheets/hair/` contains many style directories but not simple `ponytail/adult/`
+- `/lpc-generator/spritesheets/body/bodies/` has proper structure: `male/`, `female/`, `child/`, etc.
+
+**Missing Files Confirmed:**
+- ❌ `/lpc-generator/spritesheets/torso/clothes/longsleeve/male/walk.png` - path doesn't exist
+- ❌ `/lpc-generator/spritesheets/hair/ponytail/adult/walk.png` - path doesn't exist  
+- ❌ `/lpc-generator/spritesheets/legs/pants/child/walk.png` - path doesn't exist
+
+**Root Cause:** Sprite builder path construction logic assumes wrong directory structure
 
 #### Step 0.2: Path Reality Check
 - Compare console error paths with actual file locations
