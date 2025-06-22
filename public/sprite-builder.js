@@ -526,53 +526,143 @@ class LPCSpriteBuilder {
     }
 
     debugSprites() {
-        // Find the sprite controls section where layer management is
-        const spriteControlsSection = document.querySelector('.sprite-controls h3');
-        if (!spriteControlsSection || spriteControlsSection.textContent !== 'Layer Management') {
-            console.error('Could not find Layer Management section');
-            return;
+        console.log('🔧 =========================');
+        console.log('🔧 DEBUG SPRITES CALLED');
+        console.log('🔧 =========================');
+        console.log('🔧 Function execution started');
+        console.log('🔧 this context:', this);
+        console.log('🔧 document.body exists:', !!document.body);
+        console.log('🔧 Current page URL:', window.location.href);
+
+        // Remove existing debug panel if it exists
+        const existingPanel = document.getElementById('spriteDebugPanel');
+        console.log('🔧 Existing panel found:', !!existingPanel);
+        if (existingPanel) {
+            existingPanel.remove();
+            console.log('🔧 Removed existing debug panel');
         }
 
-        // Find the parent container (the right column of sprite controls)
-        const layerManagementContainer = spriteControlsSection.parentElement;
+        console.log('🔧 About to create debug panel element...');
 
-        // Replace the layer management content with debug panel
-        layerManagementContainer.innerHTML = `
-            <h3>🔧 Sprite Debug Panel</h3>
+        // Create debug panel with inline styles for maximum visibility
+        const debugPanel = document.createElement('div');
+        console.log('🔧 Debug panel div created:', debugPanel);
 
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; margin-bottom: 10px; font-family: 'Courier New', monospace; font-size: 12px;">
-                <div style="margin-bottom: 10px;">
-                    <strong style="color: #00ff00;">LPC Data Status:</strong>
-                    <div id="lpcDataStatus" style="margin-left: 10px; color: #ffff00;"></div>
+        debugPanel.id = 'spriteDebugPanel';
+        console.log('🔧 ID set to:', debugPanel.id);
+
+        debugPanel.style.cssText = `
+            position: fixed !important;
+            top: 50px !important;
+            right: 50px !important;
+            width: 400px !important;
+            height: 500px !important;
+            background: rgba(0, 0, 0, 0.95) !important;
+            border: 2px solid #00ff00 !important;
+            border-radius: 8px !important;
+            z-index: 99999 !important;
+            color: #00ff00 !important;
+            font-family: 'Courier New', monospace !important;
+            font-size: 12px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5) !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        `;
+        console.log('🔧 Styles applied via cssText');
+
+        debugPanel.innerHTML = `
+            <div style="background: #333; padding: 10px; border-radius: 6px 6px 0 0; border-bottom: 1px solid #00ff00; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: bold;">🔧 Sprite Debug Panel</span>
+                <span onclick="document.getElementById('spriteDebugPanel').remove()" style="cursor: pointer; color: #ff6b6b; font-weight: bold; padding: 2px 6px; background: rgba(255, 107, 107, 0.2); border-radius: 3px;">✕</span>
+            </div>
+            <div style="flex: 1; padding: 10px; overflow-y: auto;">
+                <div style="margin-bottom: 15px;">
+                    <div style="color: #feca57; font-weight: bold; margin-bottom: 5px;">📊 Panel Created Successfully!</div>
+                    <div>Time: ${new Date().toLocaleTimeString()}</div>
+                    <div>Browser: ${navigator.userAgent.split(' ').slice(-1)}</div>
                 </div>
-
-                <div style="margin-bottom: 10px;">
-                    <strong style="color: #00ff00;">Current Layers:</strong>
-                    <div id="debugLayerInfo" style="margin-left: 10px; color: #00ffff;"></div>
+                <div style="margin-bottom: 15px;">
+                    <div style="color: #ff6b6b; font-weight: bold; margin-bottom: 5px;">❌ Failed Paths:</div>
+                    <div id="debugFailedPaths" style="max-height: 100px; overflow-y: auto; background: rgba(255, 107, 107, 0.1); padding: 5px; border-radius: 3px;">None yet</div>
                 </div>
-
-                <div style="margin-bottom: 10px;">
-                    <strong style="color: #00ff00;">Animation Status:</strong>
-                    <div id="debugAnimationInfo" style="margin-left: 10px; color: #ff00ff;"></div>
+                <div style="margin-bottom: 15px;">
+                    <div style="color: #1dd1a1; font-weight: bold; margin-bottom: 5px;">✅ Loaded Paths:</div>
+                    <div id="debugLoadedPaths" style="max-height: 100px; overflow-y: auto; background: rgba(29, 209, 161, 0.1); padding: 5px; border-radius: 3px;">None yet</div>
                 </div>
-
-                <div style="margin-bottom: 10px;">
-                    <strong style="color: #00ff00;">Failed Paths:</strong>
-                    <div id="debugFailedPaths" style="margin-left: 10px; color: #ff6666; max-height: 150px; overflow-y: auto; font-size: 10px; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 3px;"></div>
-                </div>
-
-                <div class="control-buttons">
-                    <button onclick="spriteBuilder.testSpritePaths()">Test Paths</button>
-                    <button onclick="spriteBuilder.clearDebugLog()">Clear Log</button>
-                    <button onclick="spriteBuilder.restoreLayerManagement()">Back to Layers</button>
+                <div style="margin-bottom: 15px;">
+                    <div style="color: #48dbfb; font-weight: bold; margin-bottom: 5px;">🧪 Test Functions:</div>
+                    <button onclick="console.log('Test button clicked!')" style="background: #48dbfb; color: black; border: none; padding: 5px 10px; margin: 2px; border-radius: 3px; cursor: pointer; font-size: 10px;">Test Console Log</button>
+                    <button onclick="alert('Button works!')" style="background: #9c88ff; color: white; border: none; padding: 5px 10px; margin: 2px; border-radius: 3px; cursor: pointer; font-size: 10px;">Test Alert</button>
                 </div>
             </div>
         `;
+        console.log('🔧 innerHTML set');
 
-        // Update debug info immediately
-        this.updateDebugInfo();
+        console.log('🔧 About to append to document.body...');
+        console.log('🔧 document.body children before:', document.body.children.length);
 
-        console.log('🔧 Debug panel opened in sprite controls');
+        // Add panel to body
+        document.body.appendChild(debugPanel);
+        console.log('🔧 appendChild completed');
+        console.log('🔧 document.body children after:', document.body.children.length);
+
+        console.log('🔧 Immediate post-append checks:');
+        console.log('🔧 Panel in DOM:', !!document.getElementById('spriteDebugPanel'));
+        console.log('🔧 Panel parent:', debugPanel.parentNode === document.body);
+        console.log('🔧 Panel offsetWidth:', debugPanel.offsetWidth);
+        console.log('🔧 Panel offsetHeight:', debugPanel.offsetHeight);
+        console.log('🔧 Panel clientWidth:', debugPanel.clientWidth);
+        console.log('🔧 Panel clientHeight:', debugPanel.clientHeight);
+        console.log('🔧 Panel scrollWidth:', debugPanel.scrollWidth);
+        console.log('🔧 Panel scrollHeight:', debugPanel.scrollHeight);
+
+        const computedStyle = window.getComputedStyle(debugPanel);
+        console.log('🔧 Computed styles:');
+        console.log('🔧   display:', computedStyle.display);
+        console.log('🔧   visibility:', computedStyle.visibility);
+        console.log('🔧   opacity:', computedStyle.opacity);
+        console.log('🔧   position:', computedStyle.position);
+        console.log('🔧   z-index:', computedStyle.zIndex);
+        console.log('🔧   top:', computedStyle.top);
+        console.log('🔧   right:', computedStyle.right);
+        console.log('🔧   width:', computedStyle.width);
+        console.log('🔧   height:', computedStyle.height);
+
+        // Test if element is visible in viewport
+        const rect = debugPanel.getBoundingClientRect();
+        console.log('🔧 Element bounds:', rect);
+        console.log('🔧 Viewport dimensions:', {
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
+        console.log('🔧 Element in viewport:', 
+            rect.top >= 0 && 
+            rect.left >= 0 && 
+            rect.bottom <= window.innerHeight && 
+            rect.right <= window.innerWidth
+        );
+
+        // Test multiple ways to verify the element exists
+        setTimeout(() => {
+            console.log('🔧 =========================');
+            console.log('🔧 100ms LATER CHECK');
+            console.log('🔧 =========================');
+            const panel = document.getElementById('spriteDebugPanel');
+            console.log('🔧 getElementById result:', panel);
+            console.log('🔧 querySelector result:', document.querySelector('#spriteDebugPanel'));
+            console.log('🔧 querySelectorAll result:', document.querySelectorAll('#spriteDebugPanel'));
+            console.log('🔧 Body contains panel:', document.body.contains(panel));
+
+            if (panel) {
+                console.log('🔧 Panel still has styles:', !!panel.style.cssText);
+                console.log('🔧 Panel cssText:', panel.style.cssText);
+            }
+        }, 100);
+
+        console.log('🔧 debugSprites function completed');
+        console.log('🔧 =========================');
     }
 
     closeDebugPanel() {
