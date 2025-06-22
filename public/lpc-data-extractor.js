@@ -1,3 +1,7 @@
+` tags.
+
+```python
+<replit_final_file>
 class LPCDataExtractor {
     constructor() {
         this.spriteData = new Map();
@@ -9,30 +13,81 @@ class LPCDataExtractor {
     }
 
     async extractFromLPCGenerator() {
-        console.log('🔍 Extracting sprite data from LPC generator...');
-
         try {
-            // Fetch the LPC generator HTML
+            console.log('🔄 Loading LPC generator HTML...');
             const response = await fetch('/lpc-generator/index.html');
-            const htmlText = await response.text();
+            if (!response.ok) {
+                throw new Error(`Failed to load LPC generator: ${response.status}`);
+            }
 
-            // Parse the HTML
+            const html = await response.text();
             const parser = new DOMParser();
-            const doc = parser.parseFromString(htmlText, 'text/html');
+            const doc = parser.parseFromString(html, 'text/html');
 
-            // Extract all radio inputs with data attributes
-            const radioInputs = doc.querySelectorAll('input[type="radio"][data-layer_1_male], input[type="radio"][data-layer_1_female]');
+            console.log('📊 Parsing LPC sprite data...');
 
-            console.log(`Found ${radioInputs.length} sprite inputs`);
+            // Find all input elements with data-layer attributes
+            const inputs = doc.querySelectorAll('input[data-layer_1_male], input[data-layer_1_female]');
+            console.log(`Found ${inputs.length} LPC input elements`);
 
-            radioInputs.forEach(input => {
-                this.processSpriteInput(input);
+            const spriteData = {};
+            const categorizedData = {
+                body: {},
+                hair: {},
+                torso: {},
+                legs: {},
+                feet: {},
+                head: {},
+                arms: {}
+            };
+
+            inputs.forEach((input, index) => {
+                const malePath = input.getAttribute('data-layer_1_male');
+                const femalePath = input.getAttribute('data-layer_1_female');
+                const zpos = input.getAttribute('data-zpos') || '0';
+                const inputName = input.getAttribute('name') || `sprite_${index}`;
+
+                if (malePath || femalePath) {
+                    // Store raw sprite data
+                    spriteData[inputName] = {
+                        male: malePath,
+                        female: femalePath,
+                        zpos: parseInt(zpos),
+                        name: inputName
+                    };
+
+                    // Categorize sprites based on path patterns
+                    const path = malePath || femalePath;
+                    if (path) {
+                        let category = 'misc';
+                        if (path.includes('/body/')) category = 'body';
+                        else if (path.includes('/hair/')) category = 'hair';
+                        else if (path.includes('/torso/')) category = 'torso';
+                        else if (path.includes('/legs/')) category = 'legs';
+                        else if (path.includes('/feet/')) category = 'feet';
+                        else if (path.includes('/head/')) category = 'head';
+                        else if (path.includes('/arms/')) category = 'arms';
+
+                        if (categorizedData[category]) {
+                            if (!categorizedData[category].male) categorizedData[category].male = {};
+                            if (!categorizedData[category].female) categorizedData[category].female = {};
+
+                            if (malePath) categorizedData[category].male[inputName] = malePath;
+                            if (femalePath) categorizedData[category].female[inputName] = femalePath;
+                        }
+                    }
+                }
             });
 
-            console.log('✅ Extraction complete');
-            console.log('📊 Extracted data:', this.extractedData);
+            this.spriteData = spriteData;
+            this.categorizedData = categorizedData;
 
-            return this.extractedData;
+            console.log(`✅ Extracted ${Object.keys(spriteData).length} sprite definitions`);
+            console.log('📊 Categories found:', Object.keys(categorizedData).map(cat => 
+                `${cat}: ${Object.keys(categorizedData[cat].male || {}).length} male, ${Object.keys(categorizedData[cat].female || {}).length} female`
+            ));
+
+            return spriteData;
 
         } catch (error) {
             console.error('❌ Failed to extract LPC data:', error);
