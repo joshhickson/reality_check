@@ -274,136 +274,45 @@ class LPCSpriteBuilder {
     loadVerifiedSpritePaths() {
         console.log('📊 Loading verified sprite paths...');
 
-        // Use the actual verified paths from your scan
-        this.spriteCategories = {
+        // Use verified paths from scanner results
+        const knownWorkingPaths = {
             body: {
-                name: 'Body',
-                sprites: [
-                    // Male body sprites
-                    { 
-                        name: 'Male Body',
-                        path: '/lpc-generator/spritesheets/body/bodies/male/walk.png',
-                        bodyType: 'male',
-                        animation: 'walk',
-                        style: 'bodies'
-                    },
-                    { 
-                        name: 'Female Body',
-                        path: '/lpc-generator/spritesheets/body/bodies/female/walk.png',
-                        bodyType: 'female',
-                        animation: 'walk',
-                        style: 'bodies'
-                    },
-                    { 
-                        name: 'Child Body',
-                        path: '/lpc-generator/spritesheets/body/bodies/child/walk.png',
-                        bodyType: 'child',
-                        animation: 'walk',
-                        style: 'bodies'
-                    }
-                ]
+                pattern: '/lpc-generator/spritesheets/body/bodies/{bodyType}/{animation}.png',
+                bodyTypes: ['male', 'female', 'child'],
+                animations: ['walk', 'hurt', 'idle', 'shoot', 'slash', 'spellcast', 'thrust']
             },
             hair: {
-                name: 'Hair',
-                sprites: [
-                    { 
-                        name: 'Page Hair',
-                        path: '/lpc-generator/spritesheets/hair/page/adult/walk.png',
-                        bodyType: 'adult',
-                        animation: 'walk',
-                        style: 'page'
-                    },
-                    { 
-                        name: 'Plain Hair',
-                        path: '/lpc-generator/spritesheets/hair/plain/adult/walk.png',
-                        bodyType: 'adult',
-                        animation: 'walk',
-                        style: 'plain'
-                    },
-                    { 
-                        name: 'Long Hair',
-                        path: '/lpc-generator/spritesheets/hair/long/adult/walk.png',
-                        bodyType: 'adult',
-                        animation: 'walk',
-                        style: 'long'
-                    },
-                    { 
-                        name: 'Bangs Hair',
-                        path: '/lpc-generator/spritesheets/hair/bangs/adult/walk.png',
-                        bodyType: 'adult',
-                        animation: 'walk',
-                        style: 'bangs'
-                    },
-                    { 
-                        name: 'Bob Hair',
-                        path: '/lpc-generator/spritesheets/hair/bob/adult/walk.png',
-                        bodyType: 'adult',
-                        animation: 'walk',
-                        style: 'bob'
-                    }
-                ]
+                patterns: [
+                    '/lpc-generator/spritesheets/hair/page/adult/{animation}.png',
+                    '/lpc-generator/spritesheets/hair/plain/adult/{animation}.png',
+                    '/lpc-generator/spritesheets/hair/long/adult/{animation}.png',
+                    '/lpc-generator/spritesheets/hair/bangs/adult/{animation}.png',
+                    '/lpc-generator/spritesheets/hair/bob/adult/{animation}.png'
+                ],
+                animations: ['walk', 'hurt', 'idle', 'shoot', 'slash', 'spellcast', 'thrust']
             },
             torso: {
-                name: 'Clothing',
-                sprites: [
-                    { 
-                        name: 'Formal Shirt (Male)',
-                        path: '/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/walk.png',
-                        bodyType: 'male',
-                        animation: 'walk',
-                        style: 'formal'
-                    }
-                ]
+                pattern: '/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/{bodyType}/{animation}.png',
+                bodyTypes: ['male', 'female'],
+                animations: ['walk', 'hurt', 'shoot', 'slash', 'spellcast', 'thrust']
             },
             legs: {
-                name: 'Legs',
-                sprites: [
-                    { 
-                        name: 'Pants (Male)',
-                        path: '/lpc-generator/spritesheets/legs/pants/male/walk.png',
-                        bodyType: 'male',
-                        animation: 'walk',
-                        style: 'pants'
-                    }
-                ]
+                pattern: '/lpc-generator/spritesheets/legs/pants/{bodyType}/{animation}.png',
+                bodyTypes: ['male', 'female'],
+                animations: ['walk', 'hurt', 'idle', 'shoot', 'slash', 'spellcast', 'thrust']
             },
             arms: {
-                name: 'Arms',
-                sprites: [
-                    { 
-                        name: 'Gloves (Male)',
-                        path: '/lpc-generator/spritesheets/arms/gloves/male/walk.png',
-                        bodyType: 'male',
-                        animation: 'walk',
-                        style: 'gloves'
-                    },
-                    { 
-                        name: 'Gloves (Female)',
-                        path: '/lpc-generator/spritesheets/arms/gloves/female/walk.png',
-                        bodyType: 'female',
-                        animation: 'walk',
-                        style: 'gloves'
-                    }
-                ]
+                pattern: '/lpc-generator/spritesheets/arms/gloves/{bodyType}/{animation}.png',
+                bodyTypes: ['male', 'female'],
+                animations: ['walk', 'hurt']
             },
             feet: {
-                name: 'Feet',
-                sprites: [
-                    { 
-                        name: 'Sandals (Male)',
-                        path: '/lpc-generator/spritesheets/feet/sandals/male/walk.png',
-                        bodyType: 'male',
-                        animation: 'walk',
-                        style: 'sandals'
-                    },
-                    { 
-                        name: 'Basic Shoes (Male)',
-                        path: '/lpc-generator/spritesheets/feet/shoes/basic/male/walk.png',
-                        bodyType: 'male',
-                        animation: 'walk',
-                        style: 'basic'
-                    }
-                ]
+                patterns: [
+                    '/lpc-generator/spritesheets/feet/sandals/{bodyType}/{animation}.png',
+                    '/lpc-generator/spritesheets/feet/shoes/basic/{bodyType}/{animation}.png'
+                ],
+                bodyTypes: ['male', 'female'],
+                animations: ['walk', 'hurt']
             }
         };
 
