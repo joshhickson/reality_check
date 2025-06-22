@@ -2,6 +2,20 @@
 # LPC Sprite Builder Action Plan
 *Priority-ordered tasks for immediate implementation*
 
+## Key Insights from Working LPC Generator
+
+### Why the LPC Generator Works
+1. **Pre-built Asset Paths**: Uses `generate_sources.js` to create validated sprite paths during build time
+2. **Data Attributes System**: Each form element has `data-layer_1_male`, `data-layer_1_female` etc. with correct paths
+3. **Proper Layer Management**: Uses background/foreground separation (`bg`/`fg` folders)
+4. **Canvas Compositing**: Implements proper z-index based layer stacking
+5. **Animation Framework**: Has complete animation definitions with frame counts and timing
+
+### Critical Learning: Path Construction Strategy
+- **Current Problem**: We're trying to construct paths at runtime from parsed HTML
+- **LPC Solution**: Paths are pre-validated and embedded in data attributes during build
+- **Our Fix**: Extract paths directly from data attributes, don't reconstruct them
+
 ## Phase 1: Critical Fixes (High Priority)
 
 ### Task 1.1: Fix Debug Panel Visibility
@@ -39,13 +53,19 @@
 **Estimated Time**: 1 hour  
 **Dependencies**: Task 1.2
 
-**Steps**:
-1. Update `extractImagePath()` method with correct path patterns
-2. Add path validation function to test if files exist
-3. Implement fallback path strategies
-4. Add detailed logging for path construction process
+**NEW STRATEGY** (Based on LPC Generator Analysis):
+1. **Direct Data Attribute Extraction**: Parse LPC HTML for exact data attribute values
+2. **No Path Reconstruction**: Use paths exactly as embedded in LPC generator
+3. **Layer Background/Foreground Support**: Handle `bg`/`fg` sprite separation
+4. **Z-Index Implementation**: Use proper layer stacking from LPC system
 
-**Success Criteria**: Sprite paths resolve correctly and images load
+**Steps**:
+1. Create function to extract all `data-layer_*` attributes from LPC generator HTML
+2. Build sprite catalog from extracted data (no path construction)
+3. Implement LPC-style layer management with bg/fg separation
+4. Add z-index based rendering system
+
+**Success Criteria**: Sprite paths match exactly what works in LPC generator
 
 ## Phase 2: Core Functionality (Medium Priority)
 

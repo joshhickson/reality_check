@@ -22,6 +22,38 @@ This document provides step-by-step instructions for implementing a fully functi
 
 ## Implementation Instructions
 
+### Phase 0: LPC System Integration (NEW PRIORITY)
+
+**Objective**: Leverage the working LPC generator mechanisms directly.
+
+**Implementation Steps**:
+1. **Extract LPC Data Catalog**:
+   ```javascript
+   // Parse LPC generator HTML for all data attributes
+   const lpcElements = lpcDoc.querySelectorAll('[data-layer_1_male], [data-layer_1_female]');
+   const spriteCatalog = extractLPCSpriteCatalog(lpcElements);
+   ```
+
+2. **Import LPC Animation System**:
+   ```javascript
+   // Use LPC's animation definitions from chargen.js
+   const base_animations = {
+     spellcast: 0, thrust: 4 * 64, walk: 8 * 64, slash: 12 * 64,
+     shoot: 16 * 64, hurt: 20 * 64
+   };
+   ```
+
+3. **Implement LPC Layer System**:
+   ```javascript
+   // Support bg/fg layer separation like LPC
+   const layers = [
+     { name: 'body_bg', zIndex: 0 },
+     { name: 'body', zIndex: 1 },
+     { name: 'hair_bg', zIndex: 2 },
+     { name: 'hair', zIndex: 3 }
+   ];
+   ```
+
 ### Phase 1: Fix Debug Panel Visibility
 
 **Problem**: Debug panel exists but is not visible to users.
@@ -107,27 +139,44 @@ This document provides step-by-step instructions for implementing a fully functi
 
 ### Understanding the LPC Generator Architecture
 
-The LPC generator uses a sophisticated data-driven approach:
+**BREAKTHROUGH**: After accessing the working LPC generator, the architecture is now clear:
 
 1. **Build Process**: `generate_sources.js` processes `sheet_definitions/` JSON files
-2. **HTML Generation**: Creates form elements with `data-*` attributes containing sprite metadata
-3. **Runtime Processing**: JavaScript reads data attributes to construct sprite paths
+2. **HTML Generation**: Creates form elements with `data-*` attributes containing COMPLETE sprite paths
+3. **Runtime Processing**: JavaScript reads data attributes DIRECTLY - no path construction needed
+4. **Layer System**: Uses `bg`/`fg` folder structure for background/foreground sprites
+5. **Animation Engine**: Complete animation framework with defined frame counts and timing
+
+### Key Files Analysis
+- `sources/chargen.js`: Complete sprite loading and animation system (2000+ lines)
+- `index.html`: Contains all sprite metadata in data attributes
+- `spritesheets/`: Organized by asset type with standardized animation folders
+
+### Critical Discovery: Data Attribute Format
+```html
+<input data-layer_1_male="/lpc-generator/spritesheets/hair/page/adult/walk.png" 
+       data-layer_1_female="/lpc-generator/spritesheets/hair/page/adult/walk.png">
+```
+**This means paths are PRE-VALIDATED and complete - we don't need to construct them!**
 
 ### Integration Strategy
 
-**Option A: Parse Generated HTML** (Current Approach)
-- Parse LPC generator's `index.html` for data attributes
-- Extract sprite paths and metadata
-- Pros: Uses existing build artifacts
-- Cons: Complex parsing, indirect data access
+**NEW RECOMMENDED APPROACH** (Based on Analysis):
+**Option A: Direct Data Attribute Extraction** (Now Proven Strategy)
+- Parse LPC generator's `index.html` for complete data attributes
+- Extract EXACT sprite paths (no reconstruction needed)
+- Import LPC animation system directly
+- Pros: Uses validated paths, proven system, simpler than expected
+- Cons: None - this is how LPC actually works
 
-**Option B: Direct JSON Access** (Recommended)
-- Read sprite definitions directly from `sheet_definitions/` JSON files
-- Build sprite paths using same logic as LPC generator
-- Pros: Direct data access, more reliable
-- Cons: Need to understand LPC build logic
+**Option B: LPC System Replication** (Advanced)
+- Replicate LPC's `chargen.js` rendering system
+- Implement LPC's layer management and animation framework
+- Use LPC's sprite organization patterns
+- Pros: Full feature parity, robust system
+- Cons: Complex implementation
 
-**Recommended Path**: Implement Option A first (minimal changes), then migrate to Option B for robustness.
+**Recommended Path**: Start with Option A (extract exact paths), then gradually integrate LPC rendering system components.
 
 ## Testing Strategy
 
@@ -220,10 +269,29 @@ The sprite builder implementation is considered successful when:
 
 ## Next Steps
 
-1. **Immediate**: Fix debug panel visibility issue
-2. **Short-term**: Resolve sprite path construction problems
-3. **Medium-term**: Implement full character rendering
-4. **Long-term**: Add advanced features and optimizations
+### Immediate Actions (Based on LPC Analysis)
+1. **Extract LPC Sprite Catalog**: Parse working LPC generator for complete sprite data
+2. **Fix Debug Panel**: Make debug panel visible to access LPC data
+3. **Implement Direct Path Usage**: Stop constructing paths, use LPC data directly
+4. **Import LPC Animation System**: Use proven animation framework from chargen.js
+
+### Short-term Goals
+1. **Character Rendering**: Use LPC compositing system for proper sprite layering
+2. **Animation Support**: Implement LPC's animation timing and frame management
+3. **UI Controls**: Connect controls to LPC's sprite selection system
+
+### Medium-term Integration
+1. **Full LPC Feature Parity**: Replicate all LPC generator functionality
+2. **Custom Development UI**: Adapt LPC system to development page styling
+3. **Performance Optimization**: Optimize for development workflow
+
+### Long-term Enhancements
+1. **Extended Asset Support**: Add custom sprites beyond LPC collection
+2. **Real-time Editing**: Live sprite editing and preview
+3. **Game Integration**: Direct integration with Reality Check character system
+
+## Critical Success Metric
+**The sprite builder should work exactly like the LPC generator with development page styling.**
 
 ---
 
