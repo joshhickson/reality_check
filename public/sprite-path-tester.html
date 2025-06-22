@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprite Path Tester</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #00ff00;
+        }
+        .container {
+            background-color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        h1 {
+            color: #00ffff;
+            text-align: center;
+        }
+        button {
+            background-color: #004400;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        button:hover {
+            background-color: #006600;
+        }
+        button:disabled {
+            background-color: #222;
+            color: #666;
+            cursor: not-allowed;
+        }
+        #console {
+            background-color: #111;
+            border: 1px solid #333;
+            padding: 15px;
+            margin: 20px 0;
+            min-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success { background-color: #004400; border: 1px solid #00ff00; }
+        .status.error { background-color: #440000; border: 1px solid #ff0000; color: #ff6666; }
+        .status.info { background-color: #000044; border: 1px solid #0066ff; color: #6666ff; }
+        .button-group {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .progress {
+            width: 100%;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #00ff00;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Sprite Path Tester</h1>
+        
+        <div class="status info">
+            <strong>Instructions:</strong>
+            <ol>
+                <li>Click "Load LPC Data" to initialize the LPC sprite data extractor</li>
+                <li>Click "Test All Paths" to run comprehensive path testing</li>
+                <li>Download the generated reports for analysis</li>
+            </ol>
+        </div>
+
+        <div class="button-group">
+            <button id="loadLPCBtn" onclick="loadLPCData()">🔄 Load LPC Data</button>
+            <button id="testPathsBtn" onclick="runPathTest()" disabled>🧪 Test All Paths</button>
+            <button id="quickTestBtn" onclick="runQuickTest()" disabled>⚡ Quick Test</button>
+            <button id="clearConsoleBtn" onclick="clearConsole()">🗑️ Clear Console</button>
+        </div>
+
+        <div class="progress" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div id="console"></div>
+    </div>
+
+    <!-- Load required scripts -->
+    <script src="lpc-data-extractor.js"></script>
+    <script src="test-paths.js"></script>
+
+    <script>
+        let consoleElement = document.getElementById('console');
+        let originalConsoleLog = console.log;
+        let originalConsoleError = console.error;
+
+        // Redirect console output to our custom console
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            logToCustomConsole(args.join(' '), 'log');
+        };
+
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            logToCustomConsole(args.join(' '), 'error');
+        };
+
+        function logToCustomConsole(message, type = 'log') {
+            const timestamp = new Date().toLocaleTimeString();
+            const colorClass = type === 'error' ? 'color: #ff6666' : 'color: #00ff00';
+            consoleElement.innerHTML += `<span style="${colorClass}">[${timestamp}] ${message}</span>\n`;
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        }
+
+        function clearConsole() {
+            consoleElement.innerHTML = '';
+        }
+
+        function updateProgress(percent) {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            
+            if (percent === 0) {
+                progressContainer.style.display = 'none';
+            } else {
+                progressContainer.style.display = 'block';
+                progressBar.style.width = percent + '%';
+                if (percent >= 100) {
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                    }, 2000);
+                }
+            }
+        }
+
+        async function loadLPCData() {
+            const loadBtn = document.getElementById('loadLPCBtn');
+            loadBtn.disabled = true;
+            loadBtn.textContent = '🔄 Loading...';
+
+            try {
+                console.log('🔄 Initializing LPC Data Extractor...');
+                
+                // Initialize the LPC data extractor
+                if (!window.lpcExtractor) {
+                    console.log('❌ LPC Extractor not found, creating new instance...');
+                    window.lpcExtractor = new LPCDataExtractor();
+                }
+
+                await window.lpcExtractor.extractFromLPCGenerator();
+                
+                console.log('✅ LPC Data loaded successfully!');
+                
+                // Enable other buttons
+                document.getElementById('testPathsBtn').disabled = false;
+                document.getElementById('quickTestBtn').disabled = false;
+                
+                loadBtn.textContent = '✅ LPC Data Loaded';
+
+            } catch (error) {
+                console.error('❌ Failed to load LPC data:', error);
+                loadBtn.textContent = '❌ Load Failed';
+                loadBtn.disabled = false;
+            }
+        }
+
+        async function runPathTest() {
+            const testBtn = document.getElementById('testPathsBtn');
+            testBtn.disabled = true;
+            testBtn.textContent = '🧪 Testing...';
+
+            try {
+                updateProgress(10);
+                console.log('🧪 Starting comprehensive path test...');
+                
+                updateProgress(50);
+                const results = await testPathExtraction();
+                
+                updateProgress(100);
+                console.log('✅ Path testing completed!');
+                console.log('📁 Check your downloads for the exported files.');
+                
+                testBtn.textContent = '✅ Test Complete';
+
+            } catch (error) {
+                console.error('❌ Path testing failed:', error);
+                testBtn.textContent = '❌ Test Failed';
+            } finally {
+                setTimeout(() => {
+                    testBtn.disabled = false;
+                    testBtn.textContent = '🧪 Test All Paths';
+                }, 3000);
+            }
+        }
+
+        async function runQuickTest() {
+            const quickBtn = document.getElementById('quickTestBtn');
+            quickBtn.disabled = true;
+            quickBtn.textContent = '⚡ Running...';
+
+            try {
+                console.log('⚡ Running quick path discovery...');
+                
+                const paths = discoverAllSpritePaths();
+                if (paths) {
+                    console.log(`📊 Found ${paths.length} sprite paths`);
+                    
+                    // Test first 10 paths as sample
+                    console.log('🔍 Testing sample paths...');
+                    for (let i = 0; i < Math.min(10, paths.length); i++) {
+                        const path = paths[i];
+                        try {
+                            const response = await fetch(path, { method: 'HEAD' });
+                            console.log(`${response.ok ? '✅' : '❌'} ${path}`);
+                        } catch (error) {
+                            console.log(`❌ ${path} - ${error.message}`);
+                        }
+                    }
+                }
+                
+                quickBtn.textContent = '✅ Quick Test Done';
+
+            } catch (error) {
+                console.error('❌ Quick test failed:', error);
+                quickBtn.textContent = '❌ Quick Test Failed';
+            } finally {
+                setTimeout(() => {
+                    quickBtn.disabled = false;
+                    quickBtn.textContent = '⚡ Quick Test';
+                }, 3000);
+            }
+        }
+
+        // Auto-load on page load
+        window.addEventListener('load', () => {
+            console.log('🎮 Sprite Path Tester initialized');
+            console.log('📋 Click "Load LPC Data" to begin testing');
+        });
+    </script>
+</body>
+</html>
