@@ -96,6 +96,7 @@
 
         <div class="button-group">
             <button id="scanFilesBtn" onclick="runFileScan()" style="background-color: #006600; font-weight: bold;">📁 SCAN LPC FILES FIRST</button>
+            <button id="completeScanBtn" onclick="runCompleteScan()" style="background-color: #004466; font-weight: bold;">🌳 COMPLETE DIRECTORY SCAN</button>
             <button id="loadLPCBtn" onclick="loadLPCData()">🔄 Load LPC Data</button>
             <button id="testPathsBtn" onclick="runPathTest()" disabled>🧪 Test All Paths</button>
             <button id="quickTestBtn" onclick="runQuickTest()" disabled>⚡ Quick Test</button>
@@ -266,6 +267,39 @@
                 setTimeout(() => {
                     scanBtn.disabled = false;
                     scanBtn.textContent = '📁 Scan LPC Files';
+                }, 3000);
+            }
+        }
+
+         async function runCompleteScan() {
+            const scanBtn = document.getElementById('completeScanBtn');
+            scanBtn.disabled = true;
+            scanBtn.textContent = '🌳 Scanning...';
+
+            try {
+                updateProgress(20);
+                console.log('🌳 Starting COMPLETE file scan of entire directory tree...');
+
+                const results = await runCompleteLPCScan();
+
+                updateProgress(100);
+                console.log('✅ Complete file scan completed!');
+                console.log(`📊 Found ${results.scanStatistics.totalFiles} files in ${results.scanStatistics.totalDirectories} directories`);
+                console.log('📁 Results downloaded automatically');
+
+                scanBtn.textContent = '✅ Complete Scan Done';
+
+                // Enable other buttons now that we have real file data
+                document.getElementById('testPathsBtn').disabled = false;
+                document.getElementById('quickTestBtn').disabled = false;
+
+            } catch (error) {
+                console.error('❌ Complete scan failed:', error);
+                scanBtn.textContent = '❌ Complete Scan Failed';
+            } finally {
+                setTimeout(() => {
+                    scanBtn.disabled = false;
+                    scanBtn.textContent = '🌳 COMPLETE DIRECTORY SCAN';
                 }, 3000);
             }
         }
