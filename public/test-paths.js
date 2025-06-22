@@ -296,6 +296,7 @@ function getPathAnimation(path) {
 }
 
 // Test path discovery using actual LPC data
+async function testLPCPathDiscovery() {
     console.log('🔍 Testing sprite path discovery...');
 
     if (!window.lpcExtractor || !window.lpcExtractor.spriteData) {
@@ -387,5 +388,19 @@ function getPathAnimation(path) {
         }
     }
 
+    console.log(`📊 Testing complete: ${validPaths.length} valid, ${invalidPaths.length} invalid paths`);
+    return { validPaths, invalidPaths, totalTested };
+}
+
+// Make functions globally accessible
+if (typeof window !== 'undefined') {
+    window.testPathExtraction = testPathExtraction;
+    window.discoverAllSpritePaths = discoverAllSpritePaths;
+    window.testSpriteLoad = testSpriteLoad;
+    window.exportResults = exportResults;
+    window.testPathExists = testPathExists;
+    window.testLPCPathDiscovery = testLPCPathDiscovery;
+}
+
 // Call this in console to test: testPathExtraction()
-// Or use: discoverAllSpritePaths() to just get path discoveryPathExtraction()
+// Or use: discoverAllSpritePaths() to just get path discovery
