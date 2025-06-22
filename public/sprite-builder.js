@@ -191,11 +191,14 @@ class LPCSpriteBuilder {
             };
 
             img.onerror = () => {
-                console.error(`❌ Failed to load layer: ${path}`);
-                reject(new Error(`Failed to load: ${path}`));
+                console.error(`❌ Failed to load layer: ${fullPath}`);
+                reject(new Error(`Failed to load: ${fullPath}`));
             };
 
-            img.src = path;
+            // Construct the full path to the LPC generator spritesheets
+            const fullPath = path.startsWith('/lpc-generator/') ? path : `/lpc-generator/spritesheets/${path}`;
+            console.log(`🔍 DEBUG: Loading sprite from: ${fullPath}`);
+            img.src = fullPath;
         });
     }
 
