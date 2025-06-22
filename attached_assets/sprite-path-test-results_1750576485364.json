@@ -1,0 +1,1907 @@
+{
+  "timestamp": "2025-06-22T07:14:05.969Z",
+  "totalPaths": 0,
+  "validPaths": [],
+  "invalidPaths": [
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "hair",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for hair/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "body",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for body/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "torso/clothes/robe/female/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "torso/clothes/robe/female/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "torso/clothes/robe/female/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "torso/clothes/robe/female/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "torso/clothes/robe/female/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "torso/clothes/shirt/child/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "torso/clothes/shirt/child/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "torso/clothes/shirt/child/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "torso/clothes/shirt/child/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "torso/clothes/shirt/child/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "torso",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "legs/pants/pregnant/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "legs/pants/pregnant/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "legs/pants/pregnant/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "legs/pants/pregnant/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "legs/pants/pregnant/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "legs/pants/thin/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "legs/pants/thin/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "legs/pants/thin/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "legs/pants/thin/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "legs/pants/thin/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "legs/pants/child/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "legs/pants/child/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "legs/pants/child/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "legs/pants/child/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "legs/pants/child/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "legs/pants/thin/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "legs/pants/thin/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "legs/pants/thin/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "legs/pants/thin/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "legs",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "legs/pants/thin/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "feet/boots/rimmed/thin/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "feet/boots/rimmed/thin/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "feet/boots/rimmed/thin/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "feet/boots/rimmed/thin/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "feet/boots/rimmed/thin/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "feet/boots/rimmed/thin/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "feet/boots/rimmed/thin/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "feet/boots/rimmed/thin/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "feet/boots/rimmed/thin/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "feet/boots/rimmed/thin/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for feet/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "feet/boots/rimmed/thin/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "feet/boots/rimmed/thin/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "feet/boots/rimmed/thin/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "feet/boots/rimmed/thin/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "feet",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "feet/boots/rimmed/thin/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/male",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/female",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "head",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for head/teen",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "walk",
+      "attemptedPath": "arms/hands/ring/stud/female/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "hurt",
+      "attemptedPath": "arms/hands/ring/stud/female/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "idle",
+      "attemptedPath": "arms/hands/ring/stud/female/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "shoot",
+      "attemptedPath": "arms/hands/ring/stud/female/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "male",
+      "animation": "slash",
+      "attemptedPath": "arms/hands/ring/stud/female/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "walk",
+      "attemptedPath": "arms/hands/ring/stud/female/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "hurt",
+      "attemptedPath": "arms/hands/ring/stud/female/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "idle",
+      "attemptedPath": "arms/hands/ring/stud/female/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "shoot",
+      "attemptedPath": "arms/hands/ring/stud/female/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "female",
+      "animation": "slash",
+      "attemptedPath": "arms/hands/ring/stud/female/slash.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "walk",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "hurt",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "idle",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "shoot",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "child",
+      "animation": "slash",
+      "attemptedPath": "No LPC data found for arms/child",
+      "error": "No sprite data available"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "walk",
+      "attemptedPath": "arms/hands/ring/stud/female/walk.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "hurt",
+      "attemptedPath": "arms/hands/ring/stud/female/hurt.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "idle",
+      "attemptedPath": "arms/hands/ring/stud/female/idle.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "shoot",
+      "attemptedPath": "arms/hands/ring/stud/female/shoot.png",
+      "error": "HTTP 404: Not Found"
+    },
+    {
+      "category": "arms",
+      "bodyType": "teen",
+      "animation": "slash",
+      "attemptedPath": "arms/hands/ring/stud/female/slash.png",
+      "error": "HTTP 404: Not Found"
+    }
+  ],
+  "pathsByCategory": {},
+  "workingSprites": {
+    "hair": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for hair/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "body": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for body/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "torso": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/male/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/male/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/male/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/male/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/male/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/male/yellow.png",
+          "originalStatus": 404
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "torso/clothes/robe/female/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/robe/female/white.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "torso/clothes/robe/female/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/robe/female/white.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "torso/clothes/robe/female/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/robe/female/white.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "torso/clothes/robe/female/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/robe/female/white.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "torso/clothes/robe/female/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/robe/female/white.png",
+          "originalStatus": 404
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "torso/clothes/shirt/child/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/shirt/child/white.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "torso/clothes/shirt/child/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/shirt/child/white.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "torso/clothes/shirt/child/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/shirt/child/white.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "torso/clothes/shirt/child/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/shirt/child/white.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "torso/clothes/shirt/child/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/shirt/child/white.png",
+          "originalStatus": 404
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "torso/clothes/sleeveless/sleeveless2_polo/teen/yellow.png",
+          "originalStatus": 404
+        }
+      }
+    },
+    "legs": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "legs/pants/pregnant/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/pregnant/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "legs/pants/pregnant/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/pregnant/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "legs/pants/pregnant/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/pregnant/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "legs/pants/pregnant/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/pregnant/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "legs/pants/pregnant/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/pregnant/yellow.png",
+          "originalStatus": 404
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "legs/pants/child/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/child/white.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "legs/pants/child/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/child/white.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "legs/pants/child/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/child/white.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "legs/pants/child/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/child/white.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "legs/pants/child/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/child/white.png",
+          "originalStatus": 404
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "legs/pants/thin/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "legs/pants/thin/yellow.png",
+          "originalStatus": 404
+        }
+      }
+    },
+    "feet": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for feet/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "feet/boots/rimmed/thin/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "feet/boots/rimmed/thin/gold.png",
+          "originalStatus": 404
+        }
+      }
+    },
+    "head": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/male",
+          "error": "No sprite data available"
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/female",
+          "error": "No sprite data available"
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for head/teen",
+          "error": "No sprite data available"
+        }
+      }
+    },
+    "arms": {
+      "male": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        }
+      },
+      "female": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        }
+      },
+      "child": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "No LPC data found for arms/child",
+          "error": "No sprite data available"
+        }
+      },
+      "teen": {
+        "walk": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/walk.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "hurt": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/hurt.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "idle": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/idle.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "shoot": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/shoot.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        },
+        "slash": {
+          "success": false,
+          "attemptedPath": "arms/hands/ring/stud/female/slash.png",
+          "error": "HTTP 404: Not Found",
+          "originalPath": "arms/hands/ring/stud/female/yellow.png",
+          "originalStatus": 404
+        }
+      }
+    }
+  },
+  "failedTests": [],
+  "summary": {
+    "totalValidPaths": 0,
+    "totalInvalidPaths": 140,
+    "categoryCounts": {},
+    "successRate": "0.00%"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "totalFiles": 0,
+  "validSprites": 0,
+  "categories": {},
+  "pathPatterns": [],
+  "errors": [],
+  "validPaths": [],
+  "summary": {
+    "totalValidPaths": 0,
+    "categoriesScanned": 0,
+    "mostSuccessfulCategory": {
+      "category": null,
+      "pathCount": 0
+    },
+    "commonPatterns": []
+  }
+}
