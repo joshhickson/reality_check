@@ -1,0 +1,1260 @@
+{
+  "totalFiles": 100,
+  "validSprites": 100,
+  "categories": {
+    "body": {
+      "validPaths": 32,
+      "patterns": [
+        "{base}/body/bodies/{bodyType}/{animation}.png"
+      ]
+    },
+    "hair": {
+      "validPaths": 44,
+      "patterns": [
+        "{base}/hair/page/{bodyType}/{animation}.png",
+        "{base}/hair/plain/{bodyType}/{animation}.png",
+        "{base}/hair/long/{bodyType}/{animation}.png",
+        "{base}/hair/bangs/{bodyType}/{animation}.png",
+        "{base}/hair/bob/{bodyType}/{animation}.png"
+      ]
+    },
+    "torso": {
+      "validPaths": 8,
+      "patterns": [
+        "{base}/torso/clothes/longsleeve/formal/{bodyType}/{animation}.png"
+      ]
+    },
+    "legs": {
+      "validPaths": 9,
+      "patterns": [
+        "{base}/legs/pants/{bodyType}/{animation}.png"
+      ]
+    },
+    "arms": {
+      "validPaths": 4,
+      "patterns": [
+        "{base}/arms/gloves/{bodyType}/{animation}.png"
+      ]
+    },
+    "feet": {
+      "validPaths": 3,
+      "patterns": [
+        "{base}/feet/sandals/{bodyType}/{animation}.png",
+        "{base}/feet/shoes/basic/{bodyType}/{animation}.png"
+      ]
+    }
+  },
+  "pathPatterns": [],
+  "errors": [],
+  "validPaths": [
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "bodies",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.573Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "bodies",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.604Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/idle.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "idle",
+        "style": "bodies",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.637Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/shoot.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "shoot",
+        "style": "bodies",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.668Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/slash.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "slash",
+        "style": "bodies",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.700Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/spellcast.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "spellcast",
+        "style": "bodies",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.732Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/thrust.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "thrust",
+        "style": "bodies",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.763Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/walk.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "walk",
+        "style": "bodies",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.796Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/hurt.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "hurt",
+        "style": "bodies",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.828Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/idle.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "idle",
+        "style": "bodies",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.860Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/shoot.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "shoot",
+        "style": "bodies",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.891Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/slash.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "slash",
+        "style": "bodies",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.920Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/spellcast.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "spellcast",
+        "style": "bodies",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.952Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/thrust.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "thrust",
+        "style": "bodies",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:49.984Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/walk.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "walk",
+        "style": "page",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.016Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/hurt.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "hurt",
+        "style": "page",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.047Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/idle.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "idle",
+        "style": "page",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.079Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/shoot.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "shoot",
+        "style": "page",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.112Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/slash.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "slash",
+        "style": "page",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.143Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/spellcast.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "spellcast",
+        "style": "page",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.175Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/walk.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "walk",
+        "style": "plain",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.203Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/hurt.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "hurt",
+        "style": "plain",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.236Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/idle.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "idle",
+        "style": "plain",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.267Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "formal",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.295Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "formal",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.328Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "pants",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.488Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "pants",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.520Z"
+    },
+    {
+      "category": "arms",
+      "path": "/lpc-generator/spritesheets/arms/gloves/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "gloves",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.615Z"
+    },
+    {
+      "category": "arms",
+      "path": "/lpc-generator/spritesheets/arms/gloves/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "gloves",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.648Z"
+    },
+    {
+      "category": "arms",
+      "path": "/lpc-generator/spritesheets/arms/gloves/female/walk.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "walk",
+        "style": "gloves",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.681Z"
+    },
+    {
+      "category": "arms",
+      "path": "/lpc-generator/spritesheets/arms/gloves/female/hurt.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "hurt",
+        "style": "gloves",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.712Z"
+    },
+    {
+      "category": "feet",
+      "path": "/lpc-generator/spritesheets/feet/sandals/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "sandals",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.744Z"
+    },
+    {
+      "category": "feet",
+      "path": "/lpc-generator/spritesheets/feet/sandals/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "sandals",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.776Z"
+    },
+    {
+      "category": "feet",
+      "path": "/lpc-generator/spritesheets/feet/shoes/basic/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "basic",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.809Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "bodies",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.872Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "bodies",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.904Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/idle.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "idle",
+        "style": "bodies",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.937Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/shoot.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "shoot",
+        "style": "bodies",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.968Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/slash.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "slash",
+        "style": "bodies",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:50.999Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/spellcast.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "spellcast",
+        "style": "bodies",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.031Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/male/thrust.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "thrust",
+        "style": "bodies",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.065Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/walk.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "walk",
+        "style": "bodies",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.096Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/hurt.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "hurt",
+        "style": "bodies",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.127Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/idle.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "idle",
+        "style": "bodies",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.159Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/shoot.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "shoot",
+        "style": "bodies",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.192Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/slash.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "slash",
+        "style": "bodies",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.223Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/spellcast.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "spellcast",
+        "style": "bodies",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.256Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/female/thrust.png",
+      "metadata": {
+        "bodyType": "female",
+        "animation": "thrust",
+        "style": "bodies",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.287Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/child/walk.png",
+      "metadata": {
+        "bodyType": "child",
+        "animation": "walk",
+        "style": "bodies",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.320Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/child/hurt.png",
+      "metadata": {
+        "bodyType": "child",
+        "animation": "hurt",
+        "style": "bodies",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.352Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/child/idle.png",
+      "metadata": {
+        "bodyType": "child",
+        "animation": "idle",
+        "style": "bodies",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.388Z"
+    },
+    {
+      "category": "body",
+      "path": "/lpc-generator/spritesheets/body/bodies/child/slash.png",
+      "metadata": {
+        "bodyType": "child",
+        "animation": "slash",
+        "style": "bodies",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.451Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/walk.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "walk",
+        "style": "page",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.549Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/hurt.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "hurt",
+        "style": "page",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.580Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/idle.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "idle",
+        "style": "page",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.611Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/shoot.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "shoot",
+        "style": "page",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.644Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/slash.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "slash",
+        "style": "page",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.677Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/spellcast.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "spellcast",
+        "style": "page",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.708Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/page/adult/thrust.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "thrust",
+        "style": "page",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.739Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/walk.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "walk",
+        "style": "plain",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.772Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/hurt.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "hurt",
+        "style": "plain",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.806Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/idle.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "idle",
+        "style": "plain",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.835Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/shoot.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "shoot",
+        "style": "plain",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.867Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/slash.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "slash",
+        "style": "plain",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.899Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/spellcast.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "spellcast",
+        "style": "plain",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.933Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/plain/adult/thrust.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "thrust",
+        "style": "plain",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:51.963Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/long/adult/walk.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "walk",
+        "style": "long",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.220Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/long/adult/hurt.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "hurt",
+        "style": "long",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.256Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/long/adult/idle.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "idle",
+        "style": "long",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.288Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/long/adult/shoot.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "shoot",
+        "style": "long",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.320Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/long/adult/slash.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "slash",
+        "style": "long",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.351Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/long/adult/spellcast.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "spellcast",
+        "style": "long",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.384Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/long/adult/thrust.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "thrust",
+        "style": "long",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.416Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bangs/adult/walk.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "walk",
+        "style": "bangs",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.448Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bangs/adult/hurt.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "hurt",
+        "style": "bangs",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.480Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bangs/adult/idle.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "idle",
+        "style": "bangs",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.511Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bangs/adult/shoot.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "shoot",
+        "style": "bangs",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.543Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bangs/adult/slash.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "slash",
+        "style": "bangs",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.576Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bangs/adult/spellcast.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "spellcast",
+        "style": "bangs",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.608Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bangs/adult/thrust.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "thrust",
+        "style": "bangs",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.640Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bob/adult/walk.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "walk",
+        "style": "bob",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.672Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bob/adult/hurt.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "hurt",
+        "style": "bob",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.704Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bob/adult/idle.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "idle",
+        "style": "bob",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.735Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bob/adult/shoot.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "shoot",
+        "style": "bob",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.767Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bob/adult/slash.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "slash",
+        "style": "bob",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.799Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bob/adult/spellcast.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "spellcast",
+        "style": "bob",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.833Z"
+    },
+    {
+      "category": "hair",
+      "path": "/lpc-generator/spritesheets/hair/bob/adult/thrust.png",
+      "metadata": {
+        "bodyType": "adult",
+        "animation": "thrust",
+        "style": "bob",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.863Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "formal",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.895Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "formal",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.927Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/shoot.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "shoot",
+        "style": "formal",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:52.992Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/slash.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "slash",
+        "style": "formal",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:53.024Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/spellcast.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "spellcast",
+        "style": "formal",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:53.057Z"
+    },
+    {
+      "category": "torso",
+      "path": "/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/thrust.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "thrust",
+        "style": "formal",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:53.087Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/walk.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "walk",
+        "style": "pants",
+        "filename": "walk.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:56.985Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/hurt.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "hurt",
+        "style": "pants",
+        "filename": "hurt.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:57.019Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/idle.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "idle",
+        "style": "pants",
+        "filename": "idle.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:57.051Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/shoot.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "shoot",
+        "style": "pants",
+        "filename": "shoot.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:57.083Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/slash.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "slash",
+        "style": "pants",
+        "filename": "slash.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:57.115Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/spellcast.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "spellcast",
+        "style": "pants",
+        "filename": "spellcast.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:57.147Z"
+    },
+    {
+      "category": "legs",
+      "path": "/lpc-generator/spritesheets/legs/pants/male/thrust.png",
+      "metadata": {
+        "bodyType": "male",
+        "animation": "thrust",
+        "style": "pants",
+        "filename": "thrust.png"
+      },
+      "verified": true,
+      "timestamp": "2025-06-22T07:58:57.178Z"
+    }
+  ],
+  "summary": {
+    "totalValidPaths": 100,
+    "categoriesScanned": 6,
+    "mostSuccessfulCategory": {
+      "category": "hair",
+      "pathCount": 44
+    },
+    "commonPatterns": []
+  }
+}
