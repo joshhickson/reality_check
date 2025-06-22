@@ -98,18 +98,28 @@ async function testPathExtraction() {
 // Test individual sprite loading
 async function testSpriteLoad(category, bodyType, animation) {
     try {
-        // Check if LPC extractor is available and has data
-        if (!window.lpcExtractor || !window.lpcExtractor.spriteData) {
+        // Ensure LPC data is loaded
+        if (!window.lpcExtractor) {
+            console.log('🔧 Initializing LPC extractor...');
+            await extractLPCData();
+        }
+
+        // Double-check that we have data
+        if (!window.lpcExtractor || !window.lpcExtractor.spriteData || Object.keys(window.lpcExtractor.spriteData).length === 0) {
+            console.log('❌ LPC extractor has no data');
             return {
                 success: false,
-                attemptedPath: `LPC extractor not initialized`,
+                attemptedPath: `LPC extractor not initialized or has no data`,
                 error: 'LPC data not loaded'
             };
         }
 
+        console.log(`🧪 Testing sprite load: ${category}/${bodyType}/${animation}`);
+
         // Try to find a working sprite path using LPC data
         const sprite = window.lpcExtractor.getSprite(category, null, bodyType);
         if (!sprite || !sprite.activePath) {
+            console.log(`❌ No sprite found for ${category}/${bodyType}`);
             return {
                 success: false,
                 attemptedPath: `No LPC data found for ${category}/${bodyType}`,

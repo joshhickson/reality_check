@@ -24,35 +24,41 @@ class LPCDataExtractor {
 
             console.log('📊 Parsing LPC sprite data...');
 
-            // Find all input elements with data-layer attributes (check all layer types)
-            const inputSelectors = [
-                'input[data-layer_1_male]',
-                'input[data-layer_1_female]',
-                'input[data-layer_2_male]', 
-                'input[data-layer_2_female]',
-                'input[data-layer_3_male]',
-                'input[data-layer_3_female]'
-            ];
-            
-            const inputs = doc.querySelectorAll(inputSelectors.join(', '));
-            console.log(`Found ${inputs.length} LPC input elements`);
+            // Find ALL input elements first
+            const allInputs = doc.querySelectorAll('input');
+            console.log(`📝 Found ${allInputs.length} total input elements`);
+
+            // Then filter for ones with sprite data attributes
+            const spriteInputs = [];
+            allInputs.forEach(input => {
+                const attributes = Array.from(input.attributes);
+                const hasLPCData = attributes.some(attr => 
+                    attr.name.startsWith('data-layer_') && 
+                    attr.value && 
+                    attr.value.includes('.png')
+                );
+                if (hasLPCData) {
+                    spriteInputs.push(input);
+                }
+            });
+
+            console.log(`🎯 Found ${spriteInputs.length} inputs with sprite data`);
 
             const spriteData = {};
             const categorizedData = {
-                body: { male: {}, female: {} },
-                hair: { male: {}, female: {} },
-                torso: { male: {}, female: {} },
-                legs: { male: {}, female: {} },
-                feet: { male: {}, female: {} },
-                head: { male: {}, female: {} },
-                arms: { male: {}, female: {} }
+                body: { male: {}, female: {}, child: {}, teen: {} },
+                hair: { male: {}, female: {}, child: {}, teen: {} },
+                torso: { male: {}, female: {}, child: {}, teen: {} },
+                legs: { male: {}, female: {}, child: {}, teen: {} },
+                feet: { male: {}, female: {}, child: {}, teen: {} },
+                head: { male: {}, female: {}, child: {}, teen: {} },
+                arms: { male: {}, female: {}, child: {}, teen: {} }
             };
 
             let extractedCount = 0;
 
-            inputs.forEach((input, index) => {
-                // Get all data attributes for this input
-                const attributes = input.attributes;
+            spriteInputs.forEach((input, index) => {
+                const attributes = Array.from(input.attributes);
                 const inputName = input.getAttribute('name') || input.getAttribute('id') || `sprite_${index}`;
                 const zpos = input.getAttribute('data-zpos') || input.getAttribute('zpos') || '0';
 
@@ -63,16 +69,18 @@ class LPCDataExtractor {
                 };
 
                 // Extract all sprite paths from data attributes
-                for (let attr of attributes) {
+                attributes.forEach(attr => {
                     if (attr.name.startsWith('data-layer_') && attr.value && attr.value.includes('.png')) {
-                        // Parse attribute name: data-layer_1_male -> layer: 1, bodyType: male
-                        const match = attr.name.match(/data-layer_(\d+)_(male|female)/);
+                        // More flexible parsing: data-layer_1_male, data-layer_1_female, etc.
+                        const match = attr.name.match(/data-layer_(\d+)_(male|female|child|teen|muscular|pregnant)/);
                         if (match) {
                             const [, layer, bodyType] = match;
-                            spriteEntry.paths[bodyType] = attr.value;
+                            // Clean up the path value
+                            let cleanPath = attr.value.replace(/^["']|["']$/g, ''); // Remove quotes
+                            spriteEntry.paths[bodyType] = cleanPath;
                         }
                     }
-                }
+                });
 
                 // Only process if we found at least one valid path
                 if (Object.keys(spriteEntry.paths).length > 0) {
@@ -80,25 +88,32 @@ class LPCDataExtractor {
                     extractedCount++;
 
                     // Categorize sprites based on path patterns
-                    const samplePath = spriteEntry.paths.male || spriteEntry.paths.female;
+                    const samplePath = spriteEntry.paths.male || spriteEntry.paths.female || Object.values(spriteEntry.paths)[0];
                     if (samplePath) {
                         let category = 'misc';
                         
-                        // More specific categorization
+                        // More comprehensive categorization
                         if (samplePath.includes('/body/bodies/')) category = 'body';
                         else if (samplePath.includes('/hair/')) category = 'hair';
-                        else if (samplePath.includes('/torso/')) category = 'torso';
-                        else if (samplePath.includes('/legs/')) category = 'legs';
-                        else if (samplePath.includes('/feet/')) category = 'feet';
-                        else if (samplePath.includes('/head/')) category = 'head';
-                        else if (samplePath.includes('/arms/')) category = 'arms';
-                        else if (samplePath.includes('/eyes/')) category = 'head';
-                        else if (samplePath.includes('/facial/')) category = 'head';
+                        else if (samplePath.includes('/torso/') || samplePath.includes('/clothes/')) category = 'torso';
+                        else if (samplePath.includes('/legs/') || samplePath.includes('/pants/') || samplePath.includes('/skirt/')) category = 'legs';
+                        else if (samplePath.includes('/feet/') || samplePath.includes('/shoes/') || samplePath.includes('/boots/')) category = 'feet';
+                        else if (samplePath.includes('/head/') || samplePath.includes('/eyes/') || samplePath.includes('/facial/')) category = 'head';
+                        else if (samplePath.includes('/arms/') || samplePath.includes('/hands/')) category = 'arms';
 
-                        // Store in categorized data
+                        // Store in categorized data for all available body types
                         if (categorizedData[category]) {
                             Object.keys(spriteEntry.paths).forEach(bodyType => {
-                                if (categorizedData[category][bodyType]) {
+                                // Map body types to standard categories
+                                let standardBodyType = bodyType;
+                                if (bodyType === 'muscular' || bodyType === 'pregnant') {
+                                    standardBodyType = 'male'; // Default mapping
+                                }
+                                
+                                if (categorizedData[category][standardBodyType]) {
+                                    categorizedData[category][standardBodyType][inputName] = spriteEntry.paths[bodyType];
+                                } else if (categorizedData[category][bodyType]) {
+                                    // Direct mapping if the body type exists
                                     categorizedData[category][bodyType][inputName] = spriteEntry.paths[bodyType];
                                 }
                             });
@@ -112,11 +127,22 @@ class LPCDataExtractor {
 
             console.log(`✅ Extracted ${extractedCount} sprite definitions`);
             
-            // Log category summary
+            // Log detailed category summary
             Object.keys(categorizedData).forEach(cat => {
-                const maleCount = Object.keys(categorizedData[cat].male || {}).length;
-                const femaleCount = Object.keys(categorizedData[cat].female || {}).length;
-                console.log(`📊 ${cat}: ${maleCount} male, ${femaleCount} female`);
+                const bodyTypeCounts = {};
+                Object.keys(categorizedData[cat]).forEach(bodyType => {
+                    const count = Object.keys(categorizedData[cat][bodyType] || {}).length;
+                    if (count > 0) {
+                        bodyTypeCounts[bodyType] = count;
+                    }
+                });
+                
+                if (Object.keys(bodyTypeCounts).length > 0) {
+                    const countStr = Object.entries(bodyTypeCounts)
+                        .map(([bt, count]) => `${bt}:${count}`)
+                        .join(', ');
+                    console.log(`📊 ${cat}: ${countStr}`);
+                }
             });
 
             return spriteData;
@@ -206,34 +232,59 @@ class LPCDataExtractor {
 
     // Get a specific sprite variant
     getSprite(category, spriteName = null, bodyType = 'male') {
-        // If no specific sprite name, get the first available sprite in the category
-        if (!spriteName || spriteName === 'default') {
-            const categoryData = this.categorizedData[category];
-            if (!categoryData || !categoryData[bodyType]) {
-                return null;
-            }
-            
-            const availableSprites = Object.keys(categoryData[bodyType]);
-            if (availableSprites.length === 0) {
-                return null;
-            }
-            
-            spriteName = availableSprites[0];
-        }
-
-        // Get specific sprite data
-        const spriteData = this.spriteData[spriteName];
-        if (!spriteData || !spriteData.paths[bodyType]) {
+        console.log(`🔍 getSprite called: category=${category}, spriteName=${spriteName}, bodyType=${bodyType}`);
+        
+        // Check if we have data for this category
+        if (!this.categorizedData || !this.categorizedData[category]) {
+            console.log(`❌ No data for category: ${category}`);
+            console.log(`Available categories:`, Object.keys(this.categorizedData || {}));
             return null;
         }
 
+        const categoryData = this.categorizedData[category];
+        console.log(`📁 Category data for ${category}:`, Object.keys(categoryData));
+
+        // Check if we have data for this body type
+        if (!categoryData[bodyType]) {
+            console.log(`❌ No data for bodyType: ${bodyType} in category: ${category}`);
+            console.log(`Available body types:`, Object.keys(categoryData));
+            return null;
+        }
+
+        const bodyTypeData = categoryData[bodyType];
+        console.log(`👤 Body type data for ${bodyType}:`, Object.keys(bodyTypeData));
+
+        // If no specific sprite name, get the first available sprite in the category
+        let targetSpriteName = spriteName;
+        if (!targetSpriteName || targetSpriteName === 'default') {
+            const availableSprites = Object.keys(bodyTypeData);
+            if (availableSprites.length === 0) {
+                console.log(`❌ No sprites available for ${category}/${bodyType}`);
+                return null;
+            }
+            targetSpriteName = availableSprites[0];
+            console.log(`🎯 Using first available sprite: ${targetSpriteName}`);
+        }
+
+        // Get the sprite path
+        const spritePath = bodyTypeData[targetSpriteName];
+        if (!spritePath) {
+            console.log(`❌ No path found for sprite: ${targetSpriteName}`);
+            return null;
+        }
+
+        // Get additional data from the main sprite data if available
+        const spriteMetadata = this.spriteData[targetSpriteName] || {};
+
+        console.log(`✅ Found sprite: ${targetSpriteName} -> ${spritePath}`);
+
         return {
-            name: spriteName,
+            name: targetSpriteName,
             category: category,
-            activePath: spriteData.paths[bodyType],
+            activePath: spritePath,
             activeBodyType: bodyType,
-            zpos: spriteData.zpos || 0,
-            paths: spriteData.paths
+            zpos: spriteMetadata.zpos || 0,
+            paths: spriteMetadata.paths || { [bodyType]: spritePath }
         };
     }
 
@@ -366,11 +417,22 @@ function generateWorkingPathMappings() {
 // Utility function to extract and cache data
 async function extractLPCData() {
     try {
+        console.log('🚀 Starting LPC data extraction...');
+        
         if (!window.lpcExtractor) {
+            console.log('🔧 Creating new LPCDataExtractor instance...');
             window.lpcExtractor = new LPCDataExtractor();
         }
         
+        console.log('📥 Extracting data from LPC generator...');
         const data = await window.lpcExtractor.extractFromLPCGenerator();
+
+        if (!data || Object.keys(data).length === 0) {
+            throw new Error('No sprite data was extracted from LPC generator');
+        }
+
+        console.log('✅ LPC data extraction successful!');
+        console.log(`📊 Extracted ${Object.keys(data).length} sprite definitions`);
 
         // Cache the data in localStorage for faster subsequent loads
         localStorage.setItem('lpcSpriteData', JSON.stringify(data));
