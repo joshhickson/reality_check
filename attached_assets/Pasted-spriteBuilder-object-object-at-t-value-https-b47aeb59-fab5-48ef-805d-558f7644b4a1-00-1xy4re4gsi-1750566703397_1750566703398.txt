@@ -1,0 +1,26 @@
+spriteBuilder object: object
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+debugSprites function exists: true
+debugSprites function exists: true
+debugSprites function exists: true
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+testFunction exists: true
+testFunction exists: true
+testFunction exists: true
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Parsed LPC data: 
+Object {sex: {…}, hair: {…}, torso: {…}, legs: {…}, shadow: {…}, …}
+Loading character for sex: male
+Available LPC data keys: 
+(106) ["sex", "hair", "torso", "legs", "shadow", "body", "wound_arm", "wound_brain", "wound_ribs", "wound_eye_left", "wound_eye_right", "wound_mouth", "prosthesis_hand", "prosthesis_leg", "wheelchair", "tail", "wings", "wings_edge", "wings_dots", "head", "expression", "expression_crying", "eye_color", "eyes", "ears", "furry_ears", "furry_ears_skin", "ears_inner", "nose", "eyebrows", "wrinkes", "beard", "mustache", "hairextl", "hairextr", "ponytail", "updo", "horns", "fins", "hat", "bandana", "bandana_overlay", "headcover", "headcover_rune", "hairtie", "hairtie_rune", "hat_accessory", "hat_trim", "hat_overlay", "hat_buckle", "visor", "accessory", "facial_eyes", "facial_left", "facial_left_trim", "facial_right", "facial_right_trim", "facial_mask", "earring_left", "earring_right", "earrings", "neck", "necklace", "charm", "shoulders", "arms", "bauldron", "bracers", "wrists", "gloves", "ring", "dress", "vest", "dress_trim", "dress_sleeves", "dress_sleeves_trim", "clothes", "overalls", "apron", "bandages", "chainmail", "jacket", "jacket_collar", "jacket_trim", "jacket_pockets", "armour", "cape", "cape_trim", "backpack_straps", "backpack", "cargo", "quiver", "belt", "sash", "sash_tie", "buckles", "shoes", "shoes_toe", "socks", "weapon", …]
+Successfully loaded layer: body from /lpc-generator/spritesheets/body/bodies/male/walk.png
+Successfully loaded layer: hair from /lpc-generator/spritesheets/hair/page/adult/walk.png
