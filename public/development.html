@@ -439,13 +439,24 @@
                 </div>
 
                 <div class="sprite-controls">
-                    <h3>Layer Management</h3>
-                    <div id="layerList" class="layer-list">
-                        <!-- Layers will be populated dynamically -->
-                    </div>
+                    <h3>Debug Panel</h3>
+                    <textarea id="debugOutput" style="
+                        width: 100%; 
+                        height: 300px; 
+                        background: #000; 
+                        color: #00ff00; 
+                        font-family: 'Courier New', monospace; 
+                        font-size: 11px; 
+                        border: 1px solid #333; 
+                        border-radius: 5px; 
+                        padding: 10px; 
+                        resize: vertical;
+                        white-space: pre;
+                    " readonly>Debug information will appear here...</textarea>
                     <div class="layer-controls">
-                        <button onclick="toggleAllLayers()">Toggle All</button>
-                        <button onclick="reorderLayers()">Reorder</button>
+                        <button onclick="spriteBuilder && spriteBuilder.testFunction()">Test Function</button>
+                        <button onclick="spriteBuilder && spriteBuilder.loadCharacter()">Reload Character</button>
+                        <button onclick="spriteBuilder && spriteBuilder.updateDebugPanel()">Refresh Debug</button>
                     </div>
                 </div>
             </div>

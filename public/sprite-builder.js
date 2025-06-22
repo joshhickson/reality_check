@@ -62,6 +62,9 @@ class LPCSpriteBuilder {
             this.fullCtx.mozImageSmoothingEnabled = false;
         }
 
+        // Initialize debug panel
+        this.updateDebugPanel();
+
         // Try to load LPC data
         this.loadLPCData().then(() => {
             this.bindEventListeners();
@@ -330,11 +333,13 @@ class LPCSpriteBuilder {
                 this.visibleLayers[name] = true;
 
                 console.log(`Successfully loaded layer: ${name} from ${path}`);
+                this.updateDebugPanel();
                 resolve(img);
             };
 
             img.onerror = () => {
                 console.warn(`Failed to load layer: ${path}`);
+                this.updateDebugPanel();
                 resolve(null);
             };
 
@@ -354,6 +359,8 @@ class LPCSpriteBuilder {
             this.drawCurrentFrame();
             this.animationFrame = (this.animationFrame + 1) % this.animations[this.currentAnimation].frames;
         }, this.animationSpeed);
+
+        this.updateDebugPanel();
     }
 
     stopAnimation() {
@@ -404,30 +411,39 @@ class LPCSpriteBuilder {
     }
 
     updateLayerList() {
-        const layerList = document.getElementById('layerList');
-        if (!layerList) return;
+        // Debug panel is now default, update debug info instead
+        this.updateDebugPanel();
+    }
 
-        layerList.innerHTML = '';
+    updateDebugPanel() {
+        const debugOutput = document.getElementById('debugOutput');
+        if (!debugOutput) return;
 
-        if (this.layers.length === 0) {
-            layerList.innerHTML = '<div style="color: #666; padding: 10px;">No layers loaded</div>';
-            return;
-        }
+        const debugInfo = {
+            timestamp: new Date().toLocaleTimeString(),
+            canvasFound: !!this.canvas,
+            contextFound: !!this.ctx,
+            currentConfig: this.currentConfig,
+            layersLoaded: this.layers.length,
+            layers: this.layers.map(layer => ({
+                name: layer.name,
+                visible: layer.visible,
+                zIndex: layer.zIndex,
+                path: layer.path
+            })),
+            animationState: {
+                isAnimating: this.isAnimating,
+                currentAnimation: this.currentAnimation,
+                animationFrame: this.animationFrame,
+                animationSpeed: this.animationSpeed
+            },
+            lpcDataLoaded: !!this.lpcData,
+            imageCache: Object.keys(this.imageCache).length,
+            visibleLayers: this.visibleLayers
+        };
 
-        this.layers.forEach((layer, index) => {
-            const layerDiv = document.createElement('div');
-            layerDiv.className = 'sprite-layer';
-            layerDiv.innerHTML = `
-                <span>${layer.name}</span>
-                <div>
-                    <input type="checkbox" ${layer.visible ? 'checked' : ''} 
-                           onchange="spriteBuilder.toggleLayerVisibility('${layer.name}', this.checked)">
-                    <button onclick="spriteBuilder.moveLayer(${index}, 'up')">↑</button>
-                    <button onclick="spriteBuilder.moveLayer(${index}, 'down')">↓</button>
-                </div>
-            `;
-            layerList.appendChild(layerDiv);
-        });
+        debugOutput.value = JSON.stringify(debugInfo, null, 2);
+        debugOutput.scrollTop = debugOutput.scrollHeight;
     }
 
     toggleLayerVisibility(layerName, visible) {
