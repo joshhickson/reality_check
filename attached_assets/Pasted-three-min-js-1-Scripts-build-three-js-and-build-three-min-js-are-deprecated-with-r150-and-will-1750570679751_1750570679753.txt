@@ -1,0 +1,41 @@
+three.min.js:1 Scripts "build/three.js" and "build/three.min.js" are deprecated with r150+, and will be removed with r160. Please use ES Modules or alternatives: https://threejs.org/docs/index.html#manual/en/introduction/Installation
+(anonymous) @ three.min.js:1
+sprite-builder.js:1 Uncaught SyntaxError: Identifier 'LPCSpriteBuilder' has already been declared (at sprite-builder.js:1:1)
+development.html:1 Uncaught TypeError: Failed to resolve module specifier "three". Relative references must start with either "/", "./", or "../".
+development.html:818 🚀 DOM LOADED - Checking for sprite canvas...
+development.html:818 ✅ Found sprite canvas, initializing sprite builder...
+development.html:818 🎨 LPC Sprite Builder initialized
+development.html:818 📋 Initializing sprite builder...
+development.html:818 🔍 Loading LPC sprite data...
+development.html:818 🔍 Extracting sprite data from LPC generator...
+development.html:818 ✅ Sprite Builder initialized successfully!
+development.html:818 Found 12575 sprite inputs
+development.html:818 ✅ Extraction complete
+development.html:818 📊 Extracted data: {sprites: {…}, categories: {…}, bodyTypes: Array(6)}
+development.html:818 ✅ LPC data loaded: 8 categories
+development.html:818 📊 Available sprites: 611
+development.html:818 👤 Loading basic character...
+development.html:818 🎨 Loading character using LPC data...
+development.html:818 🔍 DEBUG: First 3 sprite entries: (3) ['Shadow', 'Body_color', 'Zombie']
+development.html:818 🔍 DEBUG: Found body sprites: ['Body_color']
+development.html:818 🔍 DEBUG: Body variants for Body_color : (21) ['light', 'amber', 'olive', 'taupe', 'bronze', 'brown', 'black', 'lavender', 'blue', 'zombie_green', 'green', 'pale_green', 'bright_green', 'dark_green', 'fur_black', 'fur_brown', 'fur_tan', 'fur_copper', 'fur_gold', 'fur_grey', 'fur_white']
+development.html:818 🔍 DEBUG: Full body sprite object: {id: 'body-Body_color_light', parentName: 'Body_color', variant: 'light', zIndex: 10, paths: {…}, …}
+development.html:818 🔍 DEBUG: Resolved body path: body/bodies/male/light.png
+light.png:1 
+            
+            
+           GET https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/body/bodies/male/light.png 404 (Not Found)
+development.html:823 ❌ Failed to load layer: body/bodies/male/light.png
+console.error @ development.html:823
+img.onerror @ VM63 sprite-builder.js:194
+development.html:823 ❌ Failed to load basic character: Error: Failed to load: body/bodies/male/light.png
+    at img.onerror (VM63 sprite-builder.js:195:24)
+console.error @ development.html:823
+loadBasicCharacter @ VM63 sprite-builder.js:90
+await in loadBasicCharacter
+init @ VM63 sprite-builder.js:56
+await in init
+LPCSpriteBuilder @ VM63 sprite-builder.js:46
+(anonymous) @ VM63 sprite-builder.js:452
+development.html:818 🔧 Drawing test rectangle
+development.html:818 🎬 Animation started: walk (9 frames)
