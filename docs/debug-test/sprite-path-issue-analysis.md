@@ -1,5 +1,5 @@
 # Sprite Path Issue Analysis & Fix Plan
-*Created: June 21, 2025*
+*Created: 06.21.2025*
 
 ## Executive Summary
 
