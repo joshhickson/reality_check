@@ -113,6 +113,7 @@
     <!-- Load required scripts in proper order -->
     <script src="lpc-data-extractor.js"></script>
     <script src="lpc-file-scanner.js"></script>
+    <script src="lpc-complete-scanner.js"></script>
     <script>
         // Ensure LPCDataExtractor is loaded before proceeding
         if (typeof LPCDataExtractor === 'undefined') {
@@ -304,38 +305,7 @@
             }
         }
 
-         async function runCompleteLPCScan() {
-            const scanBtn = document.getElementById('scanFilesBtn');
-            scanBtn.disabled = true;
-            scanBtn.textContent = '🌳 Scanning All...';
-
-            try {
-                updateProgress(20);
-                console.log('🌳 Starting COMPLETE file scan of entire directory tree...');
-
-                const results = await runCompleteDirectoryScan(); // Assuming this function exists in lpc-file-scanner.js
-
-                updateProgress(100);
-                console.log('✅ Complete file scan completed!');
-                console.log(`📊 Found ${results.summary.totalValidPaths} valid sprite paths`);
-                console.log('📁 Results downloaded automatically');
-
-                scanBtn.textContent = '✅ Scan Complete';
-
-                // Enable other buttons now that we have real file data
-                document.getElementById('testPathsBtn').disabled = false;
-                document.getElementById('quickTestBtn').disabled = false;
-
-            } catch (error) {
-                console.error('❌ File scan failed:', error);
-                scanBtn.textContent = '❌ Scan Failed';
-            } finally {
-                setTimeout(() => {
-                    scanBtn.disabled = false;
-                    scanBtn.textContent = '📁 Scan LPC Files';
-                }, 3000);
-            }
-        }
+         
 
         async function runQuickTest() {
             const quickBtn = document.getElementById('quickTestBtn');
