@@ -1,7 +1,5 @@
-` tags.
 
-```python
-<replit_final_file>
+// LPC Data Extractor - Extracts sprite data from LPC Generator
 class LPCDataExtractor {
     constructor() {
         this.spriteData = new Map();
@@ -316,12 +314,13 @@ function generateWorkingPathMappings() {
     return mappings;
 }
 
-// Global extractor instance
-window.lpcExtractor = new LPCDataExtractor();
-
 // Utility function to extract and cache data
 async function extractLPCData() {
     try {
+        if (!window.lpcExtractor) {
+            window.lpcExtractor = new LPCDataExtractor();
+        }
+        
         const data = await window.lpcExtractor.extractFromLPCGenerator();
 
         // Cache the data in localStorage for faster subsequent loads
@@ -357,6 +356,9 @@ function loadCachedLPCData() {
         if (age < maxAge) {
             console.log('📦 Loading LPC data from cache');
             const data = JSON.parse(cachedData);
+            if (!window.lpcExtractor) {
+                window.lpcExtractor = new LPCDataExtractor();
+            }
             window.lpcExtractor.extractedData = data;
             return data;
         }
@@ -364,3 +366,22 @@ function loadCachedLPCData() {
 
     return null;
 }
+
+// Make sure the class is globally available
+if (typeof window !== 'undefined') {
+    window.LPCDataExtractor = LPCDataExtractor;
+    window.extractLPCData = extractLPCData;
+    window.loadCachedLPCData = loadCachedLPCData;
+    window.extractValidSpritePaths = extractValidSpritePaths;
+    window.getAvailableAnimations = getAvailableAnimations;
+    window.validateSpritePath = validateSpritePath;
+    window.generateWorkingPathMappings = generateWorkingPathMappings;
+}
+
+// Initialize global extractor instance on load
+document.addEventListener('DOMContentLoaded', function() {
+    if (!window.lpcExtractor) {
+        console.log('🔧 Initializing global LPC extractor instance...');
+        window.lpcExtractor = new LPCDataExtractor();
+    }
+});

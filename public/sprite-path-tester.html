@@ -108,8 +108,16 @@
         <div id="console"></div>
     </div>
 
-    <!-- Load required scripts -->
+    <!-- Load required scripts in proper order -->
     <script src="lpc-data-extractor.js"></script>
+    <script>
+        // Ensure LPCDataExtractor is loaded before proceeding
+        if (typeof LPCDataExtractor === 'undefined') {
+            console.error('❌ LPCDataExtractor failed to load');
+        } else {
+            console.log('✅ LPCDataExtractor loaded successfully');
+        }
+    </script>
     <script src="test-paths.js"></script>
 
     <script>
