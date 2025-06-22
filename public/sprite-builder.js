@@ -452,159 +452,147 @@ class LPCSpriteBuilder {
     showError(message) {
         const previewDiv = document.querySelector('.preview-container');
         if (previewDiv) {
-            const errorDiv = document.createElement('div');
-            errorDiv.style.color = '#ff6b6b';
-            errorDiv.style.padding = '20px';
-            errorDiv.style.textAlign = 'center';
-            errorDiv.textContent = message;
-            previewDiv.appendChild(errorDiv);
+            previewDiv.innerHTML = `<div style="color: red; padding: 20px;">${message}</div>`;
         }
-        console.error(message);
+        console.error('Sprite Builder Error:', message);
+
+        // Also show in debug panel if open
+        const debugPanel = document.getElementById('spriteDebugPanel');
+        if (debugPanel && debugPanel.style.display !== 'none') {
+            const failedPaths = document.getElementById('debugFailedPaths');
+            if (failedPaths) {
+                failedPaths.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+            }
+        }
     }
 
-    // Debug method to list available sprites
-    async debugListAvailableSprites() {
+    updateDebugInfo() {
+        const lpcDataStatus = document.getElementById('lpcDataStatus');
+        const debugLayerList = document.getElementById('debugLayerList');
+
+        if (lpcDataStatus) {
+            if (this.lpcData) {
+                lpcDataStatus.innerHTML = `✅ LPC data loaded with ${Object.keys(this.lpcData).length} categories`;
+            } else {
+                lpcDataStatus.innerHTML = '❌ LPC data not loaded';
+            }
+        }
+
+        if (debugLayerList) {
+            if (this.layers && this.layers.length > 0) {
+                debugLayerList.innerHTML = this.layers.map(layer => 
+                    `<div>• ${layer.name} (z:${layer.zIndex}) - ${layer.visible ? '👁️' : '🚫'}</div>`
+                ).join('');
+            } else {
+                debugLayerList.innerHTML = 'No layers currently loaded';
+            }
+        }
+    }
+
+    testImagePaths() {
+        console.log('🧪 Testing sprite paths...');
         const testPaths = [
             '/lpc-generator/spritesheets/body/bodies/male/walk.png',
             '/lpc-generator/spritesheets/body/bodies/female/walk.png',
             '/lpc-generator/spritesheets/hair/page/adult/walk.png',
-            '/lpc-generator/spritesheets/hair/parted/adult/walk.png',
-            '/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/walk.png',
-            '/lpc-generator/spritesheets/legs/pants/male/walk.png',
-            '/lpc-generator/index.html'
+            '/lpc-generator/spritesheets/hair/ponytail/adult/walk.png'
         ];
 
-        console.log('Testing sprite paths...');
-        for (const path of testPaths) {
+        testPaths.forEach(async path => {
             const exists = await this.testImageExists(path);
-            console.log(`${path}: ${exists ? 'EXISTS' : 'NOT FOUND'}`);
-        }
+            console.log(`${exists ? '✅' : '❌'} ${path}`);
+        });
+    }
 
-        // Also test if we can load the LPC generator page
-        try {
-            const response = await fetch('/lpc-generator/');
-            console.log('LPC generator directory response:', response.status);
-        } catch (error) {
-            console.error('Failed to access LPC generator directory:', error);
-        }
+    parseLPCDataDirect() {
+        console.log('📋 Attempting to parse LPC data directly...');
+        this.loadLPCData().then(() => {
+            console.log('✅ LPC data parsing completed');
+            this.updateDebugInfo();
+        }).catch(error => {
+            console.error('❌ LPC data parsing failed:', error);
+            this.updateDebugInfo();
+        });
+    }
+
+    logCurrentState() {
+        console.log('📊 Current Sprite Builder State:');
+        console.log('- LPC Data:', this.lpcData);
+        console.log('- Layers:', this.layers);
+        console.log('- Current Config:', this.currentConfig);
+        console.log('- Animation:', this.currentAnimation);
+        console.log('- Canvas Context:', this.ctx);
+        console.log('- Is Animating:', this.isAnimating);
     }
 
     debugSprites() {
-        // Remove existing debug panel if it exists
-        const existingPanel = document.getElementById('sprite-debug-panel');
-        if (existingPanel) {
-            existingPanel.remove();
+        console.log('🔧 Debug Sprites clicked');
+
+        // Create debug panel if it doesn't exist
+        let debugPanel = document.getElementById('spriteDebugPanel');
+        if (!debugPanel) {
+            debugPanel = document.createElement('div');
+            debugPanel.id = 'spriteDebugPanel';
+            debugPanel.style.cssText = `
+                position: fixed;
+                top: 50px;
+                left: 50px;
+                width: 600px;
+                height: 500px;
+                background: rgba(0, 0, 0, 0.9);
+                color: white;
+                border: 2px solid #00ff00;
+                border-radius: 8px;
+                z-index: 9999;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                display: block;
+                overflow: hidden;
+            `;
+            debugPanel.innerHTML = `
+                <div style="background: #333; padding: 8px 12px; border-radius: 6px 6px 0 0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold;">
+                    <span>🔧 Sprite Builder Debug Panel</span>
+                    <button onclick="this.parentElement.parentElement.style.display='none'" style="background: #ff6b6b; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">✕</button>
+                </div>
+                <div style="padding: 12px; height: calc(100% - 50px); overflow-y: auto;">
+                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
+                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">LPC Data Status</h4>
+                        <div id="lpcDataStatus" style="color: #feca57;">Loading...</div>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
+                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">Loaded Layers</h4>
+                        <div id="debugLayerList" style="color: #ff9800;">No layers loaded</div>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
+                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">Failed Sprite Paths</h4>
+                        <div id="debugFailedPaths" style="color: #ff6b6b; font-size: 10px; max-height: 100px; overflow-y: auto;">None yet</div>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px;">
+                        <h4 style="margin: 0 0 8px 0; color: #1dd1a1;">Test Functions</h4>
+                        <button onclick="spriteBuilder.testImagePaths()" style="background: #6c5ce7; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Test Sprite Paths</button>
+                        <button onclick="spriteBuilder.loadCharacterFallback()" style="background: #a29bfe; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Load Fallback Character</button>
+                        <button onclick="spriteBuilder.parseLPCDataDirect()" style="background: #fd79a8; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Parse LPC Data</button>
+                        <button onclick="spriteBuilder.logCurrentState()" style="background: #00b894; color: white; border: none; padding: 6px 12px; margin: 2px; border-radius: 4px; cursor: pointer; font-size: 11px;">Log Current State</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(debugPanel);
         }
 
-        // Create debug panel container
-        const debugContainer = document.createElement('div');
-        debugContainer.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 400px;
-            max-height: 80vh;
-            background: rgba(0, 0, 0, 0.95);
-            border: 2px solid #555;
-            border-radius: 8px;
-            z-index: 10000;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            color: #00ff00;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        `;
-        debugContainer.id = 'sprite-debug-panel';
+        // Show the panel with animation
+        debugPanel.style.display = 'block';
+        debugPanel.style.opacity = '0';
+        debugPanel.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+            debugPanel.style.transition = 'all 0.3s ease';
+            debugPanel.style.opacity = '1';
+            debugPanel.style.transform = 'scale(1)';
+        }, 10);
 
-        // Create header
-        const header = document.createElement('div');
-        header.style.cssText = `
-            background: #333;
-            padding: 8px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #555;
-        `;
-        header.innerHTML = `
-            <span>🔍 Sprite Debug Console</span>
-            <span style="cursor: pointer; color: #ff6b6b; font-weight: bold;" onclick="document.getElementById('sprite-debug-panel').remove()">✕</span>
-        `;
+        // Update debug info immediately
+        this.updateDebugInfo();
 
-        // Create content area
-        const content = document.createElement('div');
-        content.style.cssText = `
-            padding: 12px;
-            overflow-y: auto;
-            flex: 1;
-            line-height: 1.4;
-        `;
-
-        // Generate debug information
-        let debugInfo = [];
-
-        debugInfo.push('<div style="color: #00ff00; margin-bottom: 8px;">🎯 === SPRITE DEBUG REPORT ===</div>');
-        debugInfo.push(`<div style="color: #9c88ff;">📊 Total Layers: ${this.layers.length}</div>`);
-        debugInfo.push(`<div style="color: #9c88ff;">📋 LPC Data: ${this.lpcData ? 'Loaded' : 'Not Available'}</div>`);
-        debugInfo.push(`<div style="color: #9c88ff;">🎬 Animation: ${this.currentAnimation}</div>`);
-        debugInfo.push(`<div style="color: #9c88ff;">🖼️ Frame: ${this.animationFrame}</div>`);
-
-        debugInfo.push('<div style="color: #00ff00; margin: 12px 0 8px 0;">📁 === LOADED LAYERS ===</div>');
-        if (this.layers.length === 0) {
-            debugInfo.push('<div style="color: #feca57;">⚠️ No layers currently loaded</div>');
-        } else {
-            this.layers.forEach((layer, index) => {
-                const status = layer.visible ? '✅' : '❌';
-                const visibleText = this.visibleLayers[layer.name] ? 'Visible' : 'Hidden';
-                debugInfo.push(`<div style="color: #1dd1a1;">${status} Layer ${index}: ${layer.name} (z:${layer.zIndex}) - ${visibleText}</div>`);
-                debugInfo.push(`<div style="color: #ff9800; font-size: 10px; margin-left: 16px;">📁 ${layer.path}</div>`);
-            });
-        }
-
-        debugInfo.push('<div style="color: #00ff00; margin: 12px 0 8px 0;">⚙️ === CURRENT CONFIG ===</div>');
-        Object.entries(this.currentConfig).forEach(([key, value]) => {
-            debugInfo.push(`<div style="color: #9c88ff;">🔧 ${key}: ${value}</div>`);
-        });
-
-        debugInfo.push('<div style="color: #00ff00; margin: 12px 0 8px 0;">🔍 === PATH TESTING ===</div>');
-
-        // Test common sprite paths
-        const testPaths = [
-            '/lpc-generator/spritesheets/body/bodies/male/walk.png',
-            '/lpc-generator/spritesheets/body/bodies/female/walk.png',
-            '/lpc-generator/spritesheets/hair/page/adult/walk.png',
-            '/lpc-generator/spritesheets/torso/clothes/longsleeve/longsleeve/walk.png'
-        ];
-
-        // Test paths and update display
-        Promise.all(testPaths.map(async (path) => {
-            const exists = await this.testImageExists(path);
-            return { path, exists };
-        })).then(results => {
-            const pathResults = results.map(({ path, exists }) => {
-                const status = exists ? '✅ EXISTS' : '❌ NOT FOUND';
-                const color = exists ? '#1dd1a1' : '#ff6b6b';
-                return `<div style="color: ${color};">${status}: ${path.split('/').pop()}</div>`;
-            }).join('\n');
-
-            const pathSection = content.querySelector('#path-results');
-            if (pathSection) {
-                pathSection.innerHTML = pathResults;
-            }
-        });
-
-        debugInfo.push('<div id="path-results" style="color: #feca57;">Testing paths...</div>');
-
-        // Set content
-        content.innerHTML = debugInfo.join('\n');
-
-        // Assemble panel
-        debugContainer.appendChild(header);
-        debugContainer.appendChild(content);
-        document.body.appendChild(debugContainer);
-
-        console.log('🎯 Sprite Debug Panel Created');
+        console.log('✅ Debug panel created and displayed');
     }
 }
 
