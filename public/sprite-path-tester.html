@@ -87,7 +87,8 @@
         <div class="status info">
             <strong>Instructions:</strong>
             <ol>
-                <li><strong>FIRST:</strong> Click "SCAN LPC FILES FIRST" to discover actual sprite files</li>
+                <li><strong>NEW:</strong> Click "LPC ASSET MAPPER" to parse all sprite paths from LPC generator and export a complete asset map</li>
+                <li><strong>OR:</strong> Click "SCAN LPC FILES FIRST" to discover actual sprite files through HTTP requests</li>
                 <li>Then click "Load LPC Data" to initialize the LPC sprite data extractor</li>
                 <li>Finally click "Test All Paths" to run comprehensive path testing</li>
                 <li>Download the generated reports for analysis</li>
@@ -97,6 +98,7 @@
         <div class="button-group">
             <button id="scanFilesBtn" onclick="runFileScan()" style="background-color: #006600; font-weight: bold;">📁 SCAN LPC FILES FIRST</button>
             <button id="completeScanBtn" onclick="runCompleteScan()" style="background-color: #004466; font-weight: bold;">🌳 COMPLETE DIRECTORY SCAN</button>
+            <button id="assetMapperBtn" onclick="runAssetMapper()" style="background-color: #660066; font-weight: bold;">🗺️ LPC ASSET MAPPER</button>
             <button id="loadLPCBtn" onclick="loadLPCData()">🔄 Load LPC Data</button>
             <button id="testPathsBtn" onclick="runPathTest()" disabled>🧪 Test All Paths</button>
             <button id="quickTestBtn" onclick="runQuickTest()" disabled>⚡ Quick Test</button>
@@ -114,6 +116,7 @@
     <script src="lpc-data-extractor.js"></script>
     <script src="lpc-file-scanner.js"></script>
     <script src="lpc-complete-scanner.js"></script>
+    <script src="lpc-asset-mapper.js"></script>
     <script src="sprite-db-manager.js"></script>
     <script>
         // Ensure LPCDataExtractor is loaded before proceeding
@@ -307,6 +310,67 @@
         }
 
          
+
+        async function runAssetMapper() {
+            const assetMapperBtn = document.getElementById('assetMapperBtn');
+            assetMapperBtn.disabled = true;
+            assetMapperBtn.textContent = '🗺️ Mapping...';
+
+            try {
+                updateProgress(20);
+                console.log('🗺️ Starting LPC Asset Mapper...');
+
+                // Create new asset mapper instance
+                const mapper = new LPCAssetMapper();
+                
+                updateProgress(50);
+                console.log('⏳ Waiting for asset mapping to complete...');
+                
+                // Wait for initialization to complete
+                await mapper.ready;
+                
+                updateProgress(80);
+                
+                // Get results
+                const allPaths = mapper.getAllPaths();
+                const fileTree = mapper.getFileTree();
+                const stats = mapper.getStats();
+                
+                console.log('✅ Asset mapping completed successfully!');
+                console.log(`📊 Mapped ${allPaths.length} unique sprite paths`);
+                console.log(`📂 Found ${Object.keys(stats.categories).length} categories`);
+                console.log(`🎬 Found ${Object.keys(stats.animations).length} unique animations`);
+                
+                // Display some results in console
+                console.log('\n📋 Category breakdown:');
+                Object.entries(stats.categories)
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 10)
+                    .forEach(([category, count]) => {
+                        console.log(`  ${category}: ${count} sprites`);
+                    });
+                
+                updateProgress(95);
+                
+                // Export results automatically
+                mapper.exportResults();
+                
+                updateProgress(100);
+                console.log('✅ Asset mapping complete and results exported!');
+                console.log('📁 Check your downloads for the exported files.');
+
+                assetMapperBtn.textContent = '✅ Mapping Complete';
+
+            } catch (error) {
+                console.error('❌ Asset mapping failed:', error);
+                assetMapperBtn.textContent = '❌ Mapping Failed';
+            } finally {
+                setTimeout(() => {
+                    assetMapperBtn.disabled = false;
+                    assetMapperBtn.textContent = '🗺️ LPC ASSET MAPPER';
+                }, 3000);
+            }
+        }
 
         async function runQuickTest() {
             const quickBtn = document.getElementById('quickTestBtn');
