@@ -35,7 +35,7 @@ async function initPostgreSQL() {
   try {
     await pgClient.connect();
     console.log('PostgreSQL connected successfully');
-    
+
     // Create sprite_paths table if it doesn't exist
     await pgClient.query(`
       CREATE TABLE IF NOT EXISTS sprite_paths (
@@ -51,20 +51,20 @@ async function initPostgreSQL() {
         UNIQUE(category, body_type, animation, style, file_path)
       )
     `);
-    
+
     // Create indexes for faster lookups
     await pgClient.query(`
       CREATE INDEX IF NOT EXISTS idx_sprite_category_body 
       ON sprite_paths(category, body_type)
     `);
-    
+
     await pgClient.query(`
       CREATE INDEX IF NOT EXISTS idx_sprite_valid 
       ON sprite_paths(is_valid) WHERE is_valid = true
     `);
-    
+
     console.log('Sprite paths table initialized');
-    
+
   } catch (error) {
     console.error('PostgreSQL initialization error:', error);
   }
@@ -172,7 +172,7 @@ async function getValidSpritePaths(category, bodyType, animation) {
       WHERE category = $1 AND body_type = $2 AND animation = $3 AND is_valid = true
       ORDER BY last_verified DESC
     `, [category, bodyType, animation]);
-    
+
     return result.rows;
   } catch (error) {
     console.error('Error getting sprite paths:', error);
@@ -188,7 +188,7 @@ async function getAllValidSpritePaths() {
       WHERE is_valid = true
       ORDER BY category, body_type, animation
     `);
-    
+
     return result.rows;
   } catch (error) {
     console.error('Error getting all sprite paths:', error);
@@ -213,7 +213,7 @@ async function initDatabase() {
   try {
     // Initialize PostgreSQL first
     await initPostgreSQL();
-    
+
     // Initialize card system
     const cardsExist = await db.get('cards_initialized');
     if (!cardsExist) {
@@ -465,7 +465,7 @@ app.get('/api/sprites/paths/all', async (req, res) => {
   try {
     const paths = await getAllValidSpritePaths();
     const pathsByCategory = {};
-    
+
     paths.forEach(path => {
       if (!pathsByCategory[path.category]) {
         pathsByCategory[path.category] = {};
@@ -481,7 +481,7 @@ app.get('/api/sprites/paths/all', async (req, res) => {
         style: path.style
       });
     });
-    
+
     res.json({ 
       pathsByCategory, 
       totalPaths: paths.length,
@@ -496,11 +496,11 @@ app.get('/api/sprites/paths/all', async (req, res) => {
 app.post('/api/sprites/paths/cache', express.json(), async (req, res) => {
   try {
     const { category, bodyType, animation, style, filePath, isValid } = req.body;
-    
+
     if (!category || !bodyType || !animation || !filePath) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-    
+
     await cacheSpritePath(category, bodyType, animation, style || null, filePath, isValid !== false);
     res.json({ message: 'Sprite path cached successfully' });
   } catch (error) {
@@ -512,11 +512,11 @@ app.post('/api/sprites/paths/cache', express.json(), async (req, res) => {
 app.post('/api/sprites/paths/bulk-cache', express.json(), async (req, res) => {
   try {
     const { paths } = req.body;
-    
+
     if (!Array.isArray(paths)) {
       return res.status(400).json({ error: 'Paths must be an array' });
     }
-    
+
     let cached = 0;
     for (const pathData of paths) {
       const { category, bodyType, animation, style, filePath, isValid } = pathData;
@@ -525,7 +525,7 @@ app.post('/api/sprites/paths/bulk-cache', express.json(), async (req, res) => {
         cached++;
       }
     }
-    
+
     res.json({ message: `${cached} sprite paths cached successfully` });
   } catch (error) {
     console.error('Bulk cache sprite paths error:', error);
@@ -748,6 +748,15 @@ async function initDatabase() {
     console.log('Replit Database connected successfully');
   } catch (error) {
     console.error('Database initialization error:', error);
+  }
+}
+
+// Asynchronous database initialization function
+async function initDatabaseAsync() {
+  try {
+    await initDatabase();
+  } catch (error) {
+    console.error('Async database initialization error:', error);
   }
 }
 
