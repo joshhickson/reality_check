@@ -3,458 +3,846 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reality Check - Development</title>
+    <title>Reality Check - Development Tools</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="lpc-data-extractor.js"></script>
+    <script src="sprite-builder.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             min-height: 100vh;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
             text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
+        }
+        .nav {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .section {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
-            backdrop-filter: blur(10px);
+            padding: 20px;
+            margin: 20px 0;
         }
-
-        .header h1 {
-            font-size: 2.5em;
-            color: #64ffda;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            color: #b0bec5;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .tool-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            backdrop-filter: blur(5px);
-        }
-
-        .tool-section h2 {
-            color: #64ffda;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+        .section h2 {
+            cursor: pointer;
+            margin: 0 0 20px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
         }
-
-        .sprite-canvas-container {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            border: 2px solid #64ffda;
+        .section-content {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
         }
-
-        #spriteCanvas {
-            border: 2px solid #64ffda;
+        .section-content > div {
+            flex: 1;
+        }
+        button {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 12px 24px;
             border-radius: 8px;
-            background: #0f0f23;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff5252;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        input, select, textarea {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .sin-card {
+            border-left: 5px solid #ff6b6b;
+        }
+        .virtue-card {
+            border-left: 5px solid #1dd1a1;
+        }
+        .ring-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .ring-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        .ring-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .ring-control {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            margin: 10px 0;
+        }
+        .ring-control label {
+            display: block;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .ring-control input[type="range"] {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .ring-control input[type="number"] {
+            width: 60px;
+            padding: 3px;
+            font-size: 12px;
+        }
+
+        /* Console Styles */
+        .console-window {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 350px;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #444;
+            border-radius: 8px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .console-header {
+            background: #333;
+            padding: 8px 12px;
+            border-radius: 8px 8px 0 0;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .console-close {
+            cursor: pointer;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .console-content {
+            flex: 1;
+            padding: 8px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #00ff00;
+            line-height: 1.4;
+        }
+
+        .console-info { color: #00ff00; }
+        .console-warning { color: #feca57; }
+        .console-error { color: #ff6b6b; }
+        .console-success { color: #1dd1a1; }
+        .console-card { color: #ff9800; }
+        .console-state { color: #9c88ff; }
+        .console-timer { color: #48dbfb; }
+        .console-event { color: #f0932b; }
+        .console-global { color: #eb4d4b; }
+        .console-math { color: #6c5ce7; }
+        .console-perf { color: #a29bfe; }
+
+        .timestamp {
+            color: #666;
+            font-size: 10px;
+        }
+
+        /* Sprite Builder Styles */
+        .sprite-builder {
+            display: grid;
+            grid-template-columns: 1fr 400px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .sprite-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .preview-container {
+            background: #2a2a2a;
+            border: 2px solid #555;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #spriteCanvas {
+            background: #1a1a2e;
+            border: 1px solid #333;
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
+            transform: scale(2);
+            transform-origin: center;
+            margin: 10px auto;
+            display: block;
         }
-
-        .button {
-            background: linear-gradient(45deg, #64ffda, #18ffff);
-            color: #1a1a2e;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
-            margin: 5px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
-        }
-
-        .button.secondary {
-            background: linear-gradient(45deg, #4a4a6e, #6a6a8e);
-            color: white;
-        }
-
-        .button.danger {
-            background: linear-gradient(45deg, #ff6b6b, #ff5252);
-            color: white;
-        }
-
-        .status {
+        .sprite-controls {
+            background: rgba(255, 255, 255, 0.1);
             padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border-left: 4px solid;
-        }
-
-        .status.info {
-            background: rgba(33, 150, 243, 0.1);
-            border-color: #2196f3;
-        }
-
-        .status.success {
-            background: rgba(76, 175, 80, 0.1);
-            border-color: #4caf50;
-        }
-
-        .status.warning {
-            background: rgba(255, 152, 0, 0.1);
-            border-color: #ff9800;
-        }
-
-        .navigation {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .nav-link {
-            color: #64ffda;
-            text-decoration: none;
-            margin: 0 15px;
-            padding: 10px 20px;
-            border: 1px solid #64ffda;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background: rgba(100, 255, 218, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .debug-info {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-family: monospace;
-            font-size: 0.9em;
-            border: 1px solid #333;
-        }
-
-        .debug-info h4 {
-            color: #64ffda;
-            margin-bottom: 10px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
             border-radius: 10px;
-            border: 1px solid rgba(100, 255, 218, 0.1);
-            text-align: center;
         }
-
-        .feature-card h3 {
-            color: #64ffda;
-            margin-bottom: 10px;
+        .control-group {
+            margin: 15px 0;
         }
-
-        @media (max-width: 768px) {
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 2em;
-            }
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+        }
+        .radio-group label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .control-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .animation-controls {
+            margin: 10px 0;
+        }
+        .export-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .layer-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .sprite-layer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            margin: 3px 0;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        .layer-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .layer-controls button {
+            padding: 5px 10px;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🎮 Reality Check Development Hub</h1>
-            <p>Advanced Character & Game Development Tools</p>
+        <nav class="nav">
+            <div class="nav-title">🎲 Reality Check - Development Tools</div>
+            <div class="nav-links">
+                <a href="index.html">Game</a>
+                <a href="about.html">About</a>
+                <a href="sprite-path-tester.html">Sprite Tester</a>
+                <a href="lpc-generator/index.html">LPC Generator</a>
+            </div>
+        </nav>
+
+        <h1>🛠️ Development & Testing Tools</h1>
+        <p>Advanced tools for game development, testing, and sprite creation.</p>
+
+        <!-- LPC Sprite Builder -->
+        <div class="section">
+            <h2 onclick="toggleSection('spriteBuilderContent')">🎨 LPC Sprite Builder <span id="spriteBuilderToggle">▼</span></h2>
+            <div id="spriteBuilderContent" class="sprite-builder">
+                <div class="sprite-controls">
+                    <h3>Character Builder</h3>
+
+                    <!-- Body Type Selection -->
+                    <div class="control-group">
+                        <label>Body Type:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="sex-male" name="sex" value="male" checked>
+                            <label for="sex-male">Male</label>
+                            <input type="radio" id="sex-female" name="sex" value="female">
+                            <label for="sex-female">Female</label>
+                            <input type="radio" id="sex-teen" name="sex" value="teen">
+                            <label for="sex-teen">Teen</label>
+                            <input type="radio" id="sex-child" name="sex" value="child">
+                            <label for="sex-child">Child</label>
+                        </div>
+                    </div>
+
+                    <!-- Body Color -->
+                    <div class="control-group">
+                        <label>Body Color:</label>
+                        <select id="bodyColor" onchange="updateSprite()">
+                            <option value="light">Light</option>
+                            <option value="tanned">Tanned</option>
+                            <option value="tanned2">Tanned 2</option>
+                            <option value="dark">Dark</option>
+                            <option value="dark2">Dark 2</option>
+                            <option value="darkelf">Dark Elf</option>
+                            <option value="darkelf2">Dark Elf 2</option>
+                        </select>
+                    </div>
+
+                    <!-- Hair Selection -->
+                    <div class="control-group">
+                        <label>Hair Style:</label>
+                        <select id="hairStyle" onchange="updateSprite()">
+                            <option value="none">No Hair</option>
+                            <option value="page">Page</option>
+                            <option value="page2">Page 2</option>
+                            <option value="parted">Parted</option>
+                            <option value="bangs">Bangs</option>
+                            <option value="long">Long</option>
+                            <option value="ponytail">Ponytail</option>
+                            <option value="pixie">Pixie</option>
+                            <option value="messy1">Messy</option>
+                        </select>
+                        <select id="hairColor" onchange="updateSprite()">
+                            <option value="brunette">Brunette</option>
+                            <option value="blonde">Blonde</option>
+                            <option value="redhead">Redhead</option>
+                            <option value="black">Black</option>
+                            <option value="gray">Gray</option>
+                            <option value="white">White</option>
+                        </select>
+                    </div>
+
+                    <!-- Clothing Selection -->
+                    <div class="control-group">
+                        <label>Clothing:</label>
+                        <select id="clothingTop" onchange="updateSprite()">
+                            <option value="none">Bare</option>
+                            <option value="shirt_white">White Shirt</option>
+                            <option value="longsleeve">Long Sleeve</option>
+                            <option value="shortsleeve">Short Sleeve</option>
+                            <option value="sleeveless">Sleeveless</option>
+                            <option value="robe">Robe</option>
+                        </select>
+                        <select id="clothingBottom" onchange="updateSprite()">
+                            <option value="none">Bare</option>
+                            <option value="pants">Pants</option>
+                            <option value="shorts">Shorts</option>
+                            <option value="skirt">Skirt</option>
+                        </select>
+                    </div>
+
+                    <div class="control-buttons">
+                        <button onclick="randomizeCharacter()">Randomize</button>
+                        <button onclick="resetCharacter()">Reset</button>
+                        <button onclick="debugSprites()">Debug Sprites</button>
+                        <button onclick="alert('Test button clicked!'); console.log('🧪 spriteBuilder object:', typeof spriteBuilder, spriteBuilder); if(spriteBuilder && spriteBuilder.testFunction) { spriteBuilder.testFunction(); } else { const msg = 'spriteBuilder not found or testFunction missing!'; console.error(msg); alert(msg); }" style="background: #ff9800; color: white;">Test Object</button>
+                        <button onclick="alert('Force log test'); console.log('FORCE LOG TEST'); console.warn('FORCE LOG TEST'); console.error('FORCE LOG TEST');" style="background: #ff0000; color: white;">Force Log Test</button>
+                    </div>
+                </div>
+
+                <div class="sprite-preview">
+                    <h3>Preview</h3>
+                    <div class="preview-container">
+                        <canvas id="spriteCanvas" width="64" height="64"></canvas>
+                        <canvas id="fullSpriteSheet" width="832" height="1344" style="display: none;"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <label>Animation:</label>
+                        <select id="animationSelect" onchange="changeAnimation()">
+                            <option value="walk">Walk</option>
+                            <option value="spellcast">Spellcast</option>
+                            <option value="thrust">Thrust</option>
+                            <option value="slash">Slash</option>
+                            <option value="shoot">Shoot</option>
+                            <option value="hurt">Hurt</option>
+                        </select>
+                    </div>
+                    <div class="export-controls">
+                        <button onclick="exportCurrentFrame()">Export Frame</button>
+                        <button onclick="exportSpriteSheet()">Export Sheet</button>
+                        <button onclick="saveCharacterProfile()">Save Profile</button>
+                    </div>
+
+                    <div class="layer-controls">
+                        <label>Layers:</label>
+                        <div id="layersList" class="layer-list">
+                            <!-- Layer list will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sprite-controls">
+                    <h3>Debug Panel</h3>
+                    <textarea id="debugOutput" style="
+                        width: 100%; 
+                        height: 300px; 
+                        background: #000; 
+                        color: #00ff00; 
+                        font-family: 'Courier New', monospace; 
+                        font-size: 11px; 
+                        border: 1px solid #333; 
+                        border-radius: 5px; 
+                        padding: 10px; 
+                        resize: vertical;
+                        white-space: pre;
+                    " readonly>Debug information will appear here...</textarea>
+                    <div class="layer-controls">
+                        <button onclick="spriteBuilder && spriteBuilder.testFunction()">Test Function</button>
+                        <button onclick="spriteBuilder && spriteBuilder.loadCharacter()">Reload Character</button>
+                        <button onclick="spriteBuilder && spriteBuilder.updateDebugPanel()">Refresh Debug</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="navigation">
-            <a href="/" class="nav-link">🎲 Play Game</a>
-            <a href="/about.html" class="nav-link">ℹ️ About</a>
-            <a href="/sprite-path-tester.html" class="nav-link">🧪 Path Tester</a>
+        <!-- Board Designer -->
+        <div class="section">
+            <h2 onclick="toggleSection('boardDesignerContent')">🎨 Hypocycloid Board Designer <span id="boardDesignerToggle">▼</span></h2>
+            <div id="boardDesignerContent" class="section-content" style="display: none;">
+                <div>
+                    <h3>Live Preview</h3>
+                    <svg id="designerBoard" width="400" height="400" viewBox="-200 -200 400 400" style="background: #1a1a2e; border-radius: 10px;"></svg>
+                </div>
+                <div>
+                    <h3>Ring Parameters</h3>
+                    <div id="ringControls" style="display: grid; gap: 15px;">
+                        <!-- Ring controls will be inserted here -->
+                    </div>
+                    <button onclick="resetToDefaults()">Reset to Defaults</button>
+                </div>
+                <div>
+                    <h3>Generated Code</h3>
+                    <textarea id="codeOutput" readonly style="width: 100%; height: 300px; background: #2a2a2a; color: #00ff00; font-family: monospace; font-size: 12px; border: 1px solid #555; border-radius: 5px; padding: 10px;"></textarea>
+                    <button onclick="copyCode()">Copy Code</button>
+                </div>
+            </div>
         </div>
 
-        <div class="tools-grid">
-            <!-- LPC Sprite Builder -->
-            <div class="tool-section">
-                <h2>🎨 LPC Sprite Builder</h2>
-
-                <div class="status info">
-                    <strong>✨ Enhanced Sprite System</strong><br>
-                    Now powered by LPC Asset Mapper with 21,484+ sprite paths!<br>
-                    Real-time character generation with complete LPC compatibility.
+        <!-- Card System Testing -->
+        <div class="section">
+            <h2 onclick="toggleSection('cardSystemContent')">🃏 Card System Testing <span id="cardSystemToggle">▼</span></h2>
+            <div id="cardSystemContent" class="section-content" style="display: none;">
+                <div>
+                    <h3>Card Parser</h3>
+                    <button onclick="loadCardData()">Load Card Data</button>
+                    <button onclick="shuffleDeck()">Shuffle Deck</button>
+                    <div id="deckInfo" style="margin: 10px 0; font-size: 14px;"></div>
                 </div>
-
-                <div class="sprite-canvas-container">
-                    <h3 style="color: #64ffda; margin-bottom: 15px;">Character Preview</h3>
-                    <canvas id="spriteCanvas" width="64" height="64"></canvas>
-                    <p style="margin-top: 10px; color: #b0bec5;">64x64 LPC Character Sprite</p>
+                <div>
+                    <h3>Draw Cards</h3>
+                    <button onclick="drawCard('sin')">Draw Sin Card</button>
+                    <button onclick="drawCard('virtue')">Draw Virtue Card</button>
+                    <button onclick="drawCard('random')">Draw Random</button>
+                    <div id="drawnCard" style="margin-top: 15px;"></div>
                 </div>
-
-                <!-- Sprite controls will be dynamically inserted here by sprite-builder.js -->
-
-                <div class="debug-info">
-                    <h4>Debug Commands</h4>
-                    <button class="button secondary" onclick="if(window.spriteBuilder) window.spriteBuilder.testFunction()">
-                        🧪 Test Sprite Builder
-                    </button>
-                    <button class="button secondary" onclick="console.log('Current spriteBuilder:', window.spriteBuilder)">
-                        🔍 Debug Object
-                    </button>
-                    <button class="button secondary" onclick="if(window.spriteBuilder) console.log(window.spriteBuilder.exportCharacter())">
-                        📤 Export Character
-                    </button>
+                <div>
+                    <h3>Card Effects</h3>
+                    <div id="cardEffects" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; font-family: monospace; min-height: 150px;"></div>
                 </div>
             </div>
+        </div>
 
-            <!-- Development Tools -->
-            <div class="tool-section">
-                <h2>🛠️ Development Tools</h2>
-
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h3>🗺️ Asset Mapper</h3>
-                        <p>21,484 LPC sprite paths mapped and organized</p>
-                        <button class="button" onclick="if(window.spriteBuilder && window.spriteBuilder.assetMapper) console.log(window.spriteBuilder.assetMapper.getStats())">
-                            View Stats
-                        </button>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>🎬 Animation System</h3>
-                        <p>Walk, hurt, slash, shoot, thrust, spellcast</p>
-                        <button class="button" onclick="if(window.spriteBuilder) window.spriteBuilder.changeAnimation('walk')">
-                            Test Walk
-                        </button>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>👥 Body Types</h3>
-                        <p>Male, female, child, teen support</p>
-                        <button class="button" onclick="if(window.spriteBuilder) window.spriteBuilder.changeSex('female')">
-                            Change Type
-                        </button>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>📊 Layer System</h3>
-                        <p>Z-index based sprite layering</p>
-                        <button class="button" onclick="if(window.spriteBuilder) window.spriteBuilder.addCategory('torso')">
-                            Add Layer
-                        </button>
-                    </div>
+        <!-- Skin System Testing -->
+        <div class="section">
+            <h2 onclick="toggleSection('skinSystemContent')">🎭 Skin System Testing <span id="skinSystemToggle">▼</span></h2>
+            <div id="skinSystemContent" class="section-content" style="display: none;">
+                <div>
+                    <h3>Card Skins</h3>
+                    <select id="cardSkinSelect" onchange="previewCardSkin()">
+                        <option value="default">Default Skin</option>
+                        <option value="minimal">Minimal Skin</option>
+                        <option value="retro">Retro Skin</option>
+                    </select>
+                    <div id="cardSkinPreview" style="margin: 15px 0;"></div>
                 </div>
-
-                <div class="status success">
-                    <strong>✅ System Status</strong><br>
-                    ✓ LPC Asset Mapper: Ready<br>
-                    ✓ Sprite Builder: Initialized<br>
-                    ✓ Animation System: Active<br>
-                    ✓ Path Validation: Working
+                <div>
+                    <h3>Avatar Skins</h3>
+                    <select id="avatarSkinSelect" onchange="previewAvatarSkin()">
+                        <option value="default">Default Avatar</option>
+                        <option value="pixel">Pixel Avatar</option>
+                        <option value="abstract">Abstract Avatar</option>
+                    </select>
+                    <div id="avatarSkinPreview" style="margin: 15px 0;"></div>
+                </div>
+                <div>
+                    <h3>Skin Configuration</h3>
+                    <label>Card Theme:</label>
+                    <input type="color" id="cardThemeColor" value="#ff6b6b" onchange="updateSkinTheme()">
+                    <label>Avatar Style:</label>
+                    <input type="range" id="avatarStyleSlider" min="1" max="5" value="3" onchange="updateAvatarStyle()">
+                    <div id="skinConfig" style="font-size: 12px; margin-top: 10px;"></div>
                 </div>
             </div>
+        </div>
 
-            <!-- Technical Information -->
-            <div class="tool-section">
-                <h2>📋 Technical Details</h2>
-
-                <div class="debug-info">
-                    <h4>Architecture Overview</h4>
-                    <p><strong>LPC Asset Mapper:</strong> Extracts and organizes 21,484+ sprite paths from LPC generator</p>
-                    <p><strong>Sprite Builder:</strong> Real-time character composition with layer management</p>
-                    <p><strong>Animation Engine:</strong> Frame-based animation with configurable timing</p>
-                    <p><strong>Path System:</strong> Direct LPC data usage, no runtime path construction</p>
+        <!-- Game Engine Testing -->
+        <div class="section">
+            <h2 onclick="toggleSection('gameEngineContent')">⚙️ Game Engine Testing <span id="gameEngineToggle">▼</span></h2>
+            <div id="gameEngineContent" class="section-content" style="display: none;">
+                <div>
+                    <h3>State Machine</h3>
+                    <div id="currentState" style="font-weight: bold; margin: 10px 0;">State: SETUP</div>
+                    <button onclick="advanceState()">Advance State</button>
+                    <button onclick="resetGameState()">Reset State</button>
+                    <div id="stateHistory" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 100px; overflow-y: auto;"></div>
                 </div>
-
-                <div class="debug-info">
-                    <h4>Performance Metrics</h4>
-                    <p><strong>Total Assets:</strong> 21,484 sprite paths</p>
-                    <p><strong>Categories:</strong> 24 sprite categories</p>
-                    <p><strong>Body Types:</strong> Male, Female, Child, Teen</p>
-                    <p><strong>Animations:</strong> 6 primary animations</p>
+                <div>
+                    <h3>Timer System</h3>
+                    <div id="timerDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">30:00</div>
+                    <button onclick="startTimer()">Start Timer</button>
+                    <button onclick="pauseTimer()">Pause Timer</button>
+                    <button onclick="resetTimer()">Reset Timer</button>
+                    <input type="range" id="timerSpeed" min="0.1" max="5" step="0.1" value="1" onchange="updateTimerSpeed()">
+                    <label for="timerSpeed">Speed: <span id="speedDisplay">1x</span></label>
                 </div>
-
-                <div class="status warning">
-                    <strong>🔧 Development Notes</strong><br>
-                    • Sprite paths now sourced directly from LPC Asset Mapper<br>
-                    • No more path construction errors<br>
-                    • Real-time layer management and z-index sorting<br>
-                    • Export/import character configurations
-                </div>
-            </div>
-
-            <!-- Testing & Validation -->
-            <div class="tool-section">
-                <h2>🧪 Testing & Validation</h2>
-
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h3>🔍 Path Tester</h3>
-                        <p>Comprehensive sprite path validation</p>
-                        <a href="/sprite-path-tester.html" class="button">
-                            Open Tester
-                        </a>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>📊 Asset Analysis</h3>
-                        <p>LPC generator data analysis</p>
-                        <button class="button" onclick="if(window.spriteBuilder && window.spriteBuilder.assetMapper) window.spriteBuilder.assetMapper.exportResults()">
-                            Export Data
-                        </button>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>🎯 Quick Tests</h3>
-                        <p>Rapid functionality verification</p>
-                        <button class="button" onclick="runQuickTests()">
-                            Run Tests
-                        </button>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>🔄 Reset System</h3>
-                        <p>Clear all data and restart</p>
-                        <button class="button danger" onclick="if(window.spriteBuilder) window.spriteBuilder.resetCharacter()">
-                            Reset All
-                        </button>
-                    </div>
-                </div>
-
-                <div class="debug-info">
-                    <h4>Test Results</h4>
-                    <div id="testResults">
-                        <p>Click "Run Tests" to see validation results...</p>
-                    </div>
+                <div>
+                    <h3>Event Scheduler</h3>
+                    <button onclick="scheduleEvent()">Schedule Random Event</button>
+                    <button onclick="triggerGlobalEvent()">Trigger Global Event</button>
+                    <div id="eventQueue" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 120px; overflow-y: auto;"></div>
                 </div>
             </div>
+        </div>
+
+        <!-- Hypocycloid Math Testing -->
+        <div class="section">
+            <h2 onclick="toggleSection('mathTestingContent')">📊 Hypocycloid Math Testing <span id="mathTestingToggle">▼</span></h2>
+            <div id="mathTestingContent" class="section-content" style="display: none;">
+                <div>
+                    <h3>Coordinate Generation</h3>
+                    <label>Test Ring Radius:</label>
+                    <input type="number" id="testRadius" value="150" min="50" max="300" onchange="generateTestCoordinates()">
+                    <label>Number of Points:</label>
+                    <input type="number" id="testPoints" value="10" min="3" max="50" onchange="generateTestCoordinates()">
+                    <button onclick="generateTestCoordinates()">Generate</button>
+                    <div id="coordinateOutput" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
+                </div>
+                <div>
+                    <h3>Performance Testing</h3>
+                    <button onclick="benchmarkCalculations()">Benchmark Calculations</button>
+                    <button onclick="stressTestBoard()">Stress TestBoard</button>
+                    <div id="perfResults" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
+                </div>
+                <div>
+                    <h3>Validation</h3>
+                    <button onclick="validateMath()">Validate Math</button>
+                    <button onclick="testEdgeCases()">Test Edge Cases</button>
+                    <div id="validationResults" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Console Window -->
+        <div class="console-window" id="devConsole" style="display: none;">
+            <div class="console-header">
+                <span>Development Console</span>
+                <span class="console-close" onclick="toggleConsole()">×</span>
+            </div>
+            <div class="console-content" id="consoleContent">
+                <div class="console-info"><span class="timestamp">[00:00:00]</span> Development console initialized</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <button onclick="toggleConsole()">Toggle Dev Console</button>
+            <button onclick="clearConsole()">Clear Console</button>
+            <button onclick="exportLogs()">Export Logs</button>
         </div>
     </div>
 
-    <!-- Load sprite builder and dependencies -->
-    <script src="lpc-asset-mapper.js"></script>
+    <script type="module" src="board-render.js"></script>
+    <script src="board-designer.js"></script>
     <script src="sprite-builder.js"></script>
-
     <script>
-        // Quick testing function
-        function runQuickTests() {
-            const resultsDiv = document.getElementById('testResults');
-            let results = [];
+        // Section toggle functionality
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId);
+            const toggle = document.getElementById(sectionId.replace('Content', 'Toggle'));
 
-            // Test 1: Sprite Builder Existence
-            if (window.spriteBuilder) {
-                results.push('✅ Sprite Builder: Initialized');
-
-                // Test 2: Asset Mapper
-                if (window.spriteBuilder.assetMapper) {
-                    const stats = window.spriteBuilder.assetMapper.getStats();
-                    results.push(`✅ Asset Mapper: ${stats.totalPaths} paths loaded`);
-                } else {
-                    results.push('❌ Asset Mapper: Not loaded');
-                }
-
-                // Test 3: Path Organization
-                const categoryCount = Object.keys(window.spriteBuilder.pathsByCategory).length;
-                if (categoryCount > 0) {
-                    results.push(`✅ Path Organization: ${categoryCount} categories`);
-                } else {
-                    results.push('❌ Path Organization: No categories found');
-                }
-
-                // Test 4: Current Layers
-                const layerCount = window.spriteBuilder.layers.length;
-                results.push(`✅ Current Layers: ${layerCount} loaded`);
-
-                // Test 5: Animation System
-                if (window.spriteBuilder.isAnimating) {
-                    results.push('✅ Animation System: Active');
-                } else {
-                    results.push('⚠️ Animation System: Stopped');
-                }
-
-                // Test 6: Test Function
-                try {
-                    window.spriteBuilder.testFunction();
-                    results.push('✅ Test Function: Working');
-                } catch (e) {
-                    results.push('❌ Test Function: Failed');
-                }
-
+            if (content.style.display === 'none') {
+                content.style.display = 'flex';
+                toggle.textContent = '▲';
             } else {
-                results.push('❌ Sprite Builder: Not initialized');
+                content.style.display = 'none';
+                toggle.textContent = '▼';
             }
-
-            // Test 7: DOM Elements
-            const canvas = document.getElementById('spriteCanvas');
-            if (canvas) {
-                results.push('✅ Canvas Element: Found');
-            } else {
-                results.push('❌ Canvas Element: Missing');
-            }
-
-            // Display results
-            resultsDiv.innerHTML = results.map(result => `<p>${result}</p>`).join('');
         }
 
-        // Auto-run tests after a delay to ensure everything is loaded
-        setTimeout(() => {
-            console.log('🧪 Running automatic system validation...');
-            runQuickTests();
-        }, 3000);
+        // LPC Sprite Builder Functions
+        function randomizeSprite() {
+            const bodyTypes = ['male', 'female', 'child', 'teen'];
+            const hairStyles = ['parted', 'ponytail', 'messy', 'long', 'short'];
+            const clothingTypes = ['longsleeve', 'shortsleeve', 'formal', 'casual'];
+            const skinTones = ['fair', 'medium', 'dark'];
 
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 't') {
-                e.preventDefault();
-                runQuickTests();
+            document.getElementById('bodyType').value = bodyTypes[Math.floor(Math.random() * bodyTypes.length)];
+            document.getElementById('hairStyle').value = hairStyles[Math.floor(Math.random() * hairStyles.length)];
+            document.getElementById('clothing').value = clothingTypes[Math.floor(Math.random() * clothingTypes.length)];
+            document.getElementById('skinTone').value = skinTones[Math.floor(Math.random() * skinTones.length)];
+
+            generateSprite();
+        }
+
+        function generateSprite() {
+            const bodyType = document.getElementById('bodyType').value.toLowerCase();
+            const hairStyle = document.getElementById('hairStyle').value.toLowerCase();
+            const clothing = document.getElementById('clothing').value.toLowerCase();
+            const skinTone = document.getElementById('skinTone').value.toLowerCase();
+
+            // Create a canvas to composite the sprite
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+
+            // Fill with a background color for now
+            ctx.fillStyle = getSkinToneColor(skinTone);
+            ctx.fillRect(0, 0, 64, 64);
+
+            // Draw a simple character representation
+            drawSimpleCharacter(ctx, bodyType, hairStyle, clothing, skinTone);
+
+            // Display the generated sprite
+            const preview = document.getElementById('spriteCanvas');
+            preview.innerHTML = '';
+            preview.appendChild(canvas);
+            preview.style.textAlign = 'center';
+            preview.style.lineHeight = 'normal';
+        }
+
+        function getSkinToneColor(skinTone) {
+            const skinTones = {
+                'fair': '#fdbcb4',
+                'medium': '#e6ac88',
+                'dark': '#bc9582',
+            };
+            return skinTones[skinTone] || skinTones['medium'];
+        }
+
+        function drawSimpleCharacter(ctx, bodyType, hairStyle, clothing, skinTone) {
+            const skinColor = getSkinToneColor(skinTone);
+            const hairColors = {
+                'short': '#8b4513',
+                'long': '#654321',
+                'ponytail': '#4a4a4a',
+                'messy': '#daa520',
+                'parted': '#2f1b14',
+            };
+            const clothingColors = {
+                'longsleeve': '#4169e1',
+                'shortsleeve': '#2f2f2f',
+                'formal': '#c0c0c0',
+                'casual': '#800080',
+            };
+
+            // Draw head
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(16, 8, 32, 24);
+
+            // Draw hair
+            ctx.fillStyle = hairColors[hairStyle] || '#8b4513';
+            if (hairStyle === 'long') {
+                ctx.fillRect(12, 8, 40, 16);
+                ctx.fillRect(16, 24, 32, 8);
+            } else if (hairStyle === 'ponytail') {
+                ctx.fillRect(16, 8, 32, 12);
+                ctx.fillRect(44, 16, 8, 16);
+            } else {
+                ctx.fillRect(16, 8, 32, 12);
             }
 
-            if (e.ctrlKey && e.key === 'r' && window.spriteBuilder) {
-                e.preventDefault();
-                window.spriteBuilder.resetCharacter();
+            // Draw body/clothing
+            ctx.fillStyle = clothingColors[clothing] || '#4169e1';
+            ctx.fillRect(20, 32, 24, 24);
+
+            // Draw arms
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(12, 36, 8, 16);
+            ctx.fillRect(44, 36, 8, 16);
+
+            // Draw legs
+            ctx.fillRect(24, 56, 6, 8);
+            ctx.fillRect(34, 56, 6, 8);
+
+            // Add simple facial features
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(22, 16, 2, 2); // left eye
+            ctx.fillRect(40, 16, 2, 2); // right eye
+            ctx.fillRect(30, 22, 4, 1); // mouth
+        }
+
+        function exportSprite() {
+            logToConsole('Exporting sprite as PNG...', 'success');
+            // TODO: Implement sprite export
+        }
+
+        function saveProfile() {
+            const profile = {
+                bodyType: document.getElementById('bodyType').value,
+                hairStyle: document.getElementById('hairStyle').value,
+                clothing: document.getElementById('clothing').value,
+                skinTone: document.getElementById('skinTone').value
+            };
+            localStorage.setItem('spriteProfile', JSON.stringify(profile));
+            logToConsole('Sprite profile saved', 'success');
+        }
+
+        function toggleLayer(layerName) {
+            logToConsole(`Toggled layer: ${layerName}`, 'info');
+        }
+
+        function editLayer(layerName) {
+            logToConsole(`Editing layer: ${layerName}`, 'info');
+        }
+
+        function addLayer() {
+            logToConsole('Adding new layer...', 'info');
+        }
+
+        function debugSprites() {
+            logToConsole('Debugging sprites...', 'info');
+            // Add debug logic here
+        }
+
+        // Console Functions
+        function toggleConsole() {
+            const console = document.getElementById('devConsole');
+            console.style.display = console.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function clearConsole() {
+            document.getElementById('consoleContent').innerHTML = '';
+        }
+
+        function exportLogs() {
+            const logs = document.getElementById('consoleContent').innerText;
+            const blob = new Blob([logs], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dev-logs.txt';
+            a.click();
+        }
+
+        function logToConsole(message, type = 'info') {
+            const console = document.getElementById('consoleContent');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `console-${type}`;
+            logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
+            console.appendChild(logEntry);
+            console.scrollTop = console.scrollHeight;
+        }
+
+        // Override console functions for development tracking
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logToConsole(args.join(' '), 'info');
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logToConsole(args.join(' '), 'error');
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            logToConsole(args.join(' '), 'warning');
+        };
+
+        // Initialize development page
+        document.addEventListener('DOMContentLoaded', function() {
+            logToConsole('Development tools loaded', 'success');
+
+            // Load saved sprite profile if exists
+            const savedProfile = localStorage.getItem('spriteProfile');
+            if (savedProfile) {
+                const profile = JSON.parse(savedProfile);
+                document.getElementById('bodyType').value = profile.bodyType || 'male';
+                document.getElementById('hairStyle').value = profile.hairStyle || 'parted';
+                document.getElementById('clothing').value = profile.clothing || 'longsleeve';
+                document.getElementById('skinTone').value = profile.skinTone || 'fair';
+                logToConsole('Loaded saved sprite profile', 'info');
             }
         });
     </script>
