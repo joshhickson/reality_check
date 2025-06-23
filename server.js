@@ -19,6 +19,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Health check endpoint for deployment
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy', 
+    service: 'Reality Check Game Server',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Serve LPC sprite assets
 app.use('/lpc-generator', express.static('lpc-generator'));
 
