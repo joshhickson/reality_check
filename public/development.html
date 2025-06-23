@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,7 @@
     <title>Reality Check - Development Tools</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="lpc-asset-mapper.js"></script>
     <script src="lpc-data-extractor.js"></script>
     <script src="sprite-builder.js"></script>
     <style>
@@ -161,7 +163,7 @@
             border: 1px solid #444;
             border-radius: 8px;
             z-index: 1000;
-            display: flex;
+            display: none;
             flex-direction: column;
         }
 
@@ -339,13 +341,13 @@
                     <div class="control-group">
                         <label>Body Type:</label>
                         <div class="radio-group">
-                            <input type="radio" id="sex-male" name="sex" value="male" checked>
+                            <input type="radio" id="sex-male" name="sex" value="male" checked onchange="updateBodyType()">
                             <label for="sex-male">Male</label>
-                            <input type="radio" id="sex-female" name="sex" value="female">
+                            <input type="radio" id="sex-female" name="sex" value="female" onchange="updateBodyType()">
                             <label for="sex-female">Female</label>
-                            <input type="radio" id="sex-teen" name="sex" value="teen">
+                            <input type="radio" id="sex-teen" name="sex" value="teen" onchange="updateBodyType()">
                             <label for="sex-teen">Teen</label>
-                            <input type="radio" id="sex-child" name="sex" value="child">
+                            <input type="radio" id="sex-child" name="sex" value="child" onchange="updateBodyType()">
                             <label for="sex-child">Child</label>
                         </div>
                     </div>
@@ -367,9 +369,9 @@
                     <!-- Hair Selection -->
                     <div class="control-group">
                         <label>Hair Style:</label>
-                        <select id="hairStyle" onchange="updateSprite()">
+                        <select id="hairStyle" onchange="updateHairStyle()">
                             <option value="none">No Hair</option>
-                            <option value="page">Page</option>
+                            <option value="page" selected>Page</option>
                             <option value="page2">Page 2</option>
                             <option value="parted">Parted</option>
                             <option value="bangs">Bangs</option>
@@ -388,22 +390,16 @@
                         </select>
                     </div>
 
-                    <!-- Clothing Selection -->
+                    <!-- Animation Selection -->
                     <div class="control-group">
-                        <label>Clothing:</label>
-                        <select id="clothingTop" onchange="updateSprite()">
-                            <option value="none">Bare</option>
-                            <option value="shirt_white">White Shirt</option>
-                            <option value="longsleeve">Long Sleeve</option>
-                            <option value="shortsleeve">Short Sleeve</option>
-                            <option value="sleeveless">Sleeveless</option>
-                            <option value="robe">Robe</option>
-                        </select>
-                        <select id="clothingBottom" onchange="updateSprite()">
-                            <option value="none">Bare</option>
-                            <option value="pants">Pants</option>
-                            <option value="shorts">Shorts</option>
-                            <option value="skirt">Skirt</option>
+                        <label>Animation:</label>
+                        <select id="animationType" onchange="updateAnimation()">
+                            <option value="walk" selected>Walk</option>
+                            <option value="hurt">Hurt</option>
+                            <option value="shoot">Shoot</option>
+                            <option value="slash">Slash</option>
+                            <option value="spellcast">Spellcast</option>
+                            <option value="thrust">Thrust</option>
                         </select>
                     </div>
 
@@ -411,61 +407,59 @@
                         <button onclick="randomizeCharacter()">Randomize</button>
                         <button onclick="resetCharacter()">Reset</button>
                         <button onclick="debugSprites()">Debug Sprites</button>
-                        <button onclick="alert('Test button clicked!'); console.log('🧪 spriteBuilder object:', typeof spriteBuilder, spriteBuilder); if(spriteBuilder && spriteBuilder.testFunction) { spriteBuilder.testFunction(); } else { const msg = 'spriteBuilder not found or testFunction missing!'; console.error(msg); alert(msg); }" style="background: #ff9800; color: white;">Test Object</button>
-                        <button onclick="alert('Force log test'); console.log('FORCE LOG TEST'); console.warn('FORCE LOG TEST'); console.error('FORCE LOG TEST');" style="background: #ff0000; color: white;">Force Log Test</button>
+                        <button onclick="testSpriteBuilder()">Test Builder</button>
                     </div>
-                </div>
 
-                <div class="sprite-preview">
-                    <h3>Preview</h3>
-                    <div class="preview-container">
-                        <canvas id="spriteCanvas" width="64" height="64"></canvas>
-                        <canvas id="fullSpriteSheet" width="832" height="1344" style="display: none;"></canvas>
-                    </div>
+                    <!-- Animation Controls -->
                     <div class="animation-controls">
-                        <label>Animation:</label>
-                        <select id="animationSelect" onchange="changeAnimation()">
-                            <option value="walk">Walk</option>
-                            <option value="spellcast">Spellcast</option>
-                            <option value="thrust">Thrust</option>
-                            <option value="slash">Slash</option>
-                            <option value="shoot">Shoot</option>
-                            <option value="hurt">Hurt</option>
-                        </select>
-                    </div>
-                    <div class="export-controls">
-                        <button onclick="exportCurrentFrame()">Export Frame</button>
-                        <button onclick="exportSpriteSheet()">Export Sheet</button>
-                        <button onclick="saveCharacterProfile()">Save Profile</button>
+                        <h4>Animation Controls</h4>
+                        <button onclick="toggleAnimation()">Play/Pause</button>
+                        <button onclick="nextFrame()">Next Frame</button>
+                        <button onclick="prevFrame()">Prev Frame</button>
                     </div>
 
-                    <div class="layer-controls">
-                        <label>Layers:</label>
+                    <!-- Layer Management -->
+                    <div class="control-group">
+                        <label>Sprite Layers:</label>
                         <div id="layersList" class="layer-list">
-                            <!-- Layer list will be populated by JavaScript -->
+                            <!-- Layers will be populated here -->
+                        </div>
+                        <div class="layer-controls">
+                            <button onclick="toggleAllLayers()">Toggle All</button>
+                            <button onclick="clearAllLayers()">Clear All</button>
                         </div>
                     </div>
                 </div>
 
+                <!-- Sprite Preview -->
+                <div class="sprite-preview">
+                    <h3>Sprite Preview</h3>
+                    <div class="preview-container">
+                        <canvas id="spriteCanvas" width="64" height="64"></canvas>
+                        <p>Character Animation Preview</p>
+                    </div>
+                    
+                    <div class="export-controls">
+                        <button onclick="exportSprite()">Export PNG</button>
+                        <button onclick="saveCharacter()">Save Character</button>
+                    </div>
+                </div>
+
+                <!-- Sprite Info -->
                 <div class="sprite-controls">
-                    <h3>Debug Panel</h3>
-                    <textarea id="debugOutput" style="
-                        width: 100%; 
-                        height: 300px; 
-                        background: #000; 
-                        color: #00ff00; 
-                        font-family: 'Courier New', monospace; 
-                        font-size: 11px; 
-                        border: 1px solid #333; 
-                        border-radius: 5px; 
-                        padding: 10px; 
-                        resize: vertical;
-                        white-space: pre;
-                    " readonly>Debug information will appear here...</textarea>
-                    <div class="layer-controls">
-                        <button onclick="spriteBuilder && spriteBuilder.testFunction()">Test Function</button>
-                        <button onclick="spriteBuilder && spriteBuilder.loadCharacter()">Reload Character</button>
-                        <button onclick="spriteBuilder && spriteBuilder.updateDebugPanel()">Refresh Debug</button>
+                    <h3>Sprite Information</h3>
+                    <div id="spriteInfo">
+                        <p>Current Animation: <span id="currentAnim">walk</span></p>
+                        <p>Current Frame: <span id="currentFrame">0</span></p>
+                        <p>Body Type: <span id="currentBodyType">male</span></p>
+                        <p>Loaded Layers: <span id="layerCount">0</span></p>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>Available Sprites:</label>
+                        <div id="availableSprites" style="max-height: 200px; overflow-y: auto; font-size: 12px;">
+                            Loading sprites...
+                        </div>
                     </div>
                 </div>
             </div>
@@ -473,377 +467,382 @@
 
         <!-- Board Designer -->
         <div class="section">
-            <h2 onclick="toggleSection('boardDesignerContent')">🎨 Hypocycloid Board Designer <span id="boardDesignerToggle">▼</span></h2>
-            <div id="boardDesignerContent" class="section-content" style="display: none;">
-                <div>
-                    <h3>Live Preview</h3>
-                    <svg id="designerBoard" width="400" height="400" viewBox="-200 -200 400 400" style="background: #1a1a2e; border-radius: 10px;"></svg>
-                </div>
-                <div>
-                    <h3>Ring Parameters</h3>
-                    <div id="ringControls" style="display: grid; gap: 15px;">
-                        <!-- Ring controls will be inserted here -->
+            <h2 onclick="toggleSection('boardDesignerContent')">🎯 Board Designer <span id="boardDesignerToggle">▼</span></h2>
+            <div id="boardDesignerContent" style="display: none;">
+                <div class="section-content">
+                    <div>
+                        <h3>Ring Configuration</h3>
+                        <div class="ring-legend">
+                            <div class="ring-item">
+                                <div class="ring-color" style="background: #ff6b6b;"></div>
+                                <span>Career (10 points)</span>
+                            </div>
+                            <div class="ring-item">
+                                <div class="ring-color" style="background: #feca57;"></div>
+                                <span>Health (10 points)</span>
+                            </div>
+                            <div class="ring-item">
+                                <div class="ring-color" style="background: #48dbfb;"></div>
+                                <span>Social (10 points)</span>
+                            </div>
+                            <div class="ring-item">
+                                <div class="ring-color" style="background: #1dd1a1;"></div>
+                                <span>Personal (10 points)</span>
+                            </div>
+                            <div class="ring-item">
+                                <div class="ring-color" style="background: #5f27cd;"></div>
+                                <span>BabelEvents (10 points)</span>
+                            </div>
+                        </div>
+
+                        <div class="ring-control" style="border-color: #ff6b6b;">
+                            <label>Career Ring</label>
+                            <input type="range" id="careerRadius" min="100" max="200" value="127" oninput="updateRing('career')">
+                            <input type="number" id="careerRadiusValue" value="127" min="100" max="200" onchange="updateRingFromInput('career')">
+                        </div>
+
+                        <div class="ring-control" style="border-color: #feca57;">
+                            <label>Health Ring</label>
+                            <input type="range" id="healthRadius" min="100" max="200" value="137" oninput="updateRing('health')">
+                            <input type="number" id="healthRadiusValue" value="137" min="100" max="200" onchange="updateRingFromInput('health')">
+                        </div>
+
+                        <div class="ring-control" style="border-color: #48dbfb;">
+                            <label>Social Ring</label>
+                            <input type="range" id="socialRadius" min="100" max="200" value="150" oninput="updateRing('social')">
+                            <input type="number" id="socialRadiusValue" value="150" min="100" max="200" onchange="updateRingFromInput('social')">
+                        </div>
+
+                        <div class="ring-control" style="border-color: #1dd1a1;">
+                            <label>Personal Ring</label>
+                            <input type="range" id="personalRadius" min="100" max="200" value="150" oninput="updateRing('personal')">
+                            <input type="number" id="personalRadiusValue" value="150" min="100" max="200" onchange="updateRingFromInput('personal')">
+                        </div>
+
+                        <div class="ring-control" style="border-color: #5f27cd;">
+                            <label>BabelEvents Ring</label>
+                            <input type="range" id="babeleventsRadius" min="100" max="200" value="150" oninput="updateRing('babelevents')">
+                            <input type="number" id="babeleventsRadiusValue" value="150" min="100" max="200" onchange="updateRingFromInput('babelevents')">
+                        </div>
+
+                        <button onclick="resetRings()">Reset to Defaults</button>
+                        <button onclick="randomizeRings()">Randomize</button>
+                        <button onclick="exportBoardConfig()">Export Config</button>
                     </div>
-                    <button onclick="resetToDefaults()">Reset to Defaults</button>
-                </div>
-                <div>
-                    <h3>Generated Code</h3>
-                    <textarea id="codeOutput" readonly style="width: 100%; height: 300px; background: #2a2a2a; color: #00ff00; font-family: monospace; font-size: 12px; border: 1px solid #555; border-radius: 5px; padding: 10px;"></textarea>
-                    <button onclick="copyCode()">Copy Code</button>
+                    <div>
+                        <h3>Board Preview</h3>
+                        <canvas id="boardCanvas" width="400" height="400" style="border: 1px solid #333; background: #2a2a2a;"></canvas>
+                        <p>Interactive board preview with configurable rings.</p>
+                        <button onclick="toggleBoardDebug()">Toggle Debug Mode</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Card System Testing -->
+        <!-- Game Testing -->
         <div class="section">
-            <h2 onclick="toggleSection('cardSystemContent')">🃏 Card System Testing <span id="cardSystemToggle">▼</span></h2>
-            <div id="cardSystemContent" class="section-content" style="display: none;">
-                <div>
-                    <h3>Card Parser</h3>
-                    <button onclick="loadCardData()">Load Card Data</button>
-                    <button onclick="shuffleDeck()">Shuffle Deck</button>
-                    <div id="deckInfo" style="margin: 10px 0; font-size: 14px;"></div>
-                </div>
-                <div>
-                    <h3>Draw Cards</h3>
-                    <button onclick="drawCard('sin')">Draw Sin Card</button>
-                    <button onclick="drawCard('virtue')">Draw Virtue Card</button>
-                    <button onclick="drawCard('random')">Draw Random</button>
-                    <div id="drawnCard" style="margin-top: 15px;"></div>
-                </div>
-                <div>
-                    <h3>Card Effects</h3>
-                    <div id="cardEffects" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; font-family: monospace; min-height: 150px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Skin System Testing -->
-        <div class="section">
-            <h2 onclick="toggleSection('skinSystemContent')">🎭 Skin System Testing <span id="skinSystemToggle">▼</span></h2>
-            <div id="skinSystemContent" class="section-content" style="display: none;">
-                <div>
-                    <h3>Card Skins</h3>
-                    <select id="cardSkinSelect" onchange="previewCardSkin()">
-                        <option value="default">Default Skin</option>
-                        <option value="minimal">Minimal Skin</option>
-                        <option value="retro">Retro Skin</option>
-                    </select>
-                    <div id="cardSkinPreview" style="margin: 15px 0;"></div>
-                </div>
-                <div>
-                    <h3>Avatar Skins</h3>
-                    <select id="avatarSkinSelect" onchange="previewAvatarSkin()">
-                        <option value="default">Default Avatar</option>
-                        <option value="pixel">Pixel Avatar</option>
-                        <option value="abstract">Abstract Avatar</option>
-                    </select>
-                    <div id="avatarSkinPreview" style="margin: 15px 0;"></div>
-                </div>
-                <div>
-                    <h3>Skin Configuration</h3>
-                    <label>Card Theme:</label>
-                    <input type="color" id="cardThemeColor" value="#ff6b6b" onchange="updateSkinTheme()">
-                    <label>Avatar Style:</label>
-                    <input type="range" id="avatarStyleSlider" min="1" max="5" value="3" onchange="updateAvatarStyle()">
-                    <div id="skinConfig" style="font-size: 12px; margin-top: 10px;"></div>
+            <h2 onclick="toggleSection('gameTestingContent')">🎮 Game Testing <span id="gameTestingToggle">▼</span></h2>
+            <div id="gameTestingContent" style="display: none;">
+                <div class="section-content">
+                    <div>
+                        <h3>Quick Tests</h3>
+                        <button onclick="testSocket()">Test Socket Connection</button>
+                        <button onclick="testCards()">Test Card Loading</button>
+                        <button onclick="testRings()">Test Ring Math</button>
+                        <button onclick="testAnimation()">Test Animation</button>
+                        <button onclick="runFullTest()">Run Full Test Suite</button>
+                        
+                        <h3>Performance Tests</h3>
+                        <button onclick="testPerformance()">Performance Test</button>
+                        <button onclick="testMemory()">Memory Test</button>
+                        <button onclick="stressTest()">Stress Test</button>
+                    </div>
+                    <div>
+                        <h3>Game State</h3>
+                        <div id="gameStateInfo">
+                            <p>Socket: <span id="socketStatus">Disconnected</span></p>
+                            <p>Players: <span id="playerCount">0</span></p>
+                            <p>Active Games: <span id="gameCount">0</span></p>
+                        </div>
+                        <button onclick="refreshGameState()">Refresh State</button>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Game Engine Testing -->
-        <div class="section">
-            <h2 onclick="toggleSection('gameEngineContent')">⚙️ Game Engine Testing <span id="gameEngineToggle">▼</span></h2>
-            <div id="gameEngineContent" class="section-content" style="display: none;">
-                <div>
-                    <h3>State Machine</h3>
-                    <div id="currentState" style="font-weight: bold; margin: 10px 0;">State: SETUP</div>
-                    <button onclick="advanceState()">Advance State</button>
-                    <button onclick="resetGameState()">Reset State</button>
-                    <div id="stateHistory" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 100px; overflow-y: auto;"></div>
-                </div>
-                <div>
-                    <h3>Timer System</h3>
-                    <div id="timerDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">30:00</div>
-                    <button onclick="startTimer()">Start Timer</button>
-                    <button onclick="pauseTimer()">Pause Timer</button>
-                    <button onclick="resetTimer()">Reset Timer</button>
-                    <input type="range" id="timerSpeed" min="0.1" max="5" step="0.1" value="1" onchange="updateTimerSpeed()">
-                    <label for="timerSpeed">Speed: <span id="speedDisplay">1x</span></label>
-                </div>
-                <div>
-                    <h3>Event Scheduler</h3>
-                    <button onclick="scheduleEvent()">Schedule Random Event</button>
-                    <button onclick="triggerGlobalEvent()">Trigger Global Event</button>
-                    <div id="eventQueue" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 120px; overflow-y: auto;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hypocycloid Math Testing -->
-        <div class="section">
-            <h2 onclick="toggleSection('mathTestingContent')">📊 Hypocycloid Math Testing <span id="mathTestingToggle">▼</span></h2>
-            <div id="mathTestingContent" class="section-content" style="display: none;">
-                <div>
-                    <h3>Coordinate Generation</h3>
-                    <label>Test Ring Radius:</label>
-                    <input type="number" id="testRadius" value="150" min="50" max="300" onchange="generateTestCoordinates()">
-                    <label>Number of Points:</label>
-                    <input type="number" id="testPoints" value="10" min="3" max="50" onchange="generateTestCoordinates()">
-                    <button onclick="generateTestCoordinates()">Generate</button>
-                    <div id="coordinateOutput" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
-                </div>
-                <div>
-                    <h3>Performance Testing</h3>
-                    <button onclick="benchmarkCalculations()">Benchmark Calculations</button>
-                    <button onclick="stressTestBoard()">Stress TestBoard</button>
-                    <div id="perfResults" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
-                </div>
-                <div>
-                    <h3>Validation</h3>
-                    <button onclick="validateMath()">Validate Math</button>
-                    <button onclick="testEdgeCases()">Test Edge Cases</button>
-                    <div id="validationResults" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Console Window -->
-        <div class="console-window" id="devConsole" style="display: none;">
-            <div class="console-header">
-                <span>Development Console</span>
-                <span class="console-close" onclick="toggleConsole()">×</span>
-            </div>
-            <div class="console-content" id="consoleContent">
-                <div class="console-info"><span class="timestamp">[00:00:00]</span> Development console initialized</div>
-            </div>
-        </div>
-
-        <div style="margin-top: 40px; text-align: center;">
-            <button onclick="toggleConsole()">Toggle Dev Console</button>
-            <button onclick="clearConsole()">Clear Console</button>
-            <button onclick="exportLogs()">Export Logs</button>
         </div>
     </div>
 
-    <script type="module" src="board-render.js"></script>
+    <!-- Console Window -->
+    <div id="consoleWindow" class="console-window">
+        <div class="console-header">
+            <span>Debug Console</span>
+            <span class="console-close" onclick="toggleConsole()">✕</span>
+        </div>
+        <div id="consoleContent" class="console-content">
+            <div class="console-info">Console ready...</div>
+        </div>
+    </div>
+
     <script src="board-designer.js"></script>
-    <script src="sprite-builder.js"></script>
     <script>
+        // Global variables
+        let debugMode = false;
+        let consoleVisible = false;
+
         // Section toggle functionality
         function toggleSection(sectionId) {
             const content = document.getElementById(sectionId);
             const toggle = document.getElementById(sectionId.replace('Content', 'Toggle'));
-
+            
             if (content.style.display === 'none') {
-                content.style.display = 'flex';
-                toggle.textContent = '▲';
+                content.style.display = 'block';
+                toggle.textContent = '▼';
             } else {
                 content.style.display = 'none';
-                toggle.textContent = '▼';
+                toggle.textContent = '▶';
             }
         }
 
-        // LPC Sprite Builder Functions
-        function randomizeSprite() {
-            const bodyTypes = ['male', 'female', 'child', 'teen'];
-            const hairStyles = ['parted', 'ponytail', 'messy', 'long', 'short'];
-            const clothingTypes = ['longsleeve', 'shortsleeve', 'formal', 'casual'];
-            const skinTones = ['fair', 'medium', 'dark'];
-
-            document.getElementById('bodyType').value = bodyTypes[Math.floor(Math.random() * bodyTypes.length)];
-            document.getElementById('hairStyle').value = hairStyles[Math.floor(Math.random() * hairStyles.length)];
-            document.getElementById('clothing').value = clothingTypes[Math.floor(Math.random() * clothingTypes.length)];
-            document.getElementById('skinTone').value = skinTones[Math.floor(Math.random() * skinTones.length)];
-
-            generateSprite();
-        }
-
-        function generateSprite() {
-            const bodyType = document.getElementById('bodyType').value.toLowerCase();
-            const hairStyle = document.getElementById('hairStyle').value.toLowerCase();
-            const clothing = document.getElementById('clothing').value.toLowerCase();
-            const skinTone = document.getElementById('skinTone').value.toLowerCase();
-
-            // Create a canvas to composite the sprite
-            const canvas = document.createElement('canvas');
-            canvas.width = 64;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-
-            // Fill with a background color for now
-            ctx.fillStyle = getSkinToneColor(skinTone);
-            ctx.fillRect(0, 0, 64, 64);
-
-            // Draw a simple character representation
-            drawSimpleCharacter(ctx, bodyType, hairStyle, clothing, skinTone);
-
-            // Display the generated sprite
-            const preview = document.getElementById('spriteCanvas');
-            preview.innerHTML = '';
-            preview.appendChild(canvas);
-            preview.style.textAlign = 'center';
-            preview.style.lineHeight = 'normal';
-        }
-
-        function getSkinToneColor(skinTone) {
-            const skinTones = {
-                'fair': '#fdbcb4',
-                'medium': '#e6ac88',
-                'dark': '#bc9582',
-            };
-            return skinTones[skinTone] || skinTones['medium'];
-        }
-
-        function drawSimpleCharacter(ctx, bodyType, hairStyle, clothing, skinTone) {
-            const skinColor = getSkinToneColor(skinTone);
-            const hairColors = {
-                'short': '#8b4513',
-                'long': '#654321',
-                'ponytail': '#4a4a4a',
-                'messy': '#daa520',
-                'parted': '#2f1b14',
-            };
-            const clothingColors = {
-                'longsleeve': '#4169e1',
-                'shortsleeve': '#2f2f2f',
-                'formal': '#c0c0c0',
-                'casual': '#800080',
-            };
-
-            // Draw head
-            ctx.fillStyle = skinColor;
-            ctx.fillRect(16, 8, 32, 24);
-
-            // Draw hair
-            ctx.fillStyle = hairColors[hairStyle] || '#8b4513';
-            if (hairStyle === 'long') {
-                ctx.fillRect(12, 8, 40, 16);
-                ctx.fillRect(16, 24, 32, 8);
-            } else if (hairStyle === 'ponytail') {
-                ctx.fillRect(16, 8, 32, 12);
-                ctx.fillRect(44, 16, 8, 16);
-            } else {
-                ctx.fillRect(16, 8, 32, 12);
-            }
-
-            // Draw body/clothing
-            ctx.fillStyle = clothingColors[clothing] || '#4169e1';
-            ctx.fillRect(20, 32, 24, 24);
-
-            // Draw arms
-            ctx.fillStyle = skinColor;
-            ctx.fillRect(12, 36, 8, 16);
-            ctx.fillRect(44, 36, 8, 16);
-
-            // Draw legs
-            ctx.fillRect(24, 56, 6, 8);
-            ctx.fillRect(34, 56, 6, 8);
-
-            // Add simple facial features
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(22, 16, 2, 2); // left eye
-            ctx.fillRect(40, 16, 2, 2); // right eye
-            ctx.fillRect(30, 22, 4, 1); // mouth
-        }
-
-        function exportSprite() {
-            logToConsole('Exporting sprite as PNG...', 'success');
-            // TODO: Implement sprite export
-        }
-
-        function saveProfile() {
-            const profile = {
-                bodyType: document.getElementById('bodyType').value,
-                hairStyle: document.getElementById('hairStyle').value,
-                clothing: document.getElementById('clothing').value,
-                skinTone: document.getElementById('skinTone').value
-            };
-            localStorage.setItem('spriteProfile', JSON.stringify(profile));
-            logToConsole('Sprite profile saved', 'success');
-        }
-
-        function toggleLayer(layerName) {
-            logToConsole(`Toggled layer: ${layerName}`, 'info');
-        }
-
-        function editLayer(layerName) {
-            logToConsole(`Editing layer: ${layerName}`, 'info');
-        }
-
-        function addLayer() {
-            logToConsole('Adding new layer...', 'info');
-        }
-
-        function debugSprites() {
-            logToConsole('Debugging sprites...', 'info');
-            // Add debug logic here
-        }
-
-        // Console Functions
+        // Console functionality
         function toggleConsole() {
-            const console = document.getElementById('devConsole');
-            console.style.display = console.style.display === 'none' ? 'flex' : 'none';
-        }
-
-        function clearConsole() {
-            document.getElementById('consoleContent').innerHTML = '';
-        }
-
-        function exportLogs() {
-            const logs = document.getElementById('consoleContent').innerText;
-            const blob = new Blob([logs], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'dev-logs.txt';
-            a.click();
+            const console = document.getElementById('consoleWindow');
+            consoleVisible = !consoleVisible;
+            console.style.display = consoleVisible ? 'flex' : 'none';
         }
 
         function logToConsole(message, type = 'info') {
-            const console = document.getElementById('consoleContent');
+            const consoleContent = document.getElementById('consoleContent');
             const timestamp = new Date().toLocaleTimeString();
             const logEntry = document.createElement('div');
             logEntry.className = `console-${type}`;
             logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
-            console.appendChild(logEntry);
-            console.scrollTop = console.scrollHeight;
+            consoleContent.appendChild(logEntry);
+            consoleContent.scrollTop = consoleContent.scrollHeight;
         }
 
-        // Override console functions for development tracking
-        const originalLog = console.log;
-        const originalError = console.error;
-        const originalWarn = console.warn;
-
-        console.log = function(...args) {
-            originalLog.apply(console, args);
-            logToConsole(args.join(' '), 'info');
-        };
-
-        console.error = function(...args) {
-            originalError.apply(console, args);
-            logToConsole(args.join(' '), 'error');
-        };
-
-        console.warn = function(...args) {
-            originalWarn.apply(console, args);
-            logToConsole(args.join(' '), 'warning');
-        };
-
-        // Initialize development page
-        document.addEventListener('DOMContentLoaded', function() {
-            logToConsole('Development tools loaded', 'success');
-
-            // Load saved sprite profile if exists
-            const savedProfile = localStorage.getItem('spriteProfile');
-            if (savedProfile) {
-                const profile = JSON.parse(savedProfile);
-                document.getElementById('bodyType').value = profile.bodyType || 'male';
-                document.getElementById('hairStyle').value = profile.hairStyle || 'parted';
-                document.getElementById('clothing').value = profile.clothing || 'longsleeve';
-                document.getElementById('skinTone').value = profile.skinTone || 'fair';
-                logToConsole('Loaded saved sprite profile', 'info');
+        // Sprite Builder Functions
+        function updateBodyType() {
+            const selectedBodyType = document.querySelector('input[name="sex"]:checked').value;
+            document.getElementById('currentBodyType').textContent = selectedBodyType;
+            
+            if (window.spriteBuilder) {
+                window.spriteBuilder.changeBodyType(selectedBodyType);
             }
+            logToConsole(`Changed body type to: ${selectedBodyType}`, 'info');
+        }
+
+        function updateAnimation() {
+            const selectedAnimation = document.getElementById('animationType').value;
+            document.getElementById('currentAnim').textContent = selectedAnimation;
+            
+            if (window.spriteBuilder) {
+                window.spriteBuilder.changeAnimation(selectedAnimation);
+            }
+            logToConsole(`Changed animation to: ${selectedAnimation}`, 'info');
+        }
+
+        function updateHairStyle() {
+            const selectedHairStyle = document.getElementById('hairStyle').value;
+            
+            if (window.spriteBuilder) {
+                window.spriteBuilder.changeHairStyle(selectedHairStyle);
+            }
+            logToConsole(`Changed hair style to: ${selectedHairStyle}`, 'info');
+        }
+
+        function updateSprite() {
+            logToConsole('Updating sprite with new settings...', 'info');
+        }
+
+        function randomizeCharacter() {
+            if (window.spriteBuilder) {
+                window.spriteBuilder.randomizeCharacter();
+                logToConsole('Character randomized!', 'success');
+            }
+        }
+
+        function resetCharacter() {
+            if (window.spriteBuilder) {
+                window.spriteBuilder.resetCharacter();
+                logToConsole('Character reset!', 'info');
+            }
+        }
+
+        function debugSprites() {
+            if (window.spriteBuilder) {
+                const debugInfo = window.spriteBuilder.debugSprites();
+                logToConsole(`Debug Info: ${JSON.stringify(debugInfo)}`, 'info');
+                toggleConsole();
+            }
+        }
+
+        function testSpriteBuilder() {
+            logToConsole('Testing sprite builder...', 'info');
+            
+            if (typeof window.spriteBuilder === 'object') {
+                logToConsole('✅ Sprite builder object exists', 'success');
+                
+                if (typeof window.spriteBuilder.testFunction === 'function') {
+                    const result = window.spriteBuilder.testFunction();
+                    logToConsole(`✅ Test function result: ${JSON.stringify(result)}`, 'success');
+                } else {
+                    logToConsole('❌ Test function not found', 'error');
+                }
+            } else {
+                logToConsole('❌ Sprite builder not found!', 'error');
+            }
+        }
+
+        function toggleAnimation() {
+            if (window.spriteBuilder) {
+                if (window.spriteBuilder.isAnimating) {
+                    window.spriteBuilder.stopAnimation();
+                    logToConsole('Animation paused', 'info');
+                } else {
+                    window.spriteBuilder.startAnimation();
+                    logToConsole('Animation started', 'info');
+                }
+            }
+        }
+
+        function nextFrame() {
+            if (window.spriteBuilder) {
+                window.spriteBuilder.stopAnimation();
+                window.spriteBuilder.currentFrame = (window.spriteBuilder.currentFrame + 1) % 9;
+                window.spriteBuilder.drawCurrentFrame();
+                document.getElementById('currentFrame').textContent = window.spriteBuilder.currentFrame;
+            }
+        }
+
+        function prevFrame() {
+            if (window.spriteBuilder) {
+                window.spriteBuilder.stopAnimation();
+                window.spriteBuilder.currentFrame = window.spriteBuilder.currentFrame > 0 ? window.spriteBuilder.currentFrame - 1 : 8;
+                window.spriteBuilder.drawCurrentFrame();
+                document.getElementById('currentFrame').textContent = window.spriteBuilder.currentFrame;
+            }
+        }
+
+        function toggleAllLayers() {
+            if (window.spriteBuilder) {
+                window.spriteBuilder.layers.forEach((layer, index) => {
+                    window.spriteBuilder.toggleLayerVisibility(index);
+                });
+                logToConsole('Toggled all layers', 'info');
+            }
+        }
+
+        function clearAllLayers() {
+            if (window.spriteBuilder) {
+                window.spriteBuilder.resetCharacter();
+                logToConsole('Cleared all layers', 'info');
+            }
+        }
+
+        function exportSprite() {
+            if (window.spriteBuilder && window.spriteBuilder.canvas) {
+                const link = document.createElement('a');
+                link.download = `character_${Date.now()}.png`;
+                link.href = window.spriteBuilder.canvas.toDataURL();
+                link.click();
+                logToConsole('Sprite exported as PNG', 'success');
+            }
+        }
+
+        function saveCharacter() {
+            if (window.spriteBuilder) {
+                const characterData = {
+                    bodyType: window.spriteBuilder.currentSex,
+                    hairStyle: window.spriteBuilder.currentHairStyle,
+                    animation: window.spriteBuilder.currentAnimation,
+                    layers: window.spriteBuilder.layers.map(layer => ({
+                        name: layer.name,
+                        path: layer.path,
+                        zIndex: layer.zIndex,
+                        visible: layer.visible
+                    }))
+                };
+                
+                localStorage.setItem('savedCharacter', JSON.stringify(characterData));
+                logToConsole('Character saved to localStorage', 'success');
+            }
+        }
+
+        // Game Testing Functions
+        function testSocket() {
+            logToConsole('Testing socket connection...', 'info');
+            // Socket test implementation
+        }
+
+        function testCards() {
+            logToConsole('Testing card loading...', 'info');
+            // Card test implementation
+        }
+
+        function testRings() {
+            logToConsole('Testing ring mathematics...', 'info');
+            // Ring test implementation
+        }
+
+        function testAnimation() {
+            logToConsole('Testing animation system...', 'info');
+            // Animation test implementation
+        }
+
+        function runFullTest() {
+            logToConsole('Running full test suite...', 'info');
+            testSocket();
+            testCards();
+            testRings();
+            testAnimation();
+            logToConsole('Full test suite completed!', 'success');
+        }
+
+        function testPerformance() {
+            logToConsole('Running performance tests...', 'info');
+            const start = performance.now();
+            
+            // Simulate some work
+            for (let i = 0; i < 100000; i++) {
+                Math.random();
+            }
+            
+            const end = performance.now();
+            logToConsole(`Performance test completed in ${(end - start).toFixed(2)}ms`, 'success');
+        }
+
+        function testMemory() {
+            logToConsole('Testing memory usage...', 'info');
+            if (performance.memory) {
+                const memory = performance.memory;
+                logToConsole(`Used: ${(memory.usedJSHeapSize / 1048576).toFixed(2)}MB`, 'info');
+                logToConsole(`Total: ${(memory.totalJSHeapSize / 1048576).toFixed(2)}MB`, 'info');
+                logToConsole(`Limit: ${(memory.jsHeapSizeLimit / 1048576).toFixed(2)}MB`, 'info');
+            } else {
+                logToConsole('Memory API not available', 'warning');
+            }
+        }
+
+        function stressTest() {
+            logToConsole('Running stress test...', 'warning');
+            // Stress test implementation
+        }
+
+        function refreshGameState() {
+            logToConsole('Refreshing game state...', 'info');
+            // Game state refresh implementation
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            logToConsole('Development page loaded', 'success');
+            
+            // Update sprite info periodically
+            setInterval(() => {
+                if (window.spriteBuilder) {
+                    document.getElementById('currentFrame').textContent = window.spriteBuilder.currentFrame;
+                    document.getElementById('layerCount').textContent = window.spriteBuilder.layers.length;
+                }
+            }, 100);
         });
     </script>
 </body>
