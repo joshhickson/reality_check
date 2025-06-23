@@ -1,0 +1,61 @@
+LPC ASSET MAPPER SUMMARY REPORT
+Generated: 2025-06-23T01:35:17.119Z
+==================================================
+
+OVERVIEW:
+Total unique sprite paths: 21484
+Base URL: /lpc-generator/spritesheets/
+
+CATEGORIES:
+hair: 3926 sprites
+head: 2881 sprites
+shield: 2709 sprites
+torso: 2435 sprites
+hat: 2170 sprites
+body: 1524 sprites
+facial: 1226 sprites
+legs: 890 sprites
+feet: 860 sprites
+neck: 770 sprites
+weapon: 667 sprites
+beards: 364 sprites
+dress: 360 sprites
+backpack: 156 sprites
+eyes: 146 sprites
+cape: 120 sprites
+arms: 108 sprites
+shoulders: 101 sprites
+wrists: 31 sprites
+tools: 22 sprites
+bauldron: 14 sprites
+shadow: 2 sprites
+recolor of torso: 1 sprites
+quiver: 1 sprites
+
+ANIMATIONS:
+blue: 793 occurrences
+green: 778 occurrences
+black: 751 occurrences
+red: 720 occurrences
+purple: 664 occurrences
+orange: 663 occurrences
+white: 653 occurrences
+pink: 634 occurrences
+navy: 630 occurrences
+gray: 624 occurrences
+rose: 614 occurrences
+brown: 554 occurrences
+lavender: 543 occurrences
+yellow: 460 occurrences
+gold: 443 occurrences
+teal: 428 occurrences
+tan: 421 occurrences
+forest: 421 occurrences
+sky: 421 occurrences
+maroon: 419 occurrences
+
+BODY TYPES:
+male: 2471 sprites
+child: 2439 sprites
+female: 2177 sprites
+teen: 517 sprites
