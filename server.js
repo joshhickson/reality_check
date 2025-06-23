@@ -739,29 +739,21 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+// Initialize database and start server
 const PORT = process.env.PORT || 5000;
 
-// Initialize database - Replit DB is key-value, no tables needed
-async function initDatabase() {
-  try {
-    // Replit Database is ready to use, no initialization required
-    console.log('Replit Database connected successfully');
-  } catch (error) {
-    console.error('Database initialization error:', error);
-  }
-}
-
-// Asynchronous database initialization function
-async function initDatabaseAsync() {
+async function startServer() {
   try {
     await initDatabase();
+
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`Reality Check Game Server running on port ${PORT}`);
+      console.log(`Health check available at http://localhost:${PORT}/`);
+    });
   } catch (error) {
-    console.error('Async database initialization error:', error);
+    console.error('Failed to start server:', error);
+    process.exit(1);
   }
 }
 
-initDatabase().then(() => {
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Reality Check game server running on port ${PORT}`);
-  });
-});
+startServer();
