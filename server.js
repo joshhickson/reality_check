@@ -157,6 +157,30 @@ class CardDeckManager {
 
 const cardManager = new CardDeckManager();
 
+// Character generation function
+function generateRandomCharacter() {
+  const backgrounds = [
+    { name: 'Student', money: 500 },
+    { name: 'Retail Worker', money: 1200 },
+    { name: 'Office Worker', money: 2000 },
+    { name: 'Trust Fund Kid', money: 5000 },
+    { name: 'Artist', money: 300 }
+  ];
+  
+  const personalities = [
+    'Optimistic', 'Cynical', 'Ambitious', 'Laid-back', 'Anxious'
+  ];
+  
+  const background = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  const personality = personalities[Math.floor(Math.random() * personalities.length)];
+  
+  return {
+    background,
+    personality,
+    traits: []
+  };
+}
+
 // Sprite path caching functions
 async function cacheSpritePath(category, bodyType, animation, style, filePath, isValid = true) {
   try {
