@@ -1,0 +1,598 @@
+sprite-path-tester.html:123 ✅ LPCDataExtractor loaded successfully
+sprite-path-tester.html:129 ✅ LPCFileScanner loaded successfully
+sprite-path-tester.html:141 🔧 Initializing global LPC extractor instance...
+sprite-path-tester.html:141 🎮 Sprite Path Tester initialized
+sprite-path-tester.html:141 📋 Click "Load LPC Data" to begin testing
+await populateSpriteDatabase();
+sprite-path-tester.html:141 🔍 Running complete LPC scan...
+sprite-path-tester.html:141 🌳 Starting complete LPC directory tree scan...
+sprite-path-tester.html:141 🔍 Scanning: /lpc-generator/spritesheets
+sprite-path-tester.html:141 📁 Discovering subdirectories...
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/body/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/hair/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/torso/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/legs/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/arms/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/feet/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/head/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/eyes/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/facial/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/neck/ net::ERR_ABORTED 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/backpack/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/beards/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/cape/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/dress/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/hat/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/shield/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/weapon/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/shoulders/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/bauldron/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/quiver/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:177 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/shadow/ 404 (Not Found)
+pathExists @ lpc-complete-scanner.js:177
+discoverSubdirectories @ lpc-complete-scanner.js:112
+await in discoverSubdirectories
+recursiveScan @ lpc-complete-scanner.js:63
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+sprite-path-tester.html:141 📁 Found 0 subdirectories: 
+sprite-path-tester.html:141 📄 Discovering files...
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/walk.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/hurt.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/idle.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/run.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/shoot.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/slash.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/spellcast.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/thrust.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/backslash.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/climb.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/combat_idle.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/emote.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/halfslash.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/jump.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/sit.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/black.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/blue.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/brown.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/blonde.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/red.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/green.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/white.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/gray.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/grey.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/bg.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/fg.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/base.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/overlay.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+lpc-complete-scanner.js:186 
+            
+            
+           HEAD https://b47aeb59-fab5-48ef-805d-558f7644b4a1-00-1xy4re4gsijh7.kirk.replit.dev/lpc-generator/spritesheets/shadow.png net::ERR_ABORTED 404 (Not Found)
+fileExists @ lpc-complete-scanner.js:186
+discoverFiles @ lpc-complete-scanner.js:165
+await in discoverFiles
+recursiveScan @ lpc-complete-scanner.js:67
+await in recursiveScan
+scanCompleteFileTree @ lpc-complete-scanner.js:27
+populateSpriteDatabase @ sprite-db-manager.js:239
+(anonymous) @ VM347:1
+sprite-path-tester.html:141 📄 Found 0 files: 
+sprite-path-tester.html:141 📝 Processing discovered files...
+sprite-path-tester.html:141 🎉 Complete scan finished!
+sprite-path-tester.html:141 📊 Found 0 files in 1 directories
+sprite-path-tester.html:141 🗃️ Populating database from scan results...
+sprite-path-tester.html:141 📝 Prepared 0 paths for caching
+sprite-path-tester.html:141 🎉 Database population complete!
+sprite-path-tester.html:141 🎉 Database populated successfully! {totalCached: 0}
+{totalCached: 0}

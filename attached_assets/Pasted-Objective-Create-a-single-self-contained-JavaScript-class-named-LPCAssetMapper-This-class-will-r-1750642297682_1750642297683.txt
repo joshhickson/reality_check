@@ -1,0 +1,115 @@
+Objective:
+
+Create a single, self-contained JavaScript class named LPCAssetMapper. This class will run entirely in the client's browser. Its purpose is to fetch the /lpc-generator/index.html file, parse it to find all available sprite asset paths, and then organize those paths into a structured JSON object representing the complete file tree.
+
+Core Logic:
+
+Fetching: The class constructor should immediately and asynchronously begin fetching the content of /lpc-generator/index.html using the fetch API.
+Parsing: Once the HTML content is retrieved, use the DOMParser API to turn the HTML string into a navigable DOM document.
+Extraction:
+Use doc.querySelectorAll('*') to get all elements.
+Iterate through every element and inspect its attributes.
+If an attribute name starts with data-layer_ and its value contains .png, extract the file path from the attribute's value.
+These paths are relative, like weapon/bow/male/bow.png.
+Storage: Store all unique, valid paths in a Set to prevent duplicates.
+Tree Generation: Create a method that converts the flat list of paths into a nested JSON object that represents the directory structure. Each node in the tree should be an object that can contain file names or other directory nodes.
+Class Structure:
+
+JavaScript
+
+class LPCAssetMapper {
+    constructor() {
+        this.baseUrl = '/lpc-generator/spritesheets/';
+        this.allPaths = new Set();
+        this.fileTree = {};
+        // This promise resolves when initialization is complete.
+        this.ready = this.initialize();
+    }
+
+    async initialize() {
+        // 1. Fetch index.html
+        // 2. Parse with DOMParser
+        // 3. Extract all paths from 'data-layer_' attributes
+        // 4. Populate this.allPaths with full, corrected paths
+        // 5. Build the file tree and store it in this.fileTree
+    }
+
+    // Method to build the nested JSON object from the path list
+    buildTree() {
+        // Logic to convert the Set of paths into a nested object
+    }
+
+    // Public method to get the flat list of all paths
+    getAllPaths() {
+        return Array.from(this.allPaths);
+    }
+
+    // Public method to get the structured file tree
+    getFileTree() {
+        return this.fileTree;
+    }
+}
+Output Format Example:
+
+The getFileTree() method should return a JSON object structured like this:
+
+JSON
+
+{
+  "weapon": {
+    "bow": {
+      "male": {
+        "bow.png": {}
+      },
+      "female": {
+        "bow.png": {}
+      }
+    },
+    "magic": {
+        "wand": {
+            "male": {
+                "wand.png": {}
+            }
+        }
+    }
+  },
+  "body": {
+    "bodies": {
+        "male": {
+            "walk.png": {},
+            "hurt.png": {}
+        }
+    }
+  }
+}
+Usage Example:
+
+Provide an example of how to use this class in an HTML file.
+
+HTML
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Asset Mapper Test</title>
+</head>
+<body>
+    <h1>LPC Asset Map</h1>
+    <pre id="output"></pre>
+    <script src="LPCAssetMapper.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const mapper = new LPCAssetMapper();
+            // Wait for the mapper to finish fetching and parsing
+            await mapper.ready;
+
+            // Get the generated file tree
+            const tree = mapper.getFileTree();
+
+            // Display the pretty-printed JSON in the <pre> tag
+            document.getElementById('output').textContent =
+                JSON.stringify(tree, null, 2);
+        });
+    </script>
+</body>
+</html>
