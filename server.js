@@ -166,14 +166,14 @@ function generateRandomCharacter() {
     { name: 'Trust Fund Kid', money: 5000 },
     { name: 'Artist', money: 300 }
   ];
-  
+
   const personalities = [
     'Optimistic', 'Cynical', 'Ambitious', 'Laid-back', 'Anxious'
   ];
-  
+
   const background = backgrounds[Math.floor(Math.random() * backgrounds.length)];
   const personality = personalities[Math.floor(Math.random() * personalities.length)];
-  
+
   return {
     background,
     personality,
@@ -732,15 +732,27 @@ app.get('/api/games', async (req, res) => {
   try {
     // Get all keys from the database
     const allKeys = await db.list();
-    const games = [];
+    const gameKeys = [];
 
-    // Filter for game keys and get game data
-    for (const key of allKeys) {
-      if (key.startsWith('game:')) {
-        const game = await db.get(key);
-        if (game && game.status === 'waiting') {
-          games.push(game);
+    // Handle both array and non-iterable responses
+    if (Array.isArray(allKeys)) {
+      for (const key of allKeys) {
+        if (key.startsWith('game:')) {
+          gameKeys.push(key);
         }
+      }
+    } else {
+      console.warn('Database list() returned non-array:', typeof allKeys);
+      // Return empty array if list() doesn't work as expected
+      res.json({ games: [], count: 0 });
+      return;
+    }
+
+    const games = [];
+    for (const key of gameKeys) {
+      const game = await db.get(key);
+      if (game && game.status === 'waiting') {
+        games.push(game);
       }
     }
 
