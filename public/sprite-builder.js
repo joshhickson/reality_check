@@ -108,13 +108,13 @@ class LPCSpriteBuilder {
     async loadCharacterFallback() {
         console.log('⚠️ Using fallback sprite loading...');
 
-        // Load known working sprites from LPC generator
-        const bodyPath = `/lpc-generator/spritesheets/body/bodies/${this.currentSex}/walk.png`;
+        // Load known working sprites from LPC generator, using relative paths
+        const bodyPath = `body/bodies/${this.currentSex}/walk.png`;
         await this.loadLayer('body', bodyPath, 1);
         console.log('✅ Loaded body (fallback)');
 
         // Try to load hair
-        const hairPath = `/lpc-generator/spritesheets/hair/page/adult/walk.png`;
+        const hairPath = `hair/page/adult/walk.png`;
         await this.loadLayer('hair', hairPath, 10);
         console.log('✅ Loaded hair (fallback)');
     }
@@ -156,8 +156,8 @@ class LPCSpriteBuilder {
                 reject(new Error(`Failed to load: ${fullPath}`));
             };
 
-            // Construct the full path to the LPC generator spritesheets
-            const fullPath = path.startsWith('/lpc-generator/') ? path : `/lpc-generator/spritesheets/${path}`;
+            // Path should be relative to the spritesheets directory
+            const fullPath = `/lpc-generator/spritesheets/${path}`;
             console.log(`🔍 DEBUG: Loading sprite from: ${fullPath}`);
             img.src = fullPath;
         });
@@ -560,6 +560,108 @@ function updateSprite() {
         window.spriteBuilder.updateSprite();
     }
 }
+
+// Add a placeholder for the updateSprite method
+LPCSpriteBuilder.prototype.updateSprite = function() {
+    console.log('✨ updateSprite called - feature not yet implemented');
+};
+
+// Add a new debugSprites method to the LPCSpriteBuilder class
+LPCSpriteBuilder.prototype.debugSprites = function() {
+    console.log('🐛 Firing debugSprites...');
+    this.createDebugPanel();
+    this.updateDebugPanel();
+};
+
+LPCSpriteBuilder.prototype.createDebugPanel = function() {
+    if (document.getElementById('spriteDebugPanel')) {
+        return; // Panel already exists
+    }
+
+    const panel = document.createElement('div');
+    panel.id = 'spriteDebugPanel';
+    panel.style.position = 'fixed';
+    panel.style.top = '100px';
+    panel.style.right = '20px';
+    panel.style.width = '350px';
+    panel.style.height = 'auto';
+    panel.style.maxHeight = '500px';
+    panel.style.backgroundColor = 'rgba(0, 20, 40, 0.9)';
+    panel.style.border = '1px solid #00ff00';
+    panel.style.borderRadius = '8px';
+    panel.style.zIndex = '1001';
+    panel.style.color = '#00ff00';
+    panel.style.fontFamily = "'Courier New', monospace";
+    panel.style.fontSize = '12px';
+
+    const header = document.createElement('div');
+    header.style.padding = '8px 12px';
+    header.style.backgroundColor = '#00ff00';
+    header.style.color = '#000';
+    header.style.fontWeight = 'bold';
+    header.style.borderRadius = '8px 8px 0 0';
+    header.style.cursor = 'move';
+    header.textContent = 'Sprite Debug Panel';
+
+    const closeButton = document.createElement('span');
+    closeButton.textContent = '❌';
+    closeButton.style.float = 'right';
+    closeButton.style.cursor = 'pointer';
+    closeButton.onclick = () => panel.remove();
+    header.appendChild(closeButton);
+
+    const content = document.createElement('div');
+    content.id = 'spriteDebugContent';
+    content.style.padding = '10px';
+    content.style.overflowY = 'auto';
+    content.style.maxHeight = '420px';
+    content.style.whiteSpace = 'pre-wrap';
+
+    panel.appendChild(header);
+    panel.appendChild(content);
+    document.body.appendChild(panel);
+
+    // Make panel draggable
+    let isDragging = false;
+    let offsetX, offsetY;
+    header.onmousedown = (e) => {
+        isDragging = true;
+        offsetX = e.clientX - panel.offsetLeft;
+        offsetY = e.clientY - panel.offsetTop;
+        header.style.cursor = 'grabbing';
+    };
+    document.onmousemove = (e) => {
+        if (isDragging) {
+            panel.style.left = `${e.clientX - offsetX}px`;
+            panel.style.top = `${e.clientY - offsetY}px`;
+        }
+    };
+    document.onmouseup = () => {
+        isDragging = false;
+        header.style.cursor = 'move';
+    };
+};
+
+LPCSpriteBuilder.prototype.updateDebugPanel = function() {
+    const content = document.getElementById('spriteDebugContent');
+    if (!content) {
+        console.warn('Debug panel content area not found.');
+        return;
+    }
+
+    let debugInfo = `== Sprite Builder State ==\n`;
+    debugInfo += `Animation: ${this.currentAnimation}\n`;
+    debugInfo += `Frame: ${this.currentFrame}\n`;
+    debugInfo += `Sex: ${this.currentSex}\n`;
+    debugInfo += `Animating: ${this.isAnimating}\n\n`;
+    debugInfo += `== Layers (${this.layers.length}) ==\n`;
+
+    this.layers.forEach(layer => {
+        debugInfo += `[z:${layer.zIndex}] ${layer.name} - ${layer.path}\n`;
+    });
+
+    content.textContent = debugInfo;
+};
 
 function randomizeCharacter() {
     if (window.spriteBuilder) {
