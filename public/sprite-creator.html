@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPC Sprite Creator</title>
+    <style>
+        /* Styles from sprite-path-tester.html for consistency */
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #00ff00;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+        }
+        #spriteCanvas {
+            border: 1px solid #00ff00;
+            background-color: #000;
+            image-rendering: pixelated;
+            width: 256px;
+            height: 256px;
+        }
+        .controls, .layers {
+            background-color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #00ffff;
+            text-align: center;
+        }
+        button {
+            background-color: #004400;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #006600;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background-color: #222;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        .layer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>LPC Sprite Creator</h1>
+    <div class="container">
+        <div class="main-content">
+            <canvas id="spriteCanvas" width="64" height="64"></canvas>
+            <div class="controls">
+                <h2>Animation</h2>
+                <button onclick="window.spriteBuilder.startAnimation()">Start Animation</button>
+                <button onclick="window.spriteBuilder.stopAnimation()">Stop Animation</button>
+            </div>
+             <div class="controls">
+                <h2>Character Actions</h2>
+                <button onclick="window.spriteBuilder.randomizeCharacter()">Randomize Character</button>
+                <button onclick="window.spriteBuilder.resetCharacter()">Reset Character</button>
+            </div>
+            <div class="controls">
+                <h2>Export</h2>
+                <button onclick="window.spriteBuilder.exportCurrentFrame()">Export Current Frame (PNG)</button>
+                <button onclick="window.spriteBuilder.exportSpriteSheet()">Export Spritesheet (PNG)</button>
+            </div>
+             <div class="controls">
+                <h2>Debug</h2>
+                <button onclick="window.spriteBuilder.debugSprites()">Debug Sprites</button>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="controls">
+                <h2>Sprite Layers</h2>
+                <label for="sexSelect">Sex:</label>
+                <select id="sexSelect" onchange="window.spriteBuilder.onSexSelectionChange(this)">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+
+                <label for="bodySelect">Body:</label>
+                <select id="bodySelect" onchange="window.spriteBuilder.onSpriteSelectionChange('body', this)"></select>
+
+                <label for="hairSelect">Hair:</label>
+                <select id="hairSelect" onchange="window.spriteBuilder.onSpriteSelectionChange('hair', this)"></select>
+
+                <label for="torsoSelect">Torso:</label>
+                <select id="torsoSelect" onchange="window.spriteBuilder.onSpriteSelectionChange('torso', this)"></select>
+
+                <label for="legsSelect">Legs:</label>
+                <select id="legsSelect" onchange="window.spriteBuilder.onSpriteSelectionChange('legs', this)"></select>
+
+                <label for="armsSelect">Arms:</label>
+                <select id="armsSelect" onchange="window.spriteBuilder.onSpriteSelectionChange('arms', this)"></select>
+
+                <label for="feetSelect">Feet:</label>
+                <select id="feetSelect" onchange="window.spriteBuilder.onSpriteSelectionChange('feet', this)"></select>
+            </div>
+            <div class="layers">
+                <h2>Active Layers</h2>
+                <div id="layersList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/sprite-builder.js"></script>
+    <script>
+        // Placeholder for the data extraction logic
+        async function loadSpriteData() {
+            // This will be implemented in a later step
+            console.log("Loading sprite data...");
+            // For now, we'll just initialize the builder
+            if (window.spriteBuilder) {
+                 window.spriteBuilder.init();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('spriteCanvas');
+            if (canvas) {
+                // The sprite-builder.js script will auto-initialize and attach to window.spriteBuilder
+            } else {
+                console.error("Canvas not found!");
+            }
+        });
+    </script>
+</body>
+</html>
