@@ -561,13 +561,106 @@ LPCSpriteBuilder.prototype.exportCurrentFrame = function() {
 };
 
 LPCSpriteBuilder.prototype.exportSpriteSheet = function() {
-    console.log('Exporting sprite sheet... (not implemented)');
-    alert('Sprite sheet export is not yet implemented.');
+    console.log('🖼️ Exporting sprite sheet...');
+    this.stopAnimation(); // Stop animation to prevent conflicts
+
+    const originalAnimation = this.currentAnimation;
+    const originalFrame = this.currentFrame;
+
+    const animations = Object.keys(this.base_animations);
+    const frameWidth = this.universalFrameSize;
+    const frameHeight = this.universalFrameSize;
+
+    // Find the max number of frames in any animation to determine canvas width
+    const maxFrames = Math.max(...Object.values(this.animationFrameCounts));
+    const sheetWidth = maxFrames * frameWidth;
+    const sheetHeight = animations.length * frameHeight;
+
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = sheetWidth;
+    exportCanvas.height = sheetHeight;
+    const exportCtx = exportCanvas.getContext('2d');
+
+    // It's important to draw the layers in the correct z-index order
+    const sortedLayers = [...this.layers].sort((a, b) => a.zIndex - b.zIndex);
+
+    for (let i = 0; i < animations.length; i++) {
+        const animation = animations[i];
+        const frameCount = this.animationFrameCounts[animation];
+        const animationRowY = this.base_animations[animation];
+
+        for (let j = 0; j < frameCount; j++) {
+            // Destination position on the export canvas
+            const dx = j * frameWidth;
+            const dy = i * frameHeight;
+
+            // Draw each layer for the current frame
+            sortedLayers.forEach(layer => {
+                if (layer.visible && layer.image) {
+                    // Source position on the individual sprite sheets
+                    const sx = j * frameWidth;
+                    const sy = animationRowY;
+
+                    exportCtx.drawImage(
+                        layer.image,
+                        sx, sy, frameWidth, frameHeight,
+                        dx, dy, frameWidth, frameHeight
+                    );
+                }
+            });
+        }
+    }
+
+    // Trigger download
+    const link = document.createElement('a');
+    link.download = 'spritesheet.png';
+    link.href = exportCanvas.toDataURL('image/png');
+    link.click();
+
+    // Restore original state and restart animation
+    this.currentAnimation = originalAnimation;
+    this.currentFrame = originalFrame;
+    this.startAnimation();
+    console.log('✅ Sprite sheet export complete.');
 };
 
 LPCSpriteBuilder.prototype.randomizeCharacter = function() {
-    console.log('Randomizing character... (not implemented)');
-    alert('Character randomization is not yet implemented.');
+    console.log('🎲 Randomizing character...');
+    this.resetCharacter(); // Clear existing character
+
+    const categoriesToRandomize = ['body', 'hair', 'torso', 'legs', 'arms', 'feet'];
+
+    const promises = categoriesToRandomize.map(category => {
+        if (this.spriteCategories[category] && this.spriteCategories[category].sprites.length > 0) {
+            const sprites = this.spriteCategories[category].sprites;
+            const randomIndex = Math.floor(Math.random() * sprites.length);
+            const randomSprite = sprites[randomIndex];
+
+            const path = this.currentSex === 'male' ? randomSprite.malePath : randomSprite.femalePath;
+
+            if (path) {
+                // Update the UI dropdown
+                const selectElement = document.getElementById(`${category}Select`);
+                if (selectElement) {
+                    const optionValue = JSON.stringify(randomSprite);
+                     // Find the option that matches the random sprite and set it as selected
+                    const optionToSelect = Array.from(selectElement.options).find(opt => opt.value === optionValue);
+                    if(optionToSelect) {
+                        selectElement.value = optionValue;
+                    }
+                }
+                // Return the promise from addLayerToCharacter
+                return this.addLayerToCharacter(category, { name: randomSprite.name, path: path });
+            }
+        }
+        return Promise.resolve(); // Return a resolved promise for categories with no selection
+    });
+
+    // Wait for all layers to be loaded before starting the animation
+    Promise.all(promises).then(() => {
+        this.startAnimation(); // Restart animation after randomizing
+        console.log('✅ Character randomization complete.');
+    });
 };
 
 // Initialize sprite builder when DOM is loaded
