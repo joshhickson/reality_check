@@ -411,6 +411,76 @@ io.on('connection', (socket) => {
 
 
 
+const { exec } = require('child_process');
+
+// API endpoint for LPC file scanning and database generation
+app.get('/api/scan-lpc-files', (req, res) => {
+  const command = 'find lpc-generator/spritesheets -type f -name "*.png"';
+
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`File scan exec error: ${error.message}`);
+      return res.status(500).json({
+        error: 'Failed to scan for sprite files.',
+        details: stderr
+      });
+    }
+
+    const filePaths = stdout.split('\n').filter(file => file.trim() !== '');
+    const spriteDatabase = {};
+
+    filePaths.forEach(p => {
+      const pathParts = p.replace('lpc-generator/spritesheets/', '').split('/');
+      if (pathParts.length < 3) return; // Path is too short, ignore.
+
+      const category = pathParts[0];
+      const animation = pathParts[pathParts.length - 1].replace('.png', '');
+      const sex = pathParts[pathParts.length - 2];
+      const style = pathParts.slice(1, -2).join('/'); // e.g., "clothes/shirt/basic"
+
+      if (!style) return; // Ignore files at the top level of a sex directory
+
+      // Initialize category if it doesn't exist
+      if (!spriteDatabase[category]) {
+        spriteDatabase[category] = [];
+      }
+
+      // Find or create the entry for this particular style
+      let styleEntry = spriteDatabase[category].find(s => s.style === style);
+      if (!styleEntry) {
+        styleEntry = {
+          name: style.replace(/\//g, ' '), // A user-friendly name for dropdowns
+          style: style,
+          paths: {}
+        };
+        spriteDatabase[category].push(styleEntry);
+      }
+
+      // Add the path under the correct sex and animation
+      if (!styleEntry.paths[sex]) {
+        styleEntry.paths[sex] = {};
+      }
+      styleEntry.paths[sex][animation] = `/${p}`; // Prepend slash for root-relative URL
+    });
+
+    const outputPath = path.join(__dirname, 'public', 'lpc-all-sprites.json');
+    fs.writeFile(outputPath, JSON.stringify(spriteDatabase, null, 2), (err) => {
+      if (err) {
+        console.error('Error writing sprite database file:', err);
+        return res.status(500).json({ error: 'Failed to save sprite database.' });
+      }
+
+      console.log(`✅ Sprite database generated at ${outputPath}`);
+      res.json({
+        message: `Successfully generated sprite database with ${filePaths.length} files.`,
+        file: '/lpc-all-sprites.json',
+        timestamp: new Date().toISOString()
+      });
+    });
+  });
+});
+
+
 // API endpoint to get available cards
 app.get('/api/cards/:deckName?', (req, res) => {
   try {

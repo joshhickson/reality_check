@@ -45,8 +45,8 @@ class LPCSpriteBuilder {
         // Character layers
         this.characterLayers = {};
 
-        // Sprite categories will be loaded later
-        this.spriteCategories = {};
+        // This will hold the structured data from lpc-all-sprites.json
+        this.spriteDatabase = {};
 
         console.log('🎨 LPC Sprite Builder initialized');
         this.init();
@@ -61,44 +61,34 @@ class LPCSpriteBuilder {
     }
 
     async loadLPCData() {
-        console.log('🔄 Loading LPC data from generator...');
+        console.log('🔄 Loading LPC sprite database...');
         try {
-            const response = await fetch('/lpc-generator/index.html');
-            const htmlText = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(htmlText, 'text/html');
-
-            this.spriteCategories = this.extractSpriteCategories(doc);
-            console.log('✅ LPC data loaded and parsed successfully!');
+            const response = await fetch('/lpc-all-sprites.json');
+            if (!response.ok) {
+                // If the file doesn't exist, prompt the user to generate it.
+                if (response.status === 404) {
+                    alert('Sprite database not found! Please click "Generate Sprite Database" to create it.');
+                    throw new Error('Sprite database not found. Please generate it.');
+                }
+                throw new Error(`Failed to load sprite database: ${response.statusText}`);
+            }
+            this.spriteDatabase = await response.json();
+            console.log('✅ LPC sprite database loaded successfully!');
         } catch (error) {
-            console.error('❌ Failed to load or parse LPC data:', error);
+            console.error('❌ Failed to load or parse LPC sprite database:', error);
+            // Disable UI if data loading fails
+            this.disableUI();
         }
     }
 
-    extractSpriteCategories(doc) {
-        const categories = {};
-        const elements = doc.querySelectorAll('[data-layer_1_male], [data-layer_1_female]');
-
-        elements.forEach(el => {
-            const category = el.name.split('_')[0];
-            if (!categories[category]) {
-                categories[category] = {
-                    name: category,
-                    sprites: []
-                };
+    disableUI() {
+        document.querySelectorAll('.sidebar select, .sidebar button').forEach(el => {
+            if (el.id !== 'generate-db-button') {
+                el.disabled = true;
             }
-
-            const spriteName = el.nextElementSibling.textContent.trim();
-            const malePath = el.dataset.layer_1_male;
-            const femalePath = el.dataset.layer_1_female;
-
-            categories[category].sprites.push({
-                name: spriteName,
-                malePath: malePath,
-                femalePath: femalePath,
-            });
         });
-        return categories;
+        const status = document.getElementById('db-status');
+        if(status) status.textContent = 'Sprite database is missing. Please generate it to enable controls.';
     }
 
 
@@ -113,20 +103,25 @@ class LPCSpriteBuilder {
             this.drawTestRectangle();
         }
     }
-
     async loadDefaultCharacter() {
-        console.log('⚠️ Loading default character...');
-
-        // Set a default character
-        if (this.spriteCategories.body && this.spriteCategories.body.sprites.length > 0) {
-            const bodySprite = this.spriteCategories.body.sprites[0];
-            const path = this.currentSex === 'male' ? bodySprite.malePath : bodySprite.femalePath;
-            await this.addLayerToCharacter('body', { name: bodySprite.name, path: path });
-        }
-        if (this.spriteCategories.hair && this.spriteCategories.hair.sprites.length > 0) {
-            const hairSprite = this.spriteCategories.hair.sprites[0];
-            const path = this.currentSex === 'male' ? hairSprite.malePath : hairSprite.femalePath;
-            await this.addLayerToCharacter('hair', { name: hairSprite.name, path: path });
+        console.log('👤 Loading default character...');
+        try {
+            // Load a default body and hair
+            if (this.spriteDatabase.body && this.spriteDatabase.body.length > 0) {
+                const bodySprite = this.spriteDatabase.body.find(s => s.style === 'bodies');
+                if (bodySprite) {
+                    await this.addLayerToCharacter('body', bodySprite);
+                }
+            }
+            if (this.spriteDatabase.hair && this.spriteDatabase.hair.length > 0) {
+                const hairSprite = this.spriteDatabase.hair.find(s => s.style === 'plain/adult');
+                 if (hairSprite) {
+                    await this.addLayerToCharacter('hair', hairSprite);
+                }
+            }
+        } catch (error) {
+            console.error('❌ Failed to load default character:', error);
+            this.drawTestRectangle();
         }
     }
 
@@ -139,38 +134,17 @@ class LPCSpriteBuilder {
         this.ctx.fillText('TEST', 15, 25);
     }
 
-    async loadLayer(name, path, zIndex) {
+    async loadSprite(spritePath, spriteInfo = {}) {
         return new Promise((resolve, reject) => {
             const img = new Image();
-
             img.onload = () => {
-                const layer = {
-                    name,
-                    path,
-                    image: img,
-                    zIndex,
-                    visible: true
-                };
-
-                this.layers.push(layer);
-                this.layers.sort((a, b) => a.zIndex - b.zIndex);
-
-                this.updateLayerList();
-                this.drawCurrentFrame();
-
-                console.log(`✅ Layer loaded: ${name} (z:${zIndex})`);
-                resolve(layer);
+                resolve({ image: img, path: spritePath, ...spriteInfo });
             };
-
             img.onerror = () => {
-                console.error(`❌ Failed to load layer: ${fullPath}`);
-                reject(new Error(`Failed to load: ${fullPath}`));
+                console.error(`❌ Failed to load image: ${spritePath}`);
+                reject(new Error(`Failed to load image: ${spritePath}`));
             };
-
-            // Path should be relative to the spritesheets directory
-            const fullPath = `/lpc-generator/spritesheets/${path}`;
-            console.log(`🔍 DEBUG: Loading sprite from: ${fullPath}`);
-            img.src = fullPath;
+            img.src = spritePath;
         });
     }
 
@@ -238,19 +212,17 @@ class LPCSpriteBuilder {
     updateLayerList() {
         const layersList = document.getElementById('layersList');
         if (!layersList) return;
-
         layersList.innerHTML = '';
-
         this.layers.forEach((layer, index) => {
             const layerItem = document.createElement('div');
-            layerItem.className = 'sprite-layer';
+            layerItem.className = 'layer-item';
             layerItem.innerHTML = `
                 <label>
                     <input type="checkbox" ${layer.visible ? 'checked' : ''} 
                            onchange="window.spriteBuilder.toggleLayerVisibility(${index})">
-                    ${layer.name} (z:${layer.zIndex})
+                    ${layer.name}
                 </label>
-                <button onclick="window.spriteBuilder.removeLayer(${index})">Remove</button>
+                <button onclick="window.spriteBuilder.removeLayer('${layer.name}')">X</button>
             `;
             layersList.appendChild(layerItem);
         });
@@ -263,259 +235,114 @@ class LPCSpriteBuilder {
         }
     }
 
-    removeLayer(index) {
-        if (this.layers[index]) {
-            this.layers.splice(index, 1);
-            this.updateLayerList();
-            this.drawCurrentFrame();
+    removeLayer(category) {
+        if (this.characterLayers[category]) {
+            delete this.characterLayers[category];
+            this.renderCharacter();
         }
     }
 
     resetCharacter() {
         this.stopAnimation();
-        this.layers = [];
-        this.currentFrame = 0;
-        this.ctx.fillStyle = '#1a1a2e';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.updateLayerList();
+        this.characterLayers = {};
+        this.renderCharacter();
         console.log('🔄 Character reset');
+        this.startAnimation();
     }
 
-    // Load verified sprite paths from scan results
-    loadVerifiedSpritePaths() {
-        console.log('📊 Loading verified sprite paths...');
-
-        // Use verified paths from scanner results
-        const knownWorkingPaths = {
-            body: {
-                pattern: '/lpc-generator/spritesheets/body/bodies/{bodyType}/{animation}.png',
-                bodyTypes: ['male', 'female', 'child'],
-                animations: ['walk', 'hurt', 'idle', 'shoot', 'slash', 'spellcast', 'thrust']
-            },
-            hair: {
-                patterns: [
-                    '/lpc-generator/spritesheets/hair/page/adult/{animation}.png',
-                    '/lpc-generator/spritesheets/hair/plain/adult/{animation}.png',
-                    '/lpc-generator/spritesheets/hair/long/adult/{animation}.png',
-                    '/lpc-generator/spritesheets/hair/bangs/adult/{animation}.png',
-                    '/lpc-generator/spritesheets/hair/bob/adult/{animation}.png'
-                ],
-                animations: ['walk', 'hurt', 'idle', 'shoot', 'slash', 'spellcast', 'thrust']
-            },
-            torso: {
-                pattern: '/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/{bodyType}/{animation}.png',
-                bodyTypes: ['male', 'female'],
-                animations: ['walk', 'hurt', 'shoot', 'slash', 'spellcast', 'thrust']
-            },
-            legs: {
-                pattern: '/lpc-generator/spritesheets/legs/pants/{bodyType}/{animation}.png',
-                bodyTypes: ['male', 'female'],
-                animations: ['walk', 'hurt', 'idle', 'shoot', 'slash', 'spellcast', 'thrust']
-            },
-            arms: {
-                pattern: '/lpc-generator/spritesheets/arms/gloves/{bodyType}/{animation}.png',
-                bodyTypes: ['male', 'female'],
-                animations: ['walk', 'hurt']
-            },
-            feet: {
-                patterns: [
-                    '/lpc-generator/spritesheets/feet/sandals/{bodyType}/{animation}.png',
-                    '/lpc-generator/spritesheets/feet/shoes/basic/{bodyType}/{animation}.png'
-                ],
-                bodyTypes: ['male', 'female'],
-                animations: ['walk', 'hurt']
-            }
-        };
-
-        console.log('✅ Loaded verified sprite categories with working paths!');
-    }
-
-    // Load sprite with verified path
-    async loadSprite(spritePath, spriteInfo = {}) {
-        console.log(`🖼️ Loading sprite: ${spritePath}`);
-
-        try {
-            const img = new Image();
-
-            return new Promise((resolve, reject) => {
-                img.onload = () => {
-                    console.log(`✅ Successfully loaded: ${spritePath}`);
-                    resolve({
-                        image: img,
-                        path: spritePath,
-                        ...spriteInfo
-                    });
-                };
-
-                img.onerror = () => {
-                    console.error(`❌ Failed to load: ${spritePath}`);
-                    reject(new Error(`Failed to load sprite: ${spritePath}`));
-                };
-
-                img.src = spritePath;
-            });
-
-        } catch (error) {
-            console.error(`❌ Error loading sprite ${spritePath}:`, error);
-            throw error;
-        }
-    }
-
-    // Add a sprite layer to current character
     async addLayerToCharacter(category, spriteData) {
-        console.log(`➕ Adding layer: ${category}`, spriteData);
+        // spriteData is now an entry from our JSON database, e.g., { name: "...", style: "...", paths: {...} }
+        const path = spriteData.paths[this.currentSex]?.[this.currentAnimation] || (spriteData.paths[this.currentSex] ? spriteData.paths[this.currentSex][Object.keys(spriteData.paths[this.currentSex])[0]] : undefined);
+
+
+        if (!path) {
+            console.warn(`⚠️ No path found for ${category} -> ${spriteData.name} with sex ${this.currentSex} and animation ${this.currentAnimation}`);
+            // Remove the layer if a valid path isn't found
+            if (this.characterLayers[category]) {
+                delete this.characterLayers[category];
+                this.renderCharacter();
+            }
+            return;
+        }
+
+        console.log(`➕ Adding layer: ${category} -> ${spriteData.name}`);
 
         try {
-            const sprite = await this.loadSprite(spriteData.path, spriteData);
-
+            const sprite = await this.loadSprite(path, spriteData);
             this.characterLayers[category] = {
                 image: sprite.image,
-                data: spriteData
+                data: spriteData // Store the full sprite data object
             };
-
             this.renderCharacter();
             console.log(`✅ Added ${category} layer successfully`);
-
         } catch (error) {
-            console.error(`❌ Failed to load layer: ${spriteData.path}`, error);
+            console.error(`❌ Failed to load layer: ${path}`, error);
         }
     }
 
-    // Render the current character based on loaded layers
     renderCharacter() {
         console.log('🖌️ Rendering character...');
-        this.resetCharacter(); // Clear existing layers
-        let zIndexCounter = 1; // Start z-index from 1
+        this.layers = []; // Clear existing layers
+        let zIndexCounter = 1;
 
-        // Iterate through the characterLayers and create actual layers
-        Object.entries(this.characterLayers).forEach(([category, layerData]) => {
-            if (layerData.image) {
+        const layerOrder = ['body', 'legs', 'torso', 'arms', 'head', 'hair', 'feet'];
+
+        for (const category of layerOrder) {
+            const layerData = this.characterLayers[category];
+            if (layerData && layerData.image) {
                 const layer = {
                     name: category,
                     image: layerData.image,
-                    zIndex: zIndexCounter * 10, // Increment z-index for each layer
-                    visible: true
+                    zIndex: zIndexCounter * 10,
+                    visible: true,
+                    path: layerData.data.paths[this.currentSex]?.[this.currentAnimation]
                 };
                 this.layers.push(layer);
                 zIndexCounter++;
             }
-        });
+        }
 
-        // Sort layers by zIndex
-        this.layers.sort((a, b) => a.zIndex - b.zIndex);
         this.updateLayerList();
         this.drawCurrentFrame();
     }
 
-    // Test function to verify sprite builder is working
-    testFunction() {
-        console.log('🧪 TEST FUNCTION CALLED - Sprite Builder is working!');
-        console.log('📊 Available categories:', Object.keys(this.spriteCategories));
-
-        // Test loading the first sprite from each category
-        Object.entries(this.spriteCategories).forEach(([category, data]) => {
-            if (data.sprites && data.sprites.length > 0) {
-                console.log(`🎯 Testing ${category}:`, data.sprites[0]);
-            }
-        });
-
-        return true;
-    }
-
-    // Test verified paths
-    async testVerifiedPaths() {
-        console.log('🧪 Testing verified sprite paths...');
-
-        const testPaths = [
-            '/lpc-generator/spritesheets/body/bodies/male/walk.png',
-            '/lpc-generator/spritesheets/hair/page/adult/walk.png',
-            '/lpc-generator/spritesheets/torso/clothes/longsleeve/formal/male/walk.png'
-        ];
-
-        for (const path of testPaths) {
-            try {
-                const sprite = await this.loadSprite(path);
-                console.log(`✅ VERIFIED: ${path}`);
-            } catch (error) {
-                console.error(`❌ FAILED: ${path}`, error);
-            }
-        }
-    }
-
-    // Load a sample character using verified paths
-    loadSampleCharacter() {
-        console.log('👤 Loading sample character with verified paths...');
-
-        // Load male character with verified sprites
-        const sampleSprites = {
-            body: {
-                name: 'Male Body',
-                path: '/lpc-generator/spritesheets/body/bodies/male/walk.png',
-                bodyType: 'male',
-                animation: 'walk'
-            },
-            hair: {
-                name: 'Page Hair',
-                path: '/lpc-generator/spritesheets/hair/page/adult/walk.png',
-                bodyType: 'adult',
-                animation: 'walk'
-            }
-        };
-
-        // Add each layer
-        Object.entries(sampleSprites).forEach(([category, sprite]) => {
-            this.addLayerToCharacter(category, sprite);
-        });
-    }
 
     setupUI() {
-        console.log("Setting up UI");
-        const categories = ['body', 'hair', 'torso', 'legs', 'arms', 'feet'];
-        categories.forEach(category => {
+        console.log("Setting up UI with new database structure");
+        Object.keys(this.spriteDatabase).forEach(category => {
             const select = document.getElementById(`${category}Select`);
-            if (select && this.spriteCategories[category]) {
-                this.populateDropdown(select, this.spriteCategories[category].sprites);
+            if (select) {
+                this.populateDropdown(select, this.spriteDatabase[category]);
             }
         });
     }
 
-    populateDropdown(selectElement, sprites) {
-        if (!sprites) return;
-        selectElement.innerHTML = ''; // Clear existing options
-
-        // Add a default "None" option
+    populateDropdown(selectElement, items) {
+        if (!items) return;
+        selectElement.innerHTML = ''; // Clear
         const noneOption = document.createElement('option');
         noneOption.value = '';
         noneOption.textContent = 'None';
         selectElement.appendChild(noneOption);
 
-        sprites.forEach(sprite => {
+        items.forEach(item => {
             const option = document.createElement('option');
-            option.value = JSON.stringify(sprite); // Store the entire sprite object as JSON
-            option.textContent = sprite.name;
+            // Store the style identifier in the value
+            option.value = item.style;
+            option.textContent = item.name;
             selectElement.appendChild(option);
         });
     }
 
-    // Call this function when a sprite selection changes
     onSpriteSelectionChange(category, selectElement) {
-        const selectedValue = selectElement.value;
-
-        if (selectedValue) {
-            const spriteData = JSON.parse(selectedValue);
-            const path = this.currentSex === 'male' ? spriteData.malePath : spriteData.femalePath;
-
-            if (path) {
-                this.addLayerToCharacter(category, { name: spriteData.name, path: path });
-            } else {
-                console.warn(`No path found for ${this.currentSex} in ${category}`);
+        const selectedStyle = selectElement.value;
+        if (selectedStyle) {
+            const spriteData = this.spriteDatabase[category].find(s => s.style === selectedStyle);
+            if (spriteData) {
+                this.addLayerToCharacter(category, spriteData);
             }
         } else {
-            // Handle removal of sprite
-            if (this.characterLayers[category]) {
-                delete this.characterLayers[category];
-                this.renderCharacter();
-            }
+            this.removeLayer(category);
         }
     }
 }
@@ -524,32 +351,21 @@ class LPCSpriteBuilder {
 if (typeof window !== 'undefined') {
     window.SpriteBuilder = SpriteBuilder;
 
-    // Make testing functions available globally
-    window.testVerifiedSprites = function() {
-        if (window.spriteBuilder) {
-            window.spriteBuilder.testVerifiedPaths();
-            window.spriteBuilder.loadSampleCharacter();
-        } else {
-            console.log('❌ Sprite builder not initialized yet');
-        }
-    };
-
-    window.loadSampleCharacter = function() {
-        if (window.spriteBuilder) {
-            window.spriteBuilder.loadSampleCharacter();
-        } else {
-            console.log('❌ Sprite builder not initialized yet');
-        }
-    };
 }
 
 // Add methods for UI interaction
 LPCSpriteBuilder.prototype.onSexSelectionChange = function(selectElement) {
     this.currentSex = selectElement.value;
     console.log(`Sex changed to: ${this.currentSex}`);
-    // Reload the character with the new sex
-    this.resetCharacter();
-    this.loadBasicCharacter();
+    // Re-render the character with the new sex
+    const currentLayers = { ...this.characterLayers };
+    this.characterLayers = {};
+    const promises = Object.entries(currentLayers).map(([category, layerData]) => {
+        return this.addLayerToCharacter(category, layerData.data);
+    });
+    Promise.all(promises).then(() => {
+        console.log("Character re-rendered with new sex.");
+    });
 };
 
 LPCSpriteBuilder.prototype.exportCurrentFrame = function() {
@@ -626,39 +442,22 @@ LPCSpriteBuilder.prototype.exportSpriteSheet = function() {
 
 LPCSpriteBuilder.prototype.randomizeCharacter = function() {
     console.log('🎲 Randomizing character...');
-    this.resetCharacter(); // Clear existing character
-
-    const categoriesToRandomize = ['body', 'hair', 'torso', 'legs', 'arms', 'feet'];
-
-    const promises = categoriesToRandomize.map(category => {
-        if (this.spriteCategories[category] && this.spriteCategories[category].sprites.length > 0) {
-            const sprites = this.spriteCategories[category].sprites;
-            const randomIndex = Math.floor(Math.random() * sprites.length);
-            const randomSprite = sprites[randomIndex];
-
-            const path = this.currentSex === 'male' ? randomSprite.malePath : randomSprite.femalePath;
-
-            if (path) {
-                // Update the UI dropdown
-                const selectElement = document.getElementById(`${category}Select`);
-                if (selectElement) {
-                    const optionValue = JSON.stringify(randomSprite);
-                     // Find the option that matches the random sprite and set it as selected
-                    const optionToSelect = Array.from(selectElement.options).find(opt => opt.value === optionValue);
-                    if(optionToSelect) {
-                        selectElement.value = optionValue;
-                    }
-                }
-                // Return the promise from addLayerToCharacter
-                return this.addLayerToCharacter(category, { name: randomSprite.name, path: path });
+    this.resetCharacter();
+    const promises = Object.keys(this.spriteDatabase).map(category => {
+        const select = document.getElementById(`${category}Select`);
+        if (select) {
+            const items = this.spriteDatabase[category];
+            if (items.length > 0) {
+                const randomIndex = Math.floor(Math.random() * items.length);
+                const randomSprite = items[randomIndex];
+                select.value = randomSprite.style;
+                return this.addLayerToCharacter(category, randomSprite);
             }
         }
-        return Promise.resolve(); // Return a resolved promise for categories with no selection
+        return Promise.resolve();
     });
 
-    // Wait for all layers to be loaded before starting the animation
     Promise.all(promises).then(() => {
-        this.startAnimation(); // Restart animation after randomizing
         console.log('✅ Character randomization complete.');
     });
 };

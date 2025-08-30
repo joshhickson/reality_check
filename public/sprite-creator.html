@@ -101,6 +101,11 @@
         </div>
         <div class="sidebar">
             <div class="controls">
+                <h2>Database</h2>
+                <button id="generate-db-button" onclick="generateSpriteDatabase()">Generate Sprite Database</button>
+                <p id="db-status" style="font-size: 12px; color: #00ffff; word-wrap: break-word;"></p>
+            </div>
+            <div class="controls">
                 <h2>Sprite Layers</h2>
                 <label for="sexSelect">Sex:</label>
                 <select id="sexSelect" onchange="window.spriteBuilder.onSexSelectionChange(this)">
@@ -134,6 +139,7 @@
     </div>
 
     <script src="/sprite-builder.js"></script>
+    <script src="/lpc-complete-scanner.js"></script>
     <script>
         // Placeholder for the data extraction logic
         async function loadSpriteData() {
