@@ -1,7 +1,6 @@
 // Final, corrected server.js
 const express = require('express');
-const { exec } = require('child_process');
-const fs = require('fs');
+const fs = require('fs').promises; // Use the promises version of fs
 const path = require('path');
 const cors = require('cors');
 
@@ -12,19 +11,36 @@ app.use(cors());
 app.use(express.static('public'));
 app.use('/lpc-generator', express.static('lpc-generator'));
 
-app.get('/api/scan-lpc-files', (req, res) => {
-  const command = 'find lpc-generator/spritesheets -type f -name "*.png"';
+// Modern async/await recursive function to find all files with a specific extension
+async function findFiles(startPath, filter) {
+  let results = [];
+  const files = await fs.readdir(startPath);
 
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`File scan exec error: ${error.message}`);
-      return res.status(500).json({
-        error: 'Failed to scan for sprite files.',
-        details: stderr
-      });
+  for (const file of files) {
+    const filepath = path.join(startPath, file);
+    const stats = await fs.stat(filepath);
+
+    if (stats.isDirectory()) {
+      results = results.concat(await findFiles(filepath, filter));
+    } else {
+      if (filepath.endsWith(filter)) {
+        results.push(filepath);
+      }
     }
+  }
+  return results;
+}
 
-    const filePaths = stdout.split('\n').filter(file => file.trim() !== '');
+
+app.get('/api/scan-lpc-files', async (req, res) => {
+  console.log('[SERVER] Received request for /api/scan-lpc-files');
+  const spritesheetsPath = 'lpc-generator/spritesheets';
+
+  try {
+    console.log(`[SERVER] Starting file scan in ${spritesheetsPath}...`);
+    const filePaths = await findFiles(spritesheetsPath, '.png');
+    console.log(`[SERVER] File scan complete. Found ${filePaths.length} files.`);
+
     const spriteDatabase = {};
 
     filePaths.forEach(p => {
@@ -59,20 +75,23 @@ app.get('/api/scan-lpc-files', (req, res) => {
     });
 
     const outputPath = path.join(__dirname, 'public', 'lpc-all-sprites.json');
-    fs.writeFile(outputPath, JSON.stringify(spriteDatabase, null, 2), (err) => {
-      if (err) {
-        console.error('Error writing sprite database file:', err);
-        return res.status(500).json({ error: 'Failed to save sprite database.' });
-      }
+    console.log(`[SERVER] Writing database to ${outputPath}...`);
+    await fs.writeFile(outputPath, JSON.stringify(spriteDatabase, null, 2));
+    console.log('[SERVER] Database file written successfully.');
 
-      console.log(`✅ Sprite database generated at ${outputPath}`);
-      res.json({
-        message: `Successfully generated sprite database with ${filePaths.length} files.`,
-        file: '/lpc-all-sprites.json',
-        timestamp: new Date().toISOString()
-      });
+    res.json({
+      message: `Successfully generated sprite database with ${filePaths.length} files.`,
+      file: '/lpc-all-sprites.json',
+      timestamp: new Date().toISOString()
     });
-  });
+
+  } catch (err) {
+    console.error(`[SERVER] ERROR: ${err.stack}`);
+    res.status(500).json({
+      error: 'Failed to scan for sprite files.',
+      details: err.message
+    });
+  }
 });
 
 app.listen(PORT, () => {
