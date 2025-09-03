@@ -69,6 +69,12 @@ function makeCardChoice(cardId, choiceIndex) {
   });
 }
 
+function postOnMetaNet() {
+    if (gameId && playerId) {
+        socket.emit('post_on_metanet', { gameId, playerId });
+    }
+}
+
 // Socket event handlers
 socket.on('game_created', (data) => {
   gameId = data.gameId;
@@ -146,8 +152,13 @@ function showPlayerInfo(player) {
 
 function updatePlayerStats(stats) {
   if (stats) {
-    document.getElementById('money').textContent = stats.money || 5000;
-
+    document.getElementById('money').textContent = stats.money || 0;
+    document.getElementById('mental').textContent = stats.mental_health || 0;
+    document.getElementById('sin').textContent = stats.sin || 0;
+    document.getElementById('virtue').textContent = stats.virtue || 0;
+    document.getElementById('clout').textContent = stats.clout || 0;
+  }
+}
 
 socket.on('card_resolved', (data) => {
   console.log('Card resolved:', data);
@@ -162,12 +173,6 @@ socket.on('card_resolved', (data) => {
       <div class="card-result">
         <h4>Choice Made!</h4>
         <p>Your choice has been processed.</p>
-        <div class="new-stats">
-          Money: $${data.newStats.money} | 
-          Mental Health: ${data.newStats.mental_health} | 
-          Sin: ${data.newStats.sin} | 
-          Virtue: ${data.newStats.virtue}
-        </div>
       </div>
     `;
     
@@ -178,12 +183,15 @@ socket.on('card_resolved', (data) => {
   }
 });
 
-
-    document.getElementById('mental').textContent = stats.mental_health || 5;
-    document.getElementById('sin').textContent = stats.sin || 0;
-    document.getElementById('virtue').textContent = stats.virtue || 0;
-  }
-}
+socket.on('stats_updated', (data) => {
+    console.log('Stats updated:', data);
+    // This is a generic event that can be used by multiple actions
+    // For now, we only care about our own stats
+    if (data.playerId === playerId) {
+        updatePlayerStats(data.newStats);
+    }
+    // In the future, this could update a list of all players' stats
+});
 
 function displayCharacterInfo(character) {
   const characterDiv = document.getElementById('characterInfo');
@@ -246,6 +254,15 @@ function updateTurnControls(nextPlayerIndex) {
 function updatePlayersList(data) {
   // This would update the players list UI
   console.log('Players updated:', data);
+}
+
+// Placeholder functions to avoid errors
+function movePlayerToPosition(playerId, position) {
+    console.log(`Player ${playerId} moved to position ${position}. (UI update not implemented)`);
+}
+
+function highlightRingEvents(rings) {
+    console.log(`Ring events triggered: ${rings.join(', ')}. (UI update not implemented)`);
 }
 
 // Initialize game

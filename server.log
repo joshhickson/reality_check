@@ -1,3 +1,2 @@
-Serving static files from: /app/public
-Serving LPC generator from: /app/lpc-generator
-Server listening on port 5000
+Card data loaded: 1 sin, 1 virtue, 2 chaos cards.
+Server is running on http://localhost:5000
