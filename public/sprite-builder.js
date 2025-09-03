@@ -38,29 +38,21 @@ class LPCSpriteBuilder {
     }
 
     async loadLPCData() {
+        // This function fetches the pre-generated sprite database.
+        // This approach was chosen over on-demand scanning to avoid
+        // overwhelming the server environment with file I/O.
         console.log('🔄 Loading LPC sprite database...');
         try {
             const response = await fetch('/lpc-all-sprites.json');
             if (!response.ok) {
-                if (response.status === 404) {
-                    alert('Sprite database not found! Please click "Generate Sprite Database" to create it.');
-                }
-                throw new Error('Sprite database not found.');
+                throw new Error(`Sprite database not found at /lpc-all-sprites.json. Status: ${response.status}`);
             }
             this.spriteDatabase = await response.json();
             console.log('✅ LPC sprite database loaded successfully!');
         } catch (error) {
             console.error('❌ Failed to load sprite database:', error);
-            this.disableUI();
+            // If the database fails to load, the UI will be unusable, so we log the error.
         }
-    }
-
-    disableUI() {
-        document.querySelectorAll('.sidebar select, .sidebar button').forEach(el => {
-            if (el.id !== 'generate-db-button') el.disabled = true;
-        });
-        const status = document.getElementById('db-status');
-        if (status) status.textContent = 'Sprite database missing. Please generate it.';
     }
 
     async loadDefaultCharacter() {
