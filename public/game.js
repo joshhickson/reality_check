@@ -75,26 +75,42 @@ function postOnMetaNet() {
     }
 }
 
+function addBot() {
+    if (gameId) {
+        socket.emit('add_bot', { gameId });
+    }
+}
+
 // Socket event handlers
 socket.on('game_created', (data) => {
-  gameId = data.gameId;
-  console.log('Game created:', data);
-  
-  document.getElementById('gameSetup').style.display = 'none';
-  document.getElementById('gameArea').style.display = 'block';
-  
-  updateGameStatus('Game created! Waiting for players...');
+    gameId = data.gameId;
+    console.log('Game created:', data);
+
+    // Show lobby controls
+    document.getElementById('addBotButton').style.display = 'inline-block';
+    document.getElementById('startGameButton').style.display = 'inline-block';
+
+    // Disable initial setup buttons
+    document.querySelector('button[onclick="createGame()"]').disabled = true;
+    document.querySelector('button[onclick="joinGame()"]').disabled = true;
+    document.getElementById('gameNameInput').disabled = true;
+
+
+    updateGameStatus(`Game "${document.getElementById('gameNameInput').value}" created! Add players or bots.`);
 });
 
 socket.on('player_joined', (data) => {
-  console.log('Player joined:', data);
-  updatePlayersList(data);
-  
-  if (data.player.socket_id === socket.id) {
-    playerId = data.player.id;
-    currentPlayer = data.player;
-    showPlayerInfo(data.player);
-  }
+    console.log('Player joined:', data);
+    updatePlayersList({ players: data.players }); // Pass the full players list
+
+    // If I am the one who just joined, hide the setup screen
+    if (data.player.socketId === socket.id) {
+        playerId = data.player.id;
+        currentPlayer = data.player;
+        document.getElementById('gameSetup').style.display = 'none';
+        document.getElementById('gameArea').style.display = 'block';
+        showPlayerInfo(data.player);
+    }
 });
 
 socket.on('character_assigned', (data) => {
@@ -103,37 +119,22 @@ socket.on('character_assigned', (data) => {
 });
 
 socket.on('game_started', (data) => {
-  console.log('Game started:', data);
-  gameState = data.gameState;
-  updateGameStatus('Game started! Round 1');
-  
-  // Show turn controls for first player
-  if (gameState.currentPlayer === 0 && currentPlayer) {
-    enableTurnControls();
-  }
+    console.log('Game started:', data);
+    updateUIFromGameState(data.gameState);
 });
 
+socket.on('game_state_updated', (data) => {
+    console.log('Game state updated:', data.message);
+    updateUIFromGameState(data.gameState);
+});
+
+// This event is now only for the current player after they move
 socket.on('turn_result', (data) => {
-  console.log('Turn result:', data);
-  
-  // Update board position
-  if (data.playerId === playerId) {
-    // Update your own position and stats here
-    movePlayerToPosition(playerId, data.newPosition);
-  }
-  
-  // Highlight triggered rings
-  if (data.triggeredRings.length > 0) {
-    highlightRingEvents(data.triggeredRings);
-  }
-  
-  // Display cards
-  if (data.cards) {
-    displayCards(data.cards);
-  }
-  
-  // Update turn controls
-  updateTurnControls(data.nextPlayer);
+    console.log('Turn result:', data);
+    // Display cards for the human player to choose from
+    if (data.cards) {
+        displayCards(data.cards);
+    }
 });
 
 socket.on('error', (data) => {
@@ -160,38 +161,35 @@ function updatePlayerStats(stats) {
   }
 }
 
-socket.on('card_resolved', (data) => {
-  console.log('Card resolved:', data);
-  
-  // Update player stats if it's our card
-  if (data.playerId === playerId) {
-    updatePlayerStats(data.newStats);
+function updateUIFromGameState(newState) {
+    gameState = newState;
     
-    // Show resolution message
-    const cardsArea = document.getElementById('cardsArea');
-    cardsArea.innerHTML = `
-      <div class="card-result">
-        <h4>Choice Made!</h4>
-        <p>Your choice has been processed.</p>
-      </div>
-    `;
-    
-    // Clear cards after 3 seconds
-    setTimeout(() => {
-      cardsArea.innerHTML = '';
-    }, 3000);
-  }
-});
-
-socket.on('stats_updated', (data) => {
-    console.log('Stats updated:', data);
-    // This is a generic event that can be used by multiple actions
-    // For now, we only care about our own stats
-    if (data.playerId === playerId) {
-        updatePlayerStats(data.newStats);
+    // Update my player object
+    currentPlayer = gameState.players.find(p => p.id === playerId);
+    if (currentPlayer) {
+        showPlayerInfo(currentPlayer);
     }
-    // In the future, this could update a list of all players' stats
-});
+
+    // Update player list
+    updatePlayersList({ players: gameState.players });
+
+    // Update turn controls
+    const myPlayerObject = gameState.players.find(p => p.id === playerId);
+    const myTurn = myPlayerObject && gameState.players[gameState.currentPlayerIndex].id === myPlayerObject.id;
+
+    document.getElementById('turnControls').style.display = 'block'; // Always show controls
+    document.getElementById('rollButton').disabled = !myTurn;
+    document.getElementById('metanetButton').disabled = !myTurn;
+
+    // Update game status
+    if (myTurn) {
+        updateGameStatus("It's your turn!");
+        document.getElementById('cardsArea').innerHTML = ''; // Clear cards at start of my turn
+    } else {
+        const activePlayer = gameState.players[gameState.currentPlayerIndex];
+        updateGameStatus(`Waiting for ${activePlayer.username}...`);
+    }
+}
 
 function displayCharacterInfo(character) {
   const characterDiv = document.getElementById('characterInfo');
@@ -252,8 +250,26 @@ function updateTurnControls(nextPlayerIndex) {
 }
 
 function updatePlayersList(data) {
-  // This would update the players list UI
-  console.log('Players updated:', data);
+    const playersListDiv = document.getElementById('playersList');
+    playersListDiv.innerHTML = ''; // Clear the list
+    data.players.forEach(p => {
+        const playerDiv = document.createElement('div');
+        playerDiv.className = 'player-card'; // Reuse the player-card style
+        if (p.id === gameState.players[gameState.currentPlayerIndex].id) {
+            playerDiv.style.border = '2px solid #00ff00'; // Highlight current player
+        }
+        playerDiv.innerHTML = `
+            <strong>${p.username} ${p.isBot ? '(Bot)' : ''}</strong>
+            <div class="stats-grid">
+                <div class="stat">💰 ${p.stats.money}</div>
+                <div class="stat">🧠 ${p.stats.mental_health}</div>
+                <div class="stat">☠️ ${p.stats.sin}</div>
+                <div class="stat">✝️ ${p.stats.virtue}</div>
+                <div class="stat">✨ ${p.stats.clout}</div>
+            </div>
+        `;
+        playersListDiv.appendChild(playerDiv);
+    });
 }
 
 // Placeholder functions to avoid errors
