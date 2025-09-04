@@ -1,0 +1,320 @@
+{
+  "starter_deck": [
+    {
+      "id": "hustle_prophet",
+      "name": "Hustle Culture Prophet",
+      "type": "sin",
+      "category": "personal",
+      "description": "You turn your love of baking into a joyless, on-demand cupcake delivery service. You haven't touched flour for fun in six months.",
+      "flavor_text": "Rise and grind... and cry.",
+      "choices": [
+        {
+          "text": "Fulfill the orders (+200 Money, -10 Mental Health)",
+          "effects": { "money": 200, "mental_health": -10 }
+        }
+      ]
+    },
+    {
+      "id": "protect_passion",
+      "name": "Protect the Passion",
+      "type": "virtue",
+      "category": "personal",
+      "description": "Your friend suggests you sell your beautiful watercolor paintings on Etsy. You politely decline, keeping this one thing for yourself.",
+      "flavor_text": "Not everything needs to be a business.",
+      "choices": [
+        {
+          "text": "Keep it sacred (+15 Mental Health)",
+          "effects": { "mental_health": 15 }
+        }
+      ]
+    },
+    {
+      "id": "algorithm_giveth",
+      "name": "The Algorithm Giveth...",
+      "type": "chaos",
+      "category": "personal",
+      "description": "Your goofy video of knitting a sweater for your cat goes unexpectedly viral. You are now a knitting influencer.",
+      "flavor_text": "The attention is nice. The pressure is not.",
+      "choices": [
+        {
+          "text": "Embrace your new fame",
+          "effects": { "clout": 20 },
+          "triggers": { "add_ongoing_effect": { "id": "influencer_upkeep", "turns_remaining": 3, "effects": { "money": -5 } } }
+        }
+      ]
+    },
+    {
+      "id": "commodified_self_care",
+      "name": "Commodified Self-Care",
+      "type": "sin",
+      "category": "health",
+      "description": "Feeling burnt out, you buy a $90 face serum that promises to 'restore your inner radiance.' You post it on Instagram.",
+      "flavor_text": "Is it working if no one sees it?",
+      "choices": [
+        {
+          "text": "Buy the serum (+10 Clout, -90 Money)",
+          "effects": { "clout": 10, "money": -90 }
+        }
+      ]
+    },
+    {
+      "id": "actual_self_care",
+      "name": "Actual Self-Care",
+      "type": "virtue",
+      "category": "health",
+      "description": "Instead of 'healing,' you admit you're just tired. You cancel your plans, turn off your phone, and go to bed at 9 p.m.",
+      "flavor_text": "The radical act of doing nothing.",
+      "choices": [
+        {
+          "text": "Just sleep (+20 Mental Health, -10 Clout)",
+          "effects": { "mental_health": 20, "clout": -10 }
+        }
+      ]
+    },
+    {
+      "id": "wellness_feud",
+      "name": "Wellness Influencer Feud",
+      "type": "chaos",
+      "category": "health",
+      "description": "Your favorite mindfulness guru is exposed for putting lead in their supplements. The entire wellness community is at war.",
+      "flavor_text": "So much for inner peace.",
+      "choices": [
+        {
+          "text": "Witness the drama",
+          "effects": {},
+          "triggers": { "group_effect": { "target": "all", "effects": { "mental_health": -5 } } }
+        }
+      ]
+    },
+    {
+        "id": "photo_dump",
+        "name": "The Photo Dump",
+        "type": "sin",
+        "category": "social",
+        "description": "You spend four hours curating a 10-slide Instagram carousel of 'candid' blurry photos to prove how carefree and real you are.",
+        "flavor_text": "Effortless, right?",
+        "choices": [
+          {
+            "text": "Post the dump (+15 Clout, -5 Mental Health)",
+            "effects": { "clout": 15, "mental_health": -5 }
+          }
+        ]
+    },
+    {
+        "id": "log_off",
+        "name": "Log Off",
+        "type": "virtue",
+        "category": "social",
+        "description": "You have a genuinely wonderful experience and feel no compulsion to document it for strangers on the internet.",
+        "flavor_text": "Some things are just for you.",
+        "choices": [
+          {
+            "text": "Be present (+10 Mental Health)",
+            "effects": { "mental_health": 10 }
+          }
+        ]
+    },
+    {
+        "id": "front_facing_camera",
+        "name": "Accidental Front-Facing Camera",
+        "type": "chaos",
+        "category": "social",
+        "description": "You open your phone in public and are confronted with the uncurated, gremlin-like reality of your own face. It's humbling.",
+        "flavor_text": "A moment of pure, unfiltered truth.",
+        "choices": [
+          {
+            "text": "Oof.",
+            "effects": {},
+            "triggers": { "group_effect": { "target": "all", "effects": { "clout": -5 } } }
+          }
+        ]
+    },
+    {
+        "id": "doomscroll_dissociate",
+        "name": "Doomscroll & Dissociate",
+        "type": "sin",
+        "category": "personal",
+        "description": "You read about impending ecological collapse while simultaneously ordering a plastic-wrapped salad to your door via a gig-economy app.",
+        "flavor_text": "At least the salad is healthy.",
+        "choices": [
+          {
+            "text": "Enjoy your salad (-10 Mental Health, +5 Money)",
+            "effects": { "mental_health": -10, "money": 5 }
+          }
+        ]
+    },
+    {
+        "id": "touch_grass",
+        "name": "Touch Grass",
+        "type": "virtue",
+        "category": "personal",
+        "description": "Overwhelmed by the news, you leave your phone at home and go for a walk. The world is still on fire, but the trees are nice.",
+        "flavor_text": "It's surprisingly effective.",
+        "choices": [
+          {
+            "text": "Go for a walk (+15 Mental Health)",
+            "effects": { "mental_health": 15 }
+          }
+        ]
+    },
+    {
+        "id": "the_notification",
+        "name": "The Notification",
+        "type": "chaos",
+        "category": "personal",
+        "description": "Your phone buzzes. Is it a catastrophic news alert, a 50% off pizza coupon, or a text from your mom asking for your Netflix password again?",
+        "flavor_text": "The Schrödinger's cat of modern life.",
+        "choices": [
+          {
+            "text": "Check your phone",
+            "effects": {},
+            "triggers": { "roll_dice": {
+                "1-2": { "group_effect": { "target": "all", "effects": { "mental_health": -5 } } },
+                "3-4": { "group_effect": { "target": "all", "effects": { "money": 50 } } },
+                "5-6": { "self_effect": { "lose_turn": 1 } }
+            } }
+          }
+        ]
+    },
+    {
+        "id": "defend_your_queen",
+        "name": "Defend Your Queen",
+        "type": "sin",
+        "category": "social",
+        "description": "Your favorite influencer is getting 'cancelled' for a minor infraction. You spend your entire evening fighting with anonymous troll accounts in their comment section.",
+        "flavor_text": "They'd do the same for you. Probably.",
+        "choices": [
+          {
+            "text": "Go to war (+5 Clout, -10 Mental Health)",
+            "effects": { "clout": 5, "mental_health": -10 }
+          }
+        ]
+    },
+    {
+        "id": "moment_of_clarity",
+        "name": "A Moment of Clarity",
+        "type": "virtue",
+        "category": "social",
+        "description": "You realize the YouTuber you watch every day to fall asleep doesn't know you exist. You decide to call an actual friend instead.",
+        "flavor_text": "Real connection is a two-way street.",
+        "choices": [
+          {
+            "text": "Call a friend (+15 Mental Health)",
+            "effects": { "mental_health": 15 }
+          }
+        ]
+    },
+    {
+        "id": "the_unfollowing",
+        "name": "The Unfollowing",
+        "type": "chaos",
+        "category": "social",
+        "description": "A beloved online personality suddenly deletes all their social media accounts, leaving a void in the lives of millions... and your daily routine.",
+        "flavor_text": "It feels weirdly personal.",
+        "choices": [
+          {
+            "text": "Feel the void",
+            "effects": {},
+            "triggers": { "group_effect": { "target": "all_if_clout_gt_10", "effects": { "mental_health": -10 } } }
+          }
+        ]
+    },
+    {
+      "id": "unexpected_vet_bill",
+      "name": "Emergency Vet Visit",
+      "type": "chaos",
+      "category": "personal",
+      "description": "Your pet needs emergency surgery. The bill is $3000.",
+      "flavor_text": "Your furry friend is counting on you.",
+      "choices": [
+        {
+          "text": "Pay the bill (-$3000, +2 Mental Health)",
+          "effects": { "money": -3000, "mental_health": 2, "virtue": 1 },
+          "triggers": { "add_ongoing_effect": { "id": "vet_debt", "turns_remaining": 3, "effects": { "money": -100 } } }
+        },
+        {
+          "text": "Find a cheaper vet (-$1500, -1 Mental Health)",
+          "effects": { "money": -1500, "mental_health": -1, "sin": 1 }
+        },
+        {
+          "text": "Can't afford it (-3 Mental Health, +2 Sin)",
+          "effects": { "mental_health": -3, "sin": 2 }
+        }
+      ]
+    },
+    {
+        "id": "quiet_quitting",
+        "name": "Quiet Quitting",
+        "type": "virtue",
+        "category": "career",
+        "description": "You consciously decide to do only the work specified in your job description, reclaiming your evenings and weekends.",
+        "flavor_text": "Act your wage.",
+        "choices": [
+            {
+                "text": "Set boundaries (+10 Mental Health, -5 Money)",
+                "effects": { "mental_health": 10, "money": -5 }
+            }
+        ]
+    },
+    {
+        "id": "group_chat_tyranny",
+        "name": "The Tyranny of the Group Chat",
+        "type": "chaos",
+        "category": "social",
+        "description": "A friend adds you to a new group chat for a party that happened three weeks ago. It is now exclusively for sending memes.",
+        "flavor_text": "You can never leave.",
+        "choices": [
+            {
+                "text": "Mute the chat forever. (+5 Mental Health)",
+                "effects": { "mental_health": 5 }
+            },
+            {
+                "text": "Become the main meme contributor. (+5 Clout)",
+                "effects": { "clout": 5 }
+            }
+        ]
+    },
+    {
+        "id": "student_loan_pause",
+        "name": "A Bleak Victory",
+        "type": "virtue",
+        "category": "career",
+        "description": "The government has paused student loan payments for another month. This is the best financial news you've had all year.",
+        "flavor_text": "It's sad that this counts as a win.",
+        "choices": [
+            {
+                "text": "Celebrate! (+10 Mental Health, +50 Money)",
+                "effects": { "mental_health": 10, "money": 50 }
+            }
+        ]
+    },
+    {
+        "id": "main_character_syndrome",
+        "name": "Main Character Syndrome",
+        "type": "sin",
+        "category": "personal",
+        "description": "You romanticize your trip to the grocery store, complete with an internal monologue and imagining the perfect soundtrack.",
+        "flavor_text": "Everyone else is just an NPC.",
+        "choices": [
+            {
+                "text": "Embrace it. (+5 Clout, +5 Mental Health)",
+                "effects": { "clout": 5, "mental_health": 5 }
+            }
+        ]
+    },
+    {
+        "id": "cringe_is_dead",
+        "name": "Cringe is Dead",
+        "type": "virtue",
+        "category": "social",
+        "description": "You see someone do something genuinely embarrassing in public. Instead of judging, you feel a sense of solidarity.",
+        "flavor_text": "To be human is to be cringe.",
+        "choices": [
+            {
+                "text": "Feel the empathy. (+10 Mental Health)",
+                "effects": { "mental_health": 10 }
+            }
+        ]
+    }
+  ]
+}

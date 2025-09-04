@@ -69,48 +69,26 @@ function makeCardChoice(cardId, choiceIndex) {
   });
 }
 
-function postOnMetaNet() {
-    if (gameId && playerId) {
-        socket.emit('post_on_metanet', { gameId, playerId });
-    }
-}
-
-function addBot() {
-    if (gameId) {
-        socket.emit('add_bot', { gameId });
-    }
-}
-
 // Socket event handlers
 socket.on('game_created', (data) => {
-    gameId = data.gameId;
-    console.log('Game created:', data);
+  gameId = data.gameId;
+  console.log('Game created:', data);
 
-    // Show lobby controls
-    document.getElementById('addBotButton').style.display = 'inline-block';
-    document.getElementById('startGameButton').style.display = 'inline-block';
+  document.getElementById('gameSetup').style.display = 'none';
+  document.getElementById('gameArea').style.display = 'block';
 
-    // Disable initial setup buttons
-    document.querySelector('button[onclick="createGame()"]').disabled = true;
-    document.querySelector('button[onclick="joinGame()"]').disabled = true;
-    document.getElementById('gameNameInput').disabled = true;
-
-
-    updateGameStatus(`Game "${document.getElementById('gameNameInput').value}" created! Add players or bots.`);
+  updateGameStatus('Game created! Waiting for players...');
 });
 
 socket.on('player_joined', (data) => {
-    console.log('Player joined:', data);
-    updatePlayersList({ players: data.players }); // Pass the full players list
+  console.log('Player joined:', data);
+  updatePlayersList(data);
 
-    // If I am the one who just joined, hide the setup screen
-    if (data.player.socketId === socket.id) {
-        playerId = data.player.id;
-        currentPlayer = data.player;
-        document.getElementById('gameSetup').style.display = 'none';
-        document.getElementById('gameArea').style.display = 'block';
-        showPlayerInfo(data.player);
-    }
+  if (data.player.socket_id === socket.id) {
+    playerId = data.player.id;
+    currentPlayer = data.player;
+    showPlayerInfo(data.player);
+  }
 });
 
 socket.on('character_assigned', (data) => {
@@ -119,22 +97,37 @@ socket.on('character_assigned', (data) => {
 });
 
 socket.on('game_started', (data) => {
-    console.log('Game started:', data);
-    updateUIFromGameState(data.gameState);
+  console.log('Game started:', data);
+  gameState = data.gameState;
+  updateGameStatus('Game started! Round 1');
+
+  // Show turn controls for first player
+  if (gameState.currentPlayer === 0 && currentPlayer) {
+    enableTurnControls();
+  }
 });
 
-socket.on('game_state_updated', (data) => {
-    console.log('Game state updated:', data.message);
-    updateUIFromGameState(data.gameState);
-});
-
-// This event is now only for the current player after they move
 socket.on('turn_result', (data) => {
-    console.log('Turn result:', data);
-    // Display cards for the human player to choose from
-    if (data.cards) {
-        displayCards(data.cards);
-    }
+  console.log('Turn result:', data);
+
+  // Update board position
+  if (data.playerId === playerId) {
+    // Update your own position and stats here
+    movePlayerToPosition(playerId, data.newPosition);
+  }
+
+  // Highlight triggered rings
+  if (data.triggeredRings.length > 0) {
+    highlightRingEvents(data.triggeredRings);
+  }
+
+  // Display cards
+  if (data.cards) {
+    displayCards(data.cards);
+  }
+
+  // Update turn controls
+  updateTurnControls(data.nextPlayer);
 });
 
 socket.on('error', (data) => {
@@ -153,42 +146,43 @@ function showPlayerInfo(player) {
 
 function updatePlayerStats(stats) {
   if (stats) {
-    document.getElementById('money').textContent = stats.money || 0;
-    document.getElementById('mental').textContent = stats.mental_health || 0;
+    document.getElementById('money').textContent = stats.money || 5000;
+
+
+socket.on('card_resolved', (data) => {
+  console.log('Card resolved:', data);
+
+  // Update player stats if it's our card
+  if (data.playerId === playerId) {
+    updatePlayerStats(data.newStats);
+
+    // Show resolution message
+    const cardsArea = document.getElementById('cardsArea');
+    cardsArea.innerHTML = `
+      <div class="card-result">
+        <h4>Choice Made!</h4>
+        <p>Your choice has been processed.</p>
+        <div class="new-stats">
+          Money: $${data.newStats.money} |
+          Mental Health: ${data.newStats.mental_health} |
+          Sin: ${data.newStats.sin} |
+          Virtue: ${data.newStats.virtue}
+        </div>
+      </div>
+    `;
+
+    // Clear cards after 3 seconds
+    setTimeout(() => {
+      cardsArea.innerHTML = '';
+    }, 3000);
+  }
+});
+
+
+    document.getElementById('mental').textContent = stats.mental_health || 5;
     document.getElementById('sin').textContent = stats.sin || 0;
     document.getElementById('virtue').textContent = stats.virtue || 0;
-    document.getElementById('clout').textContent = stats.clout || 0;
   }
-}
-
-function updateUIFromGameState(newState) {
-    gameState = newState;
-    
-    // Update my player object
-    currentPlayer = gameState.players.find(p => p.id === playerId);
-    if (currentPlayer) {
-        showPlayerInfo(currentPlayer);
-    }
-
-    // Update player list
-    updatePlayersList({ players: gameState.players });
-
-    // Update turn controls
-    const myPlayerObject = gameState.players.find(p => p.id === playerId);
-    const myTurn = myPlayerObject && gameState.players[gameState.currentPlayerIndex].id === myPlayerObject.id;
-
-    document.getElementById('turnControls').style.display = 'block'; // Always show controls
-    document.getElementById('rollButton').disabled = !myTurn;
-    document.getElementById('metanetButton').disabled = !myTurn;
-
-    // Update game status
-    if (myTurn) {
-        updateGameStatus("It's your turn!");
-        document.getElementById('cardsArea').innerHTML = ''; // Clear cards at start of my turn
-    } else {
-        const activePlayer = gameState.players[gameState.currentPlayerIndex];
-        updateGameStatus(`Waiting for ${activePlayer.username}...`);
-    }
 }
 
 function displayCharacterInfo(character) {
@@ -250,35 +244,8 @@ function updateTurnControls(nextPlayerIndex) {
 }
 
 function updatePlayersList(data) {
-    const playersListDiv = document.getElementById('playersList');
-    playersListDiv.innerHTML = ''; // Clear the list
-    data.players.forEach(p => {
-        const playerDiv = document.createElement('div');
-        playerDiv.className = 'player-card'; // Reuse the player-card style
-        if (p.id === gameState.players[gameState.currentPlayerIndex].id) {
-            playerDiv.style.border = '2px solid #00ff00'; // Highlight current player
-        }
-        playerDiv.innerHTML = `
-            <strong>${p.username} ${p.isBot ? '(Bot)' : ''}</strong>
-            <div class="stats-grid">
-                <div class="stat">💰 ${p.stats.money}</div>
-                <div class="stat">🧠 ${p.stats.mental_health}</div>
-                <div class="stat">☠️ ${p.stats.sin}</div>
-                <div class="stat">✝️ ${p.stats.virtue}</div>
-                <div class="stat">✨ ${p.stats.clout}</div>
-            </div>
-        `;
-        playersListDiv.appendChild(playerDiv);
-    });
-}
-
-// Placeholder functions to avoid errors
-function movePlayerToPosition(playerId, position) {
-    console.log(`Player ${playerId} moved to position ${position}. (UI update not implemented)`);
-}
-
-function highlightRingEvents(rings) {
-    console.log(`Ring events triggered: ${rings.join(', ')}. (UI update not implemented)`);
+  // This would update the players list UI
+  console.log('Players updated:', data);
 }
 
 // Initialize game
