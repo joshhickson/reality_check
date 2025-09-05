@@ -1,166 +1,272 @@
+
 // Reality Check Game Client
 const socket = io();
 
 let gameId = null;
 let playerId = null;
 let gameState = null;
+let currentPlayer = null;
 
-// UI Elements
-const gameSetupDiv = document.getElementById('gameSetup');
-const gameAreaDiv = document.getElementById('gameArea');
-const usernameInput = document.getElementById('usernameInput');
-const gameIdInput = document.getElementById('gameNameInput'); // Re-using for game ID
-const playersListDiv = document.getElementById('playersList');
-const gameStatusDiv = document.getElementById('gameStatus');
-const playerInfoDiv = document.getElementById('playerInfo');
-const moneySpan = document.getElementById('money');
-const mentalSpan = document.getElementById('mental');
-const sinSpan = document.getElementById('sin');
-const virtueSpan = document.getElementById('virtue');
-const cardsAreaDiv = document.getElementById('cardsArea');
-const turnControlsDiv = document.getElementById('turnControls');
-
-// Game Setup
+// Game setup functions
 function createGame() {
-    const playerName = usernameInput.value;
-    if (!playerName) {
-        alert('Please enter your username');
-        return;
-    }
-    socket.emit('create_game', playerName);
+  const gameName = document.getElementById('gameNameInput').value;
+  const username = document.getElementById('usernameInput').value;
+
+  if (!gameName || !username) {
+    alert('Please enter both game name and username');
+    return;
+  }
+
+  socket.emit('create_game', { gameName, maxPlayers: 5 });
+
+  // Auto-join the created game
+  setTimeout(() => {
+    socket.emit('join_game', { gameId: gameId, username });
+  }, 100);
 }
 
 function joinGame() {
-    const playerName = usernameInput.value;
-    const gameIdToJoin = gameIdInput.value;
-    if (!playerName || !gameIdToJoin) {
-        alert('Please enter your username and a game ID');
-        return;
-    }
-    socket.emit('join_game', { gameId: gameIdToJoin, playerName });
+  const username = document.getElementById('usernameInput').value;
+
+  if (!username) {
+    alert('Please enter a username');
+    return;
+  }
+
+  // For now, we'll need a game ID input or list
+  const gameIdInput = prompt('Enter Game ID:');
+  if (gameIdInput) {
+    socket.emit('join_game', { gameId: gameIdInput, username });
+  }
 }
 
 function startGame() {
-    socket.emit('start_game', gameId);
+  if (gameId) {
+    socket.emit('start_game', { gameId });
+  }
 }
 
-function drawCard() {
-    socket.emit('draw_card', gameId);
+function rollDice() {
+  const rollResult = Math.floor(Math.random() * 6) + 1;
+  document.getElementById('rollResult').innerHTML = `Rolled: ${rollResult}`;
+
+  socket.emit('player_turn', {
+    gameId,
+    playerId,
+    rollResult,
+    action: 'move'
+  });
+
+  document.getElementById('rollButton').disabled = true;
 }
 
-function playCard(cardId, choiceIndex) {
-    socket.emit('play_card', { gameId, cardId, choiceIndex });
+function makeCardChoice(cardId, choiceIndex) {
+  socket.emit('card_choice', {
+    gameId,
+    playerId,
+    cardId,
+    choiceIndex
+  });
 }
 
-function endTurn() {
-    socket.emit('end_turn', gameId);
+// Socket event handlers
+socket.on('game_created', (data) => {
+  gameId = data.gameId;
+  console.log('Game created:', data);
+
+  document.getElementById('gameSetup').style.display = 'none';
+  document.getElementById('gameArea').style.display = 'block';
+
+  updateGameStatus('Game created! Waiting for players...');
+});
+
+socket.on('player_joined', (data) => {
+  console.log('Player joined:', data);
+  updatePlayersList(data);
+
+  if (data.player.socket_id === socket.id) {
+    playerId = data.player.id;
+    currentPlayer = data.player;
+    showPlayerInfo(data.player);
+  }
+});
+
+socket.on('character_assigned', (data) => {
+  console.log('Character assigned:', data);
+  displayCharacterInfo(data.character);
+});
+
+socket.on('game_started', (data) => {
+  console.log('Game started:', data);
+  gameState = data.gameState;
+  updateGameStatus('Game started! Round 1');
+
+  // Show turn controls for first player
+  if (gameState.currentPlayer === 0 && currentPlayer) {
+    enableTurnControls();
+  }
+});
+
+socket.on('turn_result', (data) => {
+  console.log('Turn result:', data);
+
+  // Update board position
+  if (data.playerId === playerId) {
+    // Update your own position and stats here
+    movePlayerToPosition(playerId, data.newPosition);
+  }
+
+  // Highlight triggered rings
+  if (data.triggeredRings.length > 0) {
+    highlightRingEvents(data.triggeredRings);
+  }
+
+  // Display cards
+  if (data.cards) {
+    displayCards(data.cards);
+  }
+
+  // Update turn controls
+  updateTurnControls(data.nextPlayer);
+});
+
+socket.on('error', (data) => {
+  alert('Error: ' + data.message);
+});
+
+// UI update functions
+function updateGameStatus(status) {
+  document.getElementById('gameStatus').textContent = status;
 }
 
-// UI Update Functions
-function updateUI(state) {
-    gameState = state;
-    gameId = state.id;
-
-    // Update player list
-    playersListDiv.innerHTML = '';
-    for (const p of Object.values(state.players)) {
-        let playerHtml = `<div>${p.name} (Money: ${p.money}, Mental: ${p.mental_health})`;
-        if (state.player_order[state.current_turn_index] === p.id) {
-            playerHtml += ' <strong>(Current Turn)</strong>';
-        }
-        playerHtml += '</div>';
-        playersListDiv.innerHTML += playerHtml;
-    }
-
-    // Update personal info
-    const me = state.players[playerId];
-    if (me) {
-        playerInfoDiv.style.display = 'block';
-        moneySpan.textContent = me.money;
-        mentalSpan.textContent = me.mental_health;
-        sinSpan.textContent = me.sin;
-        virtueSpan.textContent = me.virtue;
-
-        // Update hand
-        cardsAreaDiv.innerHTML = '<h4>Your Hand</h4>';
-        if (me.hand.length === 0) {
-            cardsAreaDiv.innerHTML += '<p>No cards in hand.</p>';
-        } else {
-            me.hand.forEach(card => {
-                let choicesHtml = card.choices.map((choice, index) =>
-                    `<button onclick="playCard('${card.id}', ${index})">${choice.text}</button>`
-                ).join('');
-                cardsAreaDiv.innerHTML += `
-                    <div class="card ${card.type}-card">
-                        <h5>${card.name}</h5>
-                        <p>${card.description}</p>
-                        <em>${card.flavor_text}</em>
-                        <div>${choicesHtml}</div>
-                    </div>
-                `;
-            });
-        }
-    }
-
-    // Update turn controls
-    if (state.player_order[state.current_turn_index] === playerId) {
-        turnControlsDiv.style.display = 'block';
-        gameStatusDiv.textContent = "It's your turn!";
-    } else {
-        turnControlsDiv.style.display = 'none';
-        const currentPlayerName = state.players[state.player_order[state.current_turn_index]].name;
-        gameStatusDiv.textContent = `Waiting for ${currentPlayerName}...`;
-    }
+function showPlayerInfo(player) {
+  document.getElementById('playerInfo').style.display = 'block';
+  updatePlayerStats(player.stats);
 }
 
-// Socket Event Handlers
-socket.on('connect', () => {
-    playerId = socket.id;
-    console.log('Connected to server with ID:', playerId);
-});
+function updatePlayerStats(stats) {
+  if (stats) {
+    document.getElementById('money').textContent = stats.money || 5000;
 
-socket.on('game_created', ({ gameId: newGameId, gameState: initialState }) => {
-    console.log('Game Created:', newGameId);
-    gameSetupDiv.style.display = 'none';
-    gameAreaDiv.style.display = 'block';
-    gameIdInput.value = newGameId; // Show the new game ID
-    updateUI(initialState);
-    // Add a start game button for the creator
-    gameStatusDiv.innerHTML = 'Game created! Waiting for players... <button onclick="startGame()">Start Game</button>';
-});
 
-socket.on('game_joined', (initialState) => {
-    console.log('Joined Game:', initialState.id);
-    gameSetupDiv.style.display = 'none';
-    gameAreaDiv.style.display = 'block';
-    updateUI(initialState);
-});
+socket.on('card_resolved', (data) => {
+  console.log('Card resolved:', data);
 
-socket.on('update_game_state', (newState) => {
-    console.log('Game state updated');
-    updateUI(newState);
-});
+  // Update player stats if it's our card
+  if (data.playerId === playerId) {
+    updatePlayerStats(data.newStats);
 
-socket.on('turn_started', (newState) => {
-    alert("It's your turn!");
-    updateUI(newState);
-});
-
-socket.on('error', (message) => {
-    console.error('Server Error:', message);
-    alert('Error: ' + message);
-});
-
-// Initial setup
-document.addEventListener('DOMContentLoaded', () => {
-    // Re-label the button for clarity
-    document.querySelector('button[onclick="joinGame()"]').textContent = 'Join Game by ID';
-    // Re-label the input placeholder
-    gameIdInput.placeholder = 'Game ID (for joining)';
-
-    // Add new buttons for turn actions to the turnControls div
-    turnControlsDiv.innerHTML = `
-        <button onclick="drawCard()">Draw Card</button>
-        <button onclick="endTurn()">End Turn</button>
+    // Show resolution message
+    const cardsArea = document.getElementById('cardsArea');
+    cardsArea.innerHTML = `
+      <div class="card-result">
+        <h4>Choice Made!</h4>
+        <p>Your choice has been processed.</p>
+        <div class="new-stats">
+          Money: $${data.newStats.money} |
+          Mental Health: ${data.newStats.mental_health} |
+          Sin: ${data.newStats.sin} |
+          Virtue: ${data.newStats.virtue}
+        </div>
+      </div>
     `;
+
+    // Clear cards after 3 seconds
+    setTimeout(() => {
+      cardsArea.innerHTML = '';
+    }, 3000);
+  }
+});
+
+
+    document.getElementById('mental').textContent = stats.mental_health || 5;
+    document.getElementById('sin').textContent = stats.sin || 0;
+    document.getElementById('virtue').textContent = stats.virtue || 0;
+  }
+}
+
+function displayCharacterInfo(character) {
+  const characterDiv = document.getElementById('characterInfo');
+  characterDiv.innerHTML = `
+    <div><strong>Background:</strong> ${character.background.description}</div>
+    <div><strong>Traits:</strong> ${character.traits.join(', ')}</div>
+    <div><strong>Drawback:</strong> ${character.drawback}</div>
+    <div><strong>Starting Money:</strong> $${character.background.money}</div>
+  `;
+}
+
+function displayCards(cards) {
+  const cardsArea = document.getElementById('cardsArea');
+  cardsArea.innerHTML = '<h4>Choose Your Path</h4>';
+
+  cards.forEach((card, cardIndex) => {
+    const cardDiv = document.createElement('div');
+    cardDiv.className = `card ${card.type}-card`;
+
+    let choicesHtml = '';
+    if (card.choices && card.choices.length > 0) {
+      choicesHtml = card.choices.map((choice, choiceIndex) => `
+        <button onclick="makeCardChoice('${card.id}', ${choiceIndex})" class="choice-btn">
+          ${choice.text}
+        </button>
+      `).join('');
+    }
+
+    cardDiv.innerHTML = `
+      <h5>${card.name}</h5>
+      <p>${card.description}</p>
+      ${card.flavor_text ? `<em class="flavor-text">"${card.flavor_text}"</em>` : ''}
+      <div class="card-choices">
+        ${choicesHtml}
+      </div>
+    `;
+    cardsArea.appendChild(cardDiv);
+  });
+}
+
+function enableTurnControls() {
+  document.getElementById('turnControls').style.display = 'block';
+  document.getElementById('rollButton').disabled = false;
+}
+
+function updateTurnControls(nextPlayerIndex) {
+  // Enable/disable controls based on whose turn it is
+  const isMyTurn = gameState && gameState.players[nextPlayerIndex] &&
+                   gameState.players[nextPlayerIndex].id === playerId;
+
+  document.getElementById('rollButton').disabled = !isMyTurn;
+
+  if (isMyTurn) {
+    updateGameStatus("It's your turn!");
+  } else {
+    updateGameStatus(`Waiting for other players...`);
+  }
+}
+
+function updatePlayersList(data) {
+  // This would update the players list UI
+  console.log('Players updated:', data);
+}
+
+// Initialize game
+document.addEventListener('DOMContentLoaded', () => {
+  // Load available games
+  fetch('/api/games')
+    .then(response => response.json())
+    .then(games => {
+      const gamesList = document.getElementById('gamesList');
+      if (games.length > 0) {
+        gamesList.innerHTML = '<h4>Available Games:</h4>';
+        games.forEach(game => {
+          const gameDiv = document.createElement('div');
+          gameDiv.innerHTML = `
+            <div style="background: rgba(255,255,255,0.1); padding: 10px; margin: 5px; border-radius: 5px;">
+              <strong>${game.name}</strong> - ${game.status}
+              <button onclick="socket.emit('join_game', {gameId: '${game.id}', username: document.getElementById('usernameInput').value})">Join</button>
+            </div>
+          `;
+          gamesList.appendChild(gameDiv);
+        });
+      }
+    });
 });
