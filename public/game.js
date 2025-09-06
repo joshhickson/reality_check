@@ -78,6 +78,14 @@ socket.on('game_created', (data) => {
   document.getElementById('gameArea').style.display = 'block';
 
   updateGameStatus('Game created! Waiting for players...');
+
+  // Create and add the "Start Game" button
+  const gameControls = document.querySelector('.game-controls');
+  const startButton = document.createElement('button');
+  startButton.id = 'startGameButton';
+  startButton.textContent = 'Start Game';
+  startButton.onclick = startGame;
+  gameControls.prepend(startButton); // Add it at the top of the controls
 });
 
 socket.on('player_joined', (data) => {

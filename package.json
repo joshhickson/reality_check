@@ -2,10 +2,10 @@
   "name": "reality-check-game",
   "version": "1.0.0",
   "description": "Reality Check: The Game of Modern Survival, Sin, and Satire",
-  "main": "server.js",
+  "main": "game-server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node game-server.js",
+    "dev": "nodemon game-server.js"
   },
   "dependencies": {
     "@replit/database": "^3.0.1",
