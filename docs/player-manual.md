@@ -89,7 +89,7 @@ Life is full of interruptions. During your turn, another player might reveal a C
 After the final round, the game ends and Judgment Day begins.
 
 1.  **Peer Testimony:** All players will secretly give one "Kudos" token to a player they wish to celebrate and one "Concern" token to a player whose actions they found problematic.
-2.  **Final Scoring:** Your final score is calculated based on your stats. Kudos tokens provide a bonus, while Concern tokens give a penalty.
+2.  **Final Scoring:** Your final score is calculated based on your stats. Having a high Mental Health provides a significant bonus, while Kudos tokens from other players will boost your score and Concern tokens will lower it.
 3.  **Victory:** The player with the highest score is the "winner," but the group also determines winners for the other victory conditions (The Saint, The Hustler, The Survivor, The Builder).
 
 The ultimate goal is to spark conversation. Who played the "best" game? What does that even mean? That's your final Reality Check.
