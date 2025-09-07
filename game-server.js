@@ -120,6 +120,16 @@ io.on('connection', (socket) => {
     // For simulation, we'll just transition to the decision phase
     game.stateMachine.transition('Tile');
     game.stateMachine.transition('Card');
+    
+    // Set up pendingDecision context before transitioning to Decision
+    game.stateMachine.updateContext({
+      pendingDecision: {
+        playerId: playerId,
+        cardId: 'simulation_card',
+        options: ['Option 1', 'Option 2']
+      }
+    });
+    
     game.stateMachine.transition('Decision');
 
     io.to(game.id).emit('game_state_update', game.getGameState());

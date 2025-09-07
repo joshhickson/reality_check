@@ -105,18 +105,24 @@ function handleGameStateUpdate(data) {
         currentSocket = bot1_socket;
     } else if (currentPlayer.id === bot2_id) {
         currentSocket = bot2_socket;
+    } else if (currentPlayer.name === 'Creator') {
+        // The automatic Creator player - use the game creator's socket (Bot1)
+        currentSocket = bot1_socket;
+        console.log(`Bot1 is controlling the automatic Creator player.`);
     }
 
     if (currentSocket) {
         setTimeout(() => {
             if (currentState === 'Roll') {
                 console.log(`Bot ${currentPlayer.name} is rolling the dice.`);
+                console.log(`Emitting roll_dice with:`, { gameId, playerId: currentPlayer.id });
                 currentSocket.emit('roll_dice', {
                     gameId: gameId,
                     playerId: currentPlayer.id
                 });
             } else if (currentState === 'Decision') {
                 console.log(`Bot ${currentPlayer.name} is making a choice.`);
+                console.log(`Emitting card_choice with:`, { gameId, playerId: currentPlayer.id });
                 currentSocket.emit('card_choice', {
                     gameId: gameId,
                     playerId: currentPlayer.id,
@@ -134,6 +140,7 @@ async function runSimulation() {
         bot1_socket = await connectBot("Bot1");
         bot2_socket = await connectBot("Bot2");
 
+        // Bot1 creates the game and joins as Bot1
         bot1_id = await createGame(bot1_socket, "Bot Game", "Bot1");
         bot2_id = await joinGame(bot2_socket, gameId, "Bot2");
 
