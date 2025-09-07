@@ -15,8 +15,7 @@ class Game {
 
     this.currentPlayerIndex = 0;
 
-    // Add the creator as the first player
-    this.addPlayer(creatorSocket, 'Creator'); // Placeholder name for now
+    // The creator will join through the 'join_game' event
   }
 
   addPlayer(socket, username) {

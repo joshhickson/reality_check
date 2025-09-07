@@ -112,6 +112,19 @@ io.on('connection', (socket) => {
     }, 2000);
   });
 
+  socket.on('roll_dice', ({ gameId, playerId }) => {
+    console.log(`[EVENT] roll_dice from ${socket.id}`, { gameId, playerId });
+    const game = games[gameId];
+    if (!game) return;
+
+    // For simulation, we'll just transition to the decision phase
+    game.stateMachine.transition('Tile');
+    game.stateMachine.transition('Card');
+    game.stateMachine.transition('Decision');
+
+    io.to(game.id).emit('game_state_update', game.getGameState());
+  });
+
   socket.on('disconnect', () => {
     console.log(`👋 User disconnected: ${socket.id}`);
   });
