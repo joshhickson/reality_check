@@ -1,4 +1,8 @@
-// Final, corrected server.js
+// DEPRECATED: This server.js file is redundant and conflicts with game-server.js
+// The game-server.js file already includes all this functionality plus Socket.IO
+// Keeping this file for reference but commented out to prevent port conflicts
+
+/*
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
@@ -22,3 +26,4 @@ app.use('/lpc-generator', express.static(lpcGeneratorPath));
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+*/
