@@ -1,3 +1,5 @@
 node_modules/
 /lpc-all-sprites.json
 public/lpc-all-sprites.json
+server.log
+client.log
