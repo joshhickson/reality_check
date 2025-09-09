@@ -65,6 +65,7 @@ class Game {
       currentPlayer: this.getCurrentPlayer().id,
       turnNumber: this.scheduler.getCurrentTurn()
     });
+    this.stateMachine.transition('Idle');
     this.stateMachine.transition('Roll');
     // More logic here for processing global events, etc.
   }
@@ -77,7 +78,8 @@ class Game {
       players: this.players.map(p => p.getPublicState()),
       currentPlayerId: this.getCurrentPlayer() ? this.getCurrentPlayer().id : null,
       currentTurn: this.scheduler.getCurrentTurn(),
-      currentState: this.stateMachine.getCurrentState()
+      currentState: this.stateMachine.getCurrentState(),
+      pendingDecision: this.stateMachine.getContext().pendingDecision
     };
   }
 }

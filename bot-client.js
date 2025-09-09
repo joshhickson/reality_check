@@ -1,159 +1,212 @@
 const { io } = require("socket.io-client");
 
 const SERVER_URL = "http://localhost:5000";
+const TURN_LIMIT = 10;
 
-let gameId;
-let bot1_socket;
-let bot2_socket;
-let bot1_id;
-let bot2_id;
-const turnLimit = 10; // Stop after 10 turns
-let turnCount = 0;
+class Bot {
+    constructor(name, personality = 'Random') {
+        this.name = name;
+        this.personality = personality;
+        this.socket = null;
+        this.playerId = null;
+        this.gameId = null;
+        this.controlsCreator = false; // Flag to indicate if this bot controls the 'Creator' player
+    }
 
-function connectBot(name) {
-    return new Promise((resolve, reject) => {
-        const socket = io(SERVER_URL, {
-            reconnection: false,
-            transports: ["websocket"],
+    connect() {
+        return new Promise((resolve, reject) => {
+            this.socket = io(SERVER_URL, {
+                reconnection: false,
+                transports: ["websocket"],
+            });
+
+            this.socket.on('connect', () => {
+                console.log(`Bot ${this.name} connected with id ${this.socket.id}`);
+                resolve();
+            });
+
+            this.socket.on('connect_error', (err) => {
+                console.error(`Bot ${this.name} connection error: ${err.message}`);
+                reject(err);
+            });
+
+            this.socket.on('disconnect', () => {
+                console.log(`Bot ${this.name} disconnected`);
+            });
+
+            // Listen for game state updates
+            this.socket.on('game_state_update', (data) => this.handleGameStateUpdate(data));
+            this.socket.on('game_started', (data) => this.handleGameStateUpdate(data));
+
+            // Generic event logger for debugging
+            this.socket.onAny((eventName, ...args) => {
+                console.log(`[${this.name}] Event: ${eventName}`, JSON.stringify(args));
+            });
         });
+    }
 
-        socket.on('connect', () => {
-            console.log(`Bot ${name} connected with id ${socket.id}`);
-            resolve(socket);
+    createGame(gameName) {
+        return new Promise((resolve) => {
+            this.socket.emit('create_game', { gameName });
+            this.socket.on('game_created', (data) => {
+                this.gameId = data.gameId;
+                console.log(`Game created with ID: ${this.gameId}`);
+                // The creator of the game also joins it.
+                this.joinGame(this.gameId).then(() => {
+                    resolve({ gameId: this.gameId });
+                });
+            });
         });
+    }
 
-        socket.on('connect_error', (err) => {
-            console.error(`Bot ${name} connection error: ${err.message}`);
-            reject(err);
-        });
-
-        socket.on('disconnect', () => {
-            console.log(`Bot ${name} disconnected`);
-        });
-
-        // Generic event logger
-        socket.onAny((eventName, ...args) => {
-            console.log(`[${name}] Event: ${eventName}`, args);
-        });
-    });
-}
-
-function createGame(socket, gameName, username) {
-    return new Promise((resolve) => {
-        socket.emit('create_game', { gameName });
-        socket.on('game_created', (data) => {
-            gameId = data.gameId;
-            console.log(`Game created with ID: ${gameId}`);
-            // Join the game immediately after creation
-            socket.emit('join_game', { gameId, username });
-            socket.on('player_joined', (playerData) => {
-                if(playerData.player.name === username) {
-                    resolve(playerData.player.id);
+    joinGame(gameId) {
+        return new Promise((resolve) => {
+            this.socket.emit('join_game', { gameId, username: this.name });
+            this.socket.on('player_joined', (playerData) => {
+                if (playerData.player.name === this.name) {
+                    this.playerId = playerData.player.id;
+                    this.gameId = gameId;
+                    console.log(`Bot ${this.name} joined game ${this.gameId} with player ID ${this.playerId}`);
+                    resolve();
                 }
             });
         });
-    });
-}
-
-function joinGame(socket, gameId, username) {
-    return new Promise((resolve) => {
-        socket.emit('join_game', { gameId, username });
-        socket.on('player_joined', (playerData) => {
-             if(playerData.player.name === username) {
-                resolve(playerData.player.id);
-            }
-        });
-    });
-}
-
-function startGame(socket, gameId) {
-    socket.emit('start_game', { gameId });
-}
-
-function handleGameStateUpdate(data) {
-    console.log("Game state update received");
-    const gameState = data.gameState || data; // Handle both event structures
-    if (!gameState) {
-        console.error("Invalid game state data received:", data);
-        return;
     }
 
-    turnCount = gameState.currentTurn;
-    console.log(`Current turn: ${turnCount}`);
-
-    if (turnCount > turnLimit) {
-        console.log("Reached turn limit. Ending simulation.");
-        bot1_socket.disconnect();
-        bot2_socket.disconnect();
-        return;
+    startGame() {
+        if (this.gameId) {
+            this.socket.emit('start_game', { gameId: this.gameId });
+        }
     }
 
-    const { currentPlayerId, players, currentState } = gameState;
-    const currentPlayer = players.find(p => p.id === currentPlayerId);
+    handleGameStateUpdate(data) {
+        const gameState = data.gameState || data;
+        if (!gameState) {
+            console.error(`[${this.name}] Invalid game state data received:`, data);
+            return;
+        }
 
-    if (!currentPlayer) {
-        console.log("Game over or invalid state.");
-        bot1_socket.disconnect();
-        bot2_socket.disconnect();
-        return;
+        const { currentPlayerId, players, currentState, currentTurn } = gameState;
+
+        if (currentTurn > TURN_LIMIT) {
+            console.log("Reached turn limit. Ending simulation.");
+            this.disconnect();
+            return;
+        }
+
+        const currentPlayer = players.find(p => p.id === currentPlayerId);
+        if (!currentPlayer) {
+            console.log("Game over or invalid state. Disconnecting.");
+            this.disconnect();
+            return;
+        }
+
+        // A bot acts if it's their turn, or if they are controlling the 'Creator' player
+        const isMyTurn = currentPlayer.id === this.playerId;
+        const isCreatorTurn = currentPlayer.name === 'Creator' && this.controlsCreator;
+
+        if (isMyTurn || isCreatorTurn) {
+            console.log(`[${this.name}] It's ${currentPlayer.name}'s turn. State is ${currentState}`);
+            setTimeout(() => {
+                this.makeDecision(gameState);
+            }, 2000); // Wait 2 seconds to make the simulation easier to follow
+        }
     }
 
-    console.log(`It's ${currentPlayer.name}'s turn. State is ${currentState}`);
+    makeDecision(gameState) {
+        const { currentState, currentPlayerId } = gameState;
 
-    let currentSocket;
-    if (currentPlayer.id === bot1_id) {
-        currentSocket = bot1_socket;
-    } else if (currentPlayer.id === bot2_id) {
-        currentSocket = bot2_socket;
-    } else if (currentPlayer.name === 'Creator') {
-        // The automatic Creator player - use the game creator's socket (Bot1)
-        currentSocket = bot1_socket;
-        console.log(`Bot1 is controlling the automatic Creator player.`);
+        if (currentState === 'Roll') {
+            console.log(`[${this.name}] Rolling the dice.`);
+            this.socket.emit('roll_dice', {
+                gameId: this.gameId,
+                playerId: currentPlayerId
+            });
+        } else if (currentState === 'Decision') {
+            const choiceIndex = this.chooseOption(gameState);
+            console.log(`[${this.name}] Making a choice (option ${choiceIndex}).`);
+            this.socket.emit('card_choice', {
+                gameId: this.gameId,
+                playerId: currentPlayerId,
+                cardId: 'dummy_card', // This will need to be dynamic in the future
+                choiceIndex: choiceIndex
+            });
+        }
     }
 
-    if (currentSocket) {
-        setTimeout(() => {
-            if (currentState === 'Roll') {
-                console.log(`Bot ${currentPlayer.name} is rolling the dice.`);
-                console.log(`Emitting roll_dice with:`, { gameId, playerId: currentPlayer.id });
-                currentSocket.emit('roll_dice', {
-                    gameId: gameId,
-                    playerId: currentPlayer.id
+    chooseOption(gameState) {
+        const pendingDecision = gameState.pendingDecision;
+        if (!pendingDecision || !pendingDecision.options || pendingDecision.options.length === 0) {
+            console.log(`[${this.name}] No decision options found, defaulting to 0.`);
+            return 0;
+        }
+
+        const options = pendingDecision.options;
+
+        switch (this.personality) {
+            case 'Aggressive':
+                console.log(`[${this.name}] Choosing as Aggressive personality.`);
+                let bestSinOption = 0;
+                let maxSin = -Infinity;
+                options.forEach((option, i) => {
+                    const sin = option.effects.sin || 0;
+                    if (sin > maxSin) {
+                        maxSin = sin;
+                        bestSinOption = i;
+                    }
                 });
-            } else if (currentState === 'Decision') {
-                console.log(`Bot ${currentPlayer.name} is making a choice.`);
-                console.log(`Emitting card_choice with:`, { gameId, playerId: currentPlayer.id });
-                currentSocket.emit('card_choice', {
-                    gameId: gameId,
-                    playerId: currentPlayer.id,
-                    cardId: 'dummy_card',
-                    choiceIndex: 0
+                return bestSinOption;
+
+            case 'Virtuous':
+                console.log(`[${this.name}] Choosing as Virtuous personality.`);
+                let bestVirtueOption = 0;
+                let maxVirtue = -Infinity;
+                options.forEach((option, i) => {
+                    const virtue = option.effects.virtue || 0;
+                    if (virtue > maxVirtue) {
+                        maxVirtue = virtue;
+                        bestVirtueOption = i;
+                    }
                 });
-            }
-        }, 2000);
+                return bestVirtueOption;
+
+            case 'Random':
+            default:
+                console.log(`[${this.name}] Choosing as Random personality.`);
+                return Math.floor(Math.random() * options.length);
+        }
+    }
+
+    disconnect() {
+        if (this.socket) {
+            this.socket.disconnect();
+        }
     }
 }
-
 
 async function runSimulation() {
+    const bot1 = new Bot("Bot1", "Aggressive");
+    const bot2 = new Bot("Bot2", "Virtuous");
+
     try {
-        bot1_socket = await connectBot("Bot1");
-        bot2_socket = await connectBot("Bot2");
+        // Connect both bots
+        await bot1.connect();
+        await bot2.connect();
 
-        // Bot1 creates the game and joins as Bot1
-        bot1_id = await createGame(bot1_socket, "Bot Game", "Bot1");
-        bot2_id = await joinGame(bot2_socket, gameId, "Bot2");
+        // Bot1 creates the game. This also makes Bot1 join the game.
+        const { gameId } = await bot1.createGame("Bot Game");
+        bot1.controlsCreator = true; // Bot1 is the game creator, so it controls the 'Creator' player
 
-        bot1_socket.on('game_started', handleGameStateUpdate);
-        bot2_socket.on('game_started', handleGameStateUpdate);
-        bot1_socket.on('game_state_update', handleGameStateUpdate);
-        bot2_socket.on('game_state_update', handleGameStateUpdate);
+        // Bot2 joins the game
+        await bot2.joinGame(gameId);
 
-        console.log("Starting game...");
-        startGame(bot1_socket, gameId);
+        console.log("Starting game with an Aggressive bot and a Virtuous bot...");
+        bot1.startGame();
 
     } catch (error) {
         console.error("Simulation failed:", error);
+        bot1.disconnect();
+        bot2.disconnect();
     }
 }
 

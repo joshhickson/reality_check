@@ -89,21 +89,35 @@ io.on('connection', (socket) => {
 
   socket.on('card_choice', (data) => {
     console.log(`[EVENT] card_choice from ${socket.id}`, data);
-    const { gameId, playerId } = data;
+    const { gameId, playerId, choiceIndex } = data;
     const game = games[gameId];
     if (!game) return;
+
     const player = game.players.find(p => p.id === playerId);
     if (!player) return;
 
-    const placeholderEffect = { mentalHealth: -1, money: 100 };
+    const pendingDecision = game.stateMachine.getContext().pendingDecision;
+    if (!pendingDecision || pendingDecision.playerId !== playerId) {
+      return socket.emit('error', { message: 'Not a valid decision time for this player.' });
+    }
+
+    const chosenOption = pendingDecision.options[choiceIndex];
+    if (!chosenOption) {
+      return socket.emit('error', { message: 'Invalid choice index.' });
+    }
+
+    const effects = chosenOption.effects;
     const currentRound = game.scheduler.getCurrentTurn();
-    player.applyEffects(placeholderEffect, currentRound);
-    console.log(`[GAME] Player ${player.name} chose an option. New stats:`, player.stats);
+    player.applyEffects(effects, currentRound);
+    console.log(`[GAME] Player ${player.name} chose '${chosenOption.text}'. New stats:`, player.stats);
+
+    game.stateMachine.updateContext({ pendingDecision: null });
 
     game.stateMachine.transition('EndTurn');
     io.to(game.id).emit('card_resolved', {
         playerId: player.id,
-        newStats: player.stats
+        newStats: player.stats,
+        choiceText: chosenOption.text
     });
 
     setTimeout(() => {
@@ -126,7 +140,10 @@ io.on('connection', (socket) => {
       pendingDecision: {
         playerId: playerId,
         cardId: 'simulation_card',
-        options: ['Option 1', 'Option 2']
+        options: [
+          { text: 'Become a corporate shill', effects: { money: 200, virtue: -1, sin: 1 } },
+          { text: 'Organize a protest', effects: { money: -50, mentalHealth: -1, virtue: 2 } }
+        ]
       }
     });
     
