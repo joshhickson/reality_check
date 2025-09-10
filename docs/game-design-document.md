@@ -1,6 +1,22 @@
 # Reality Check: Game Design Document (GDD)
 *Version 0.2 - Balanced Systems*
 
+---
+### **Version History**
+| Version | Date       | Author(s) | Summary of Changes                                    |
+| :------ | :--------- | :-------- | :---------------------------------------------------- |
+| 0.1     | 2025-08-28 | Design Team | Initial draft of core mechanics and vision.           |
+| 0.2     | 2025-09-08 | Design Team | Added advanced mechanics (Exile, Social Capital, etc.) |
+
+---
+### **Related Documents**
+*   [**Art Style Guide**](./art-style-guide.md)
+*   [**Narrative & Thematic Guide**](./narrative-guide.md)
+*   [**Target Audience Profile**](./target-audience.md)
+*   [**Component List**](./component-list.md)
+*   [**Playtesting Plan**](./playtesting-plan.md)
+---
+
 ## 1. Core Game Loop & Vision
 
 **Vision:** To create a satirical, narrative-driven board game that mirrors the complexities of modern adult life. The game should encourage social interaction, moral ambiguity, and strategic thinking beyond simple resource accumulation. The primary goal is not just to "win," but to generate memorable stories and conversations.
@@ -32,6 +48,7 @@ This section provides concrete rules for the game's primary systems.
 *   At the start of your turn, if your **Mental Health** is **3 or lower**, you are suffering from **"Burnout."**
 *   While suffering from Burnout, you **cannot** perform the "Draw a Card" action. You must choose another action, such as "Play a Card" from your hand.
 *   If you have no other valid actions, you must spend your turn "recovering," which allows you to draw one card but immediately end your turn without playing it.
+*   **Crossroads Immunity:** To prevent a "punishment spiral," a player suffering from Burnout is **immune to any negative effects from "Crossroads" cards**. They can still be the target of positive or neutral effects.
 *   **Circuit Breaker:** After a turn in which you suffered from Burnout, you are immune to its effects for one full round, giving you a window to recover.
 
 ### 3.2. "Community Impact" & The Builder Victory
@@ -40,7 +57,7 @@ This section provides concrete rules for the game's primary systems.
 
 **Rule:**
 *   A new global tracker, the **"Community Impact Track,"** is added to the game (0-20).
-*   Players gain Community Impact points via Direct Aid, Virtue Cards, and Babel Events.
+*   Players gain Community Impact points via Direct Aid, Virtue Cards, and Babel Events. **(Rate of Gain: Players gain 1 point per instance of Direct Aid, and as specified on cards—typically 1-3 points).**
 *   **The Builder Bonus:** At the end of the game, the player with the highest score on the Community Impact Track wins **"The Builder"** title. This title grants a tiered bonus to their final score, based on their final Virtue (V):
     *   If 1 ≤ V ≤ 4, bonus = **+1 point**.
     *   If 5 ≤ V ≤ 9, bonus = **+2 points**.
@@ -68,6 +85,7 @@ This section provides concrete rules for the game's primary systems.
 1.  **Peer Testimony Phase:**
     *   Each player secretly receives one **"Kudos"** token and one **"Concern"** token.
     *   Simultaneously, all players assign their tokens to other players (not themselves).
+    *   **Guidance:** Players should assign "Kudos" to a player they feel played cleverly, embodied the spirit of the game, or contributed positively to the table. "Concern" tokens should be assigned to a player whose journey was particularly tragic, self-destructive, or ruthless. This is not a popularity contest, but a thematic reflection on each player's story.
 2.  **Final Scoring:**
     *   Let M, MH, S, V be the final values for each pillar.
     *   Let `Kudos` be the number of Kudos tokens received, and `Concern` be the number of Concern tokens received.
@@ -75,7 +93,8 @@ This section provides concrete rules for the game's primary systems.
         *   If MH ≥ 8, MH_Bonus = 10 points.
         *   If 5 ≤ MH ≤ 7, MH_Bonus = 5 points.
         *   If MH < 5, MH_Bonus = 0 points.
-    *   **Final Score = (M / 1000) + (V * 2) - (S * 2) + MH_Bonus + (Kudos * 3) - (Concern * 1)**
+    *   **Final Score = (M / 1000) + V - S + MH_Bonus + (Kudos * 2) - Concern**
+    *   *(Designer's Note: The formula has been simplified to reduce cognitive load. The raw values of Virtue and Sin are now used instead of multipliers, making strategic trade-offs easier to calculate.)*
 
 ## 4. Advanced Mechanics & Systems
 
@@ -83,15 +102,15 @@ This section details the more complex systems that provide "Reality Check" with 
 
 ### 4.1. The Exile Protocol (Replaces Red Line Protocol)
 
-**Concept:** A player-driven catch-up mechanism that addresses a runaway leader without resorting to player elimination. It transforms a dominant player into a new kind of disruptive force, keeping all players engaged.
+**Concept:** A player-driven catch-up mechanism that addresses a runaway leader without resorting to player elimination. It transforms a dominant player into a new kind of disruptive force, keeping all players engaged. **This version is revised to mitigate the "kingmaker" effect.**
 
 **Rules:**
-*   **Trigger Condition:** The Exile Protocol can be initiated at the start of any player's turn if one player's **Money** is more than double the combined total of the two players with the least Money.
+*   **Trigger Condition:** The Exile Protocol can be initiated at the start of any player's turn **if one player's Money is more than double the combined total of the two players with the least Money.** (For a 3-player game, this is the sum of the other two players' Money).
 *   **The Vote:** The player whose turn it is may propose a vote to "Exile" the wealthy player. The vote requires a simple majority to pass. The wealthy player does not get a vote.
 *   **Consequences of Exile:**
     *   The Exiled player immediately loses 50% of their Money, which is redistributed equally among all other players.
-    *   The Exiled player receives a new secret objective card (e.g., "Cause two other players to fall below 3 Mental Health," or "Ensure the player with the highest Virtue does not win.").
-    *   The Exiled player no longer pursues the standard victory conditions. They can only win by achieving their new secret objective. They are still part of the game, but their goals are now fundamentally different and often disruptive.
+    *   The Exiled player receives a new **Secret Comeback Objective**. (e.g., "End the game with at least 10 Virtue," or "Have the highest Mental Health at the end of the game.")
+    *   The Exiled player can no longer win via the normal scoring rules. **They can only win by achieving their Secret Comeback Objective.** This keeps the player in the game with a new path to victory, rather than turning them into a pure spoiler.
 
 ### 4.2. Social Capital Resource System
 
@@ -101,10 +120,10 @@ This section details the more complex systems that provide "Reality Check" with 
 *   **Gaining Social Capital:** Players gain Social Capital tokens (SC) through:
     *   **Virtue Cards:** Specific choices on Virtue cards will award SC.
     *   **Community Events:** Pro-social choices during Babel Events can award SC.
-    *   **Direct Aid:** When you give another player a resource voluntarily (not as part of a card effect that forces you to), you may gain 1 SC.
+    *   **Direct Aid:** When you give another player a resource voluntarily, you may gain 1 SC. **(Note: This must be a truly voluntary transfer, not one compelled by a card effect. Trading resources is not considered Direct Aid).**
 *   **Spending Social Capital:** A player can spend their accumulated SC on their turn to perform powerful social actions. A player may only perform one Social Capital action per turn.
-    *   **1 SC: "Call in a Favor"** - Reroll any one die roll you make this turn.
-    *   **2 SC: "Lean on Your Network"** - Negate a Mental Health loss of 2 points or less.
+    *   **1 SC: "Lean on Your Network"** - Negate a Mental Health loss of 2 points or less.
+    *   **2 SC: "Call in a Favor"** - Reroll any one die roll you make this turn.
     *   **4 SC: "Community Organizer"** - Add an additional vote to any group decision or Babel Event vote.
 
 ### 4.3. "Crossroads" Interrupt System
