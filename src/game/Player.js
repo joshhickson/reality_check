@@ -6,22 +6,23 @@ class Player {
     this.name = name;
     this.socketId = socket.id;
 
-    // Starting stats based on docs/stats-system.md
+    // GDD v0.3: Starting stats are fixed for consistent testing.
     this.stats = {
-      money: Math.floor(Math.random() * 10001) + 15000, // $15,000 - $25,000
-      mentalHealth: Math.floor(Math.random() * 3) + 6, // 6-8
-      sin: Math.floor(Math.random() * 3), // 0-2
-      virtue: Math.floor(Math.random() * 3) // 0-2
+      money: 20000,
+      mentalHealth: 7,
+      sin: 0,
+      virtue: 0
     };
 
-    this.isImmuneToBurnout = false;
+    this.isBurnedOut = false; // Player is suffering from burnout this turn
+    this.isImmuneToBurnout = false; // Player is immune for one round after burnout
     this.burnoutImmunityRound = 0;
+    this.actionPoints = 0;
+    this.heldCrossroadsCard = null;
   }
 
   // Method to apply stat changes from events or choices
   applyEffects(effects, currentRound = 0) {
-    const oldMentalHealth = this.stats.mentalHealth;
-
     if (effects.money) this.stats.money += effects.money;
     if (effects.mentalHealth) this.stats.mentalHealth += effects.mentalHealth;
     if (effects.sin) this.stats.sin += effects.sin;
@@ -32,38 +33,35 @@ class Player {
     this.stats.sin = Math.max(0, this.stats.sin);
     this.stats.virtue = Math.max(0, this.stats.virtue);
 
-    // Check for burnout if mental health decreased
-    if (this.stats.mentalHealth < oldMentalHealth) {
-      this.checkAndTriggerBurnout(currentRound);
-    }
+    // After stats change, update the player's burnout status
+    this.updateBurnoutStatus(currentRound);
   }
 
-  // Burnout Mechanic
-  checkAndTriggerBurnout(currentRound) {
-    this.checkBurnoutImmunity(currentRound);
+  // GDD v0.3: Burnout is a deterministic state, not a probabilistic event.
+  updateBurnoutStatus(currentRound) {
+    this.checkBurnoutImmunity(currentRound); // Check if immunity has expired
+
     if (this.isImmuneToBurnout) {
-      console.log(`[MECHANIC] Player ${this.name} is immune to burnout this round.`);
+      this.isBurnedOut = false;
       return;
     }
 
-    const mh = this.stats.mentalHealth;
-    let burnoutChance = 0;
-    if (mh <= 3) burnoutChance = 0.33;
-    if (mh <= 2) burnoutChance = 0.66;
-    if (mh <= 1) burnoutChance = 1.0;
-
-    if (Math.random() < burnoutChance) {
-      console.log(`[MECHANIC] Player ${this.name} suffered a burnout!`);
-      // Apply burnout consequences directly to avoid recursive loop
-      this.stats.mentalHealth = Math.max(0, this.stats.mentalHealth - 2);
-      this.stats.money -= 500;
-
-      this.setBurnoutImmunity(currentRound);
-      // In a full implementation, an event would be emitted to notify the client
+    if (this.stats.mentalHealth <= 3) {
+      if (!this.isBurnedOut) {
+        console.log(`[MECHANIC] Player ${this.name} is now suffering from Burnout.`);
+        this.isBurnedOut = true;
+        // Set immunity for the *next* round (Circuit Breaker)
+        this.setBurnoutImmunity(currentRound);
+      }
+    } else {
+      if (this.isBurnedOut) {
+        console.log(`[MECHANIC] Player ${this.name} has recovered from Burnout.`);
+      }
+      this.isBurnedOut = false;
     }
   }
 
-  // Method to set burnout immunity
+  // Method to set burnout immunity for the next round
   setBurnoutImmunity(currentRound) {
     this.isImmuneToBurnout = true;
     this.burnoutImmunityRound = currentRound;
@@ -71,7 +69,9 @@ class Player {
 
   // Method to check and clear burnout immunity
   checkBurnoutImmunity(currentRound) {
+    // Immunity lasts for one full round. It expires if the game is on a later round than the one immunity was granted in.
     if (this.isImmuneToBurnout && currentRound > this.burnoutImmunityRound) {
+      console.log(`[MECHANIC] Player ${this.name}'s burnout immunity has worn off.`);
       this.isImmuneToBurnout = false;
     }
   }
@@ -89,7 +89,10 @@ class Player {
     return {
       id: this.id,
       name: this.name,
-      stats: this.stats
+      stats: this.stats,
+      isBurnedOut: this.isBurnedOut, // Expose this to the client
+      actionPoints: this.actionPoints,
+      hasCrossroadsCard: !!this.heldCrossroadsCard
     };
   }
 }

@@ -10,7 +10,6 @@ class Bot {
         this.socket = null;
         this.playerId = null;
         this.gameId = null;
-        this.controlsCreator = false; // Flag to indicate if this bot controls the 'Creator' player
     }
 
     connect() {
@@ -34,14 +33,10 @@ class Bot {
                 console.log(`Bot ${this.name} disconnected`);
             });
 
-            // Listen for game state updates
             this.socket.on('game_state_update', (data) => this.handleGameStateUpdate(data));
-            this.socket.on('game_started', (data) => this.handleGameStateUpdate(data));
-
-            // Generic event logger for debugging
-            this.socket.onAny((eventName, ...args) => {
-                console.log(`[${this.name}] Event: ${eventName}`, JSON.stringify(args));
-            });
+            this.socket.on('game_started', (data) => this.handleGameStateUpdate(data.gameState));
+            this.socket.on('card_resolved', (data) => console.log(`[${this.name}] Card resolved:`, data));
+            this.socket.on('error', (data) => console.error(`[${this.name}] Server Error:`, data.message));
         });
     }
 
@@ -50,8 +45,7 @@ class Bot {
             this.socket.emit('create_game', { gameName });
             this.socket.on('game_created', (data) => {
                 this.gameId = data.gameId;
-                console.log(`Game created with ID: ${this.gameId}`);
-                // The creator of the game also joins it.
+                console.log(`[${this.name}] Game created with ID: ${this.gameId}`);
                 this.joinGame(this.gameId).then(() => {
                     resolve({ gameId: this.gameId });
                 });
@@ -62,11 +56,11 @@ class Bot {
     joinGame(gameId) {
         return new Promise((resolve) => {
             this.socket.emit('join_game', { gameId, username: this.name });
-            this.socket.on('player_joined', (playerData) => {
-                if (playerData.player.name === this.name) {
-                    this.playerId = playerData.player.id;
+            this.socket.on('player_joined', (data) => {
+                if (data.player.name === this.name) {
+                    this.playerId = data.player.id;
                     this.gameId = gameId;
-                    console.log(`Bot ${this.name} joined game ${this.gameId} with player ID ${this.playerId}`);
+                    console.log(`[${this.name}] Joined game ${this.gameId} with player ID ${this.playerId}`);
                     resolve();
                 }
             });
@@ -79,14 +73,13 @@ class Bot {
         }
     }
 
-    handleGameStateUpdate(data) {
-        const gameState = data.gameState || data;
-        if (!gameState) {
-            console.error(`[${this.name}] Invalid game state data received:`, data);
+    handleGameStateUpdate(gameState) {
+        if (!gameState || !gameState.players) {
+            console.error(`[${this.name}] Invalid game state data received:`, gameState);
             return;
         }
 
-        const { currentPlayerId, players, currentState, currentTurn } = gameState;
+        const { currentPlayerId, players, currentState, currentTurn, pendingDecision } = gameState;
 
         if (currentTurn > TURN_LIMIT) {
             console.log("Reached turn limit. Ending simulation.");
@@ -94,87 +87,60 @@ class Bot {
             return;
         }
 
-        const currentPlayer = players.find(p => p.id === currentPlayerId);
-        if (!currentPlayer) {
-            console.log("Game over or invalid state. Disconnecting.");
-            this.disconnect();
-            return;
-        }
+        const me = players.find(p => p.id === this.playerId);
+        if (!me) return;
 
-        // A bot acts if it's their turn, or if they are controlling the 'Creator' player
-        const isMyTurn = currentPlayer.id === this.playerId;
-        const isCreatorTurn = currentPlayer.name === 'Creator' && this.controlsCreator;
+        if (currentPlayerId === this.playerId) {
+            console.log(`\n--- [${this.name}] It's my turn (Turn ${currentTurn}) ---`);
+            console.log(`My Stats: ${JSON.stringify(me.stats)}`);
+            console.log(`My AP: ${me.actionPoints}`);
 
-        if (isMyTurn || isCreatorTurn) {
-            console.log(`[${this.name}] It's ${currentPlayer.name}'s turn. State is ${currentState}`);
             setTimeout(() => {
-                this.makeDecision(gameState);
-            }, 2000); // Wait 2 seconds to make the simulation easier to follow
+                if (pendingDecision && pendingDecision.playerId === this.playerId) {
+                    this.handleDecision(pendingDecision);
+                } else if (me.actionPoints > 0) {
+                    this.takeTurn(me);
+                }
+            }, 1500);
         }
     }
 
-    makeDecision(gameState) {
-        const { currentState, currentPlayerId } = gameState;
+    takeTurn(me) {
+        if (me.actionPoints <= 0) return;
 
-        if (currentState === 'Roll') {
-            console.log(`[${this.name}] Rolling the dice.`);
-            this.socket.emit('roll_dice', {
+        // Simple strategy for testing: always work overtime if possible.
+        if (me.actionPoints >= 2) {
+            console.log(`[${this.name}] Decided to WORK_OVERTIME.`);
+            this.socket.emit('player_action', {
                 gameId: this.gameId,
-                playerId: currentPlayerId
+                playerId: this.playerId,
+                action: { type: 'WORK_OVERTIME' }
             });
-        } else if (currentState === 'Decision') {
-            const choiceIndex = this.chooseOption(gameState);
-            console.log(`[${this.name}] Making a choice (option ${choiceIndex}).`);
-            this.socket.emit('card_choice', {
+        } else if (me.actionPoints >= 1) {
+            // Fallback for when we have only 1 AP
+             console.log(`[${this.name}] Decided to DRAW_CARD.`);
+             this.socket.emit('player_action', {
                 gameId: this.gameId,
-                playerId: currentPlayerId,
-                cardId: 'dummy_card', // This will need to be dynamic in the future
-                choiceIndex: choiceIndex
+                playerId: this.playerId,
+                action: { type: 'DRAW_CARD' }
             });
         }
     }
 
-    chooseOption(gameState) {
-        const pendingDecision = gameState.pendingDecision;
-        if (!pendingDecision || !pendingDecision.options || pendingDecision.options.length === 0) {
-            console.log(`[${this.name}] No decision options found, defaulting to 0.`);
-            return 0;
-        }
+    handleDecision(pendingDecision) {
+        console.log(`[${this.name}] I have a decision to make: "${pendingDecision.text}"`);
+        const choiceIndex = this.chooseOption(pendingDecision.options);
+        console.log(`[${this.name}] Making a choice (option ${choiceIndex}).`);
+        this.socket.emit('card_choice', {
+            gameId: this.gameId,
+            playerId: this.playerId,
+            choiceIndex: choiceIndex
+        });
+    }
 
-        const options = pendingDecision.options;
-
-        switch (this.personality) {
-            case 'Aggressive':
-                console.log(`[${this.name}] Choosing as Aggressive personality.`);
-                let bestSinOption = 0;
-                let maxSin = -Infinity;
-                options.forEach((option, i) => {
-                    const sin = option.effects.sin || 0;
-                    if (sin > maxSin) {
-                        maxSin = sin;
-                        bestSinOption = i;
-                    }
-                });
-                return bestSinOption;
-
-            case 'Virtuous':
-                console.log(`[${this.name}] Choosing as Virtuous personality.`);
-                let bestVirtueOption = 0;
-                let maxVirtue = -Infinity;
-                options.forEach((option, i) => {
-                    const virtue = option.effects.virtue || 0;
-                    if (virtue > maxVirtue) {
-                        maxVirtue = virtue;
-                        bestVirtueOption = i;
-                    }
-                });
-                return bestVirtueOption;
-
-            case 'Random':
-            default:
-                console.log(`[${this.name}] Choosing as Random personality.`);
-                return Math.floor(Math.random() * options.length);
-        }
+    chooseOption(options) {
+        // For now, bot always chooses the first option during a decision.
+        return 0;
     }
 
     disconnect() {
@@ -185,28 +151,25 @@ class Bot {
 }
 
 async function runSimulation() {
-    const bot1 = new Bot("Bot1", "Aggressive");
-    const bot2 = new Bot("Bot2", "Virtuous");
+    console.log("--- Starting Bot Simulation ---");
+    const creatorBot = new Bot("CreatorBot");
+    const joiningBot = new Bot("JoinerBot");
 
     try {
-        // Connect both bots
-        await bot1.connect();
-        await bot2.connect();
+        await creatorBot.connect();
+        await joiningBot.connect();
 
-        // Bot1 creates the game. This also makes Bot1 join the game.
-        const { gameId } = await bot1.createGame("Bot Game");
-        bot1.controlsCreator = true; // Bot1 is the game creator, so it controls the 'Creator' player
+        const { gameId } = await creatorBot.createGame("Bot Test Game");
 
-        // Bot2 joins the game
-        await bot2.joinGame(gameId);
+        await joiningBot.joinGame(gameId);
 
-        console.log("Starting game with an Aggressive bot and a Virtuous bot...");
-        bot1.startGame();
+        console.log("\n--- Starting Game ---");
+        creatorBot.startGame();
 
     } catch (error) {
         console.error("Simulation failed:", error);
-        bot1.disconnect();
-        bot2.disconnect();
+        creatorBot.disconnect();
+        joiningBot.disconnect();
     }
 }
 

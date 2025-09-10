@@ -9,28 +9,32 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const server = http.createServer(app);
 
-// Correctly configure Socket.IO with CORS
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow all origins
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
 
 const PORT = process.env.PORT || 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// --- Static File Serving ---
 const publicPath = path.join(__dirname, 'public');
 const lpcGeneratorPath = path.join(__dirname, 'lpc-generator');
 app.use(express.static(publicPath));
 app.use('/lpc-generator', express.static(lpcGeneratorPath));
 
-// --- In-memory storage for games ---
 const games = {};
+
+// --- Helper Functions ---
+function checkTurnEnd(game, player) {
+  if (player.actionPoints <= 0) {
+    console.log(`[GAME] Player ${player.name}'s turn has ended (AP depleted).`);
+    game.nextTurn();
+  }
+}
 
 // --- API Routes ---
 app.get('/api/games', (req, res) => {
@@ -48,7 +52,6 @@ io.on('connection', (socket) => {
   console.log(`🔌 New connection: ${socket.id}`);
 
   socket.on('create_game', ({ gameName }) => {
-    console.log(`[EVENT] create_game from ${socket.id}`, { gameName });
     const gameId = uuidv4();
     const game = new Game(gameName, socket, gameId);
     games[gameId] = game;
@@ -58,11 +61,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join_game', ({ gameId, username }) => {
-    console.log(`[EVENT] join_game from ${socket.id}`, { gameId, username });
     const game = games[gameId];
-    if (!game) {
-      return socket.emit('error', { message: 'Game not found.' });
-    }
+    if (!game) return socket.emit('error', { message: 'Game not found.' });
     try {
       const player = game.addPlayer(socket, username);
       socket.join(gameId);
@@ -73,11 +73,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('start_game', ({ gameId }) => {
-    console.log(`[EVENT] start_game from ${socket.id}`, { gameId });
     const game = games[gameId];
-    if (!game) {
-      return socket.emit('error', { message: 'Game not found.' });
-    }
+    if (!game) return socket.emit('error', { message: 'Game not found.' });
     try {
       game.start();
       io.to(gameId).emit('game_started', { gameState: game.getGameState() });
@@ -87,12 +84,75 @@ io.on('connection', (socket) => {
     }
   });
 
+  // --- Player Action Handlers ---
+
+  socket.on('player_action', (data) => {
+    const { gameId, playerId, action } = data;
+    const game = games[gameId];
+    if (!game) return;
+    const player = game.players.find(p => p.id === playerId);
+    if (!player) return;
+
+    if (game.getCurrentPlayer().id !== player.id) {
+      return socket.emit('error', { message: 'Not your turn.' });
+    }
+
+    const playerStateBefore = JSON.parse(JSON.stringify(player.getPublicState()));
+    let cost = 0;
+    let actionSucceeded = false;
+
+    switch(action.type) {
+        case 'WORK_OVERTIME':
+            cost = 2;
+            if (player.actionPoints >= cost) {
+                player.actionPoints -= cost;
+                player.applyEffects({ money: 500, mentalHealth: -1 }, game.scheduler.getCurrentTurn());
+                console.log(`[ACTION] ${player.name} works overtime.`);
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'DRAW_CARD':
+            if (player.isBurnedOut) {
+                return socket.emit('error', { message: "You cannot draw cards while suffering from Burnout." });
+            }
+            cost = 1;
+            if (player.actionPoints >= cost) {
+                player.actionPoints -= cost;
+                console.log(`[ACTION] ${player.name} draws a card.`);
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'PLAY_CARD':
+            cost = 1;
+            if (player.actionPoints >= cost) {
+                player.actionPoints -= cost;
+                console.log(`[ACTION] ${player.name} plays a card. (Not implemented)`);
+                actionSucceeded = true;
+            }
+            break;
+    }
+
+    if (!actionSucceeded) {
+        return socket.emit('error', { message: "Not enough Action Points." });
+    }
+
+    const playerStateAfter = player.getPublicState();
+    const interruptOccurred = game.checkCrossroadsTrigger(action.type, playerStateBefore, playerStateAfter);
+
+    io.to(game.id).emit('game_state_update', game.getGameState());
+
+    if (!interruptOccurred) {
+        checkTurnEnd(game, player);
+        io.to(game.id).emit('game_state_update', game.getGameState());
+    }
+  });
+
   socket.on('card_choice', (data) => {
-    console.log(`[EVENT] card_choice from ${socket.id}`, data);
     const { gameId, playerId, choiceIndex } = data;
     const game = games[gameId];
     if (!game) return;
-
     const player = game.players.find(p => p.id === playerId);
     if (!player) return;
 
@@ -102,54 +162,36 @@ io.on('connection', (socket) => {
     }
 
     const chosenOption = pendingDecision.options[choiceIndex];
-    if (!chosenOption) {
-      return socket.emit('error', { message: 'Invalid choice index.' });
-    }
+    if (!chosenOption) return socket.emit('error', { message: 'Invalid choice index.' });
 
-    const effects = chosenOption.effects;
-    const currentRound = game.scheduler.getCurrentTurn();
-    player.applyEffects(effects, currentRound);
+    const playerStateBefore = JSON.parse(JSON.stringify(player.getPublicState()));
+    player.applyEffects(chosenOption.effects, game.scheduler.getCurrentTurn());
+    const playerStateAfter = player.getPublicState();
+
     console.log(`[GAME] Player ${player.name} chose '${chosenOption.text}'. New stats:`, player.stats);
 
     game.stateMachine.updateContext({ pendingDecision: null });
 
-    game.stateMachine.transition('EndTurn');
+    // Only transition to EndTurn if it was a Crossroads decision.
+    // Regular card plays will be handled by the AP system.
+    if (pendingDecision.type === 'CROSSROADS') {
+        game.stateMachine.transition('EndTurn');
+    }
+
     io.to(game.id).emit('card_resolved', {
         playerId: player.id,
         newStats: player.stats,
         choiceText: chosenOption.text
     });
-
-    setTimeout(() => {
-        game.nextTurn();
-        io.to(game.id).emit('game_state_update', game.getGameState());
-    }, 2000);
-  });
-
-  socket.on('roll_dice', ({ gameId, playerId }) => {
-    console.log(`[EVENT] roll_dice from ${socket.id}`, { gameId, playerId });
-    const game = games[gameId];
-    if (!game) return;
-
-    // For simulation, we'll just transition to the decision phase
-    game.stateMachine.transition('Tile');
-    game.stateMachine.transition('Card');
     
-    // Set up pendingDecision context before transitioning to Decision
-    game.stateMachine.updateContext({
-      pendingDecision: {
-        playerId: playerId,
-        cardId: 'simulation_card',
-        options: [
-          { text: 'Become a corporate shill', effects: { money: 200, virtue: -1, sin: 1 } },
-          { text: 'Organize a protest', effects: { money: -50, mentalHealth: -1, virtue: 2 } }
-        ]
-      }
-    });
+    const interruptOccurred = game.checkCrossroadsTrigger('CARD_CHOICE', playerStateBefore, playerStateAfter);
     
-    game.stateMachine.transition('Decision');
-
     io.to(game.id).emit('game_state_update', game.getGameState());
+
+    if (!interruptOccurred) {
+        checkTurnEnd(game, player);
+        io.to(game.id).emit('game_state_update', game.getGameState());
+    }
   });
 
   socket.on('disconnect', () => {
@@ -157,7 +199,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// --- Server Start ---
 server.listen(PORT, () => {
   console.log(`🚀 Server listening on port ${PORT}`);
   console.log(`Serving static files from: ${publicPath}`);
