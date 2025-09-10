@@ -1,12 +1,12 @@
 🚀 Server listening on port 5000
 Serving static files from: /app/public
-🔌 New connection: lCUSEFlu948zUymRAAAB
-🔌 New connection: sBNUGCoBUZHHeY81AAAD
-[GAME] Game aba95118-9194-4903-b6cf-9a616c07cd97 created by lCUSEFlu948zUymRAAAB
-[GAME] Player CreatorBot (f4bf5eca-51ff-4c9c-822f-92bb7b83258b) joined game aba95118-9194-4903-b6cf-9a616c07cd97
-[GAME] Player JoinerBot (47692659-9596-47a7-84c3-2ea51e2a817e) joined game aba95118-9194-4903-b6cf-9a616c07cd97
+🔌 New connection: _rGTNKvY_hfxdqDfAAAB
+🔌 New connection: TUK3sAl8bvC2102nAAAD
+[GAME] Game c05b6659-1338-4e7b-8481-e68eee5be420 created by _rGTNKvY_hfxdqDfAAAB
+[GAME] Player CreatorBot (0df2a5a2-5f4a-4803-b1d4-161ccd43728d) joined game c05b6659-1338-4e7b-8481-e68eee5be420
+[GAME] Player JoinerBot (5bd0e8f0-d5bf-4a00-8362-fa227f617395) joined game c05b6659-1338-4e7b-8481-e68eee5be420
 🔄 State transition: Idle → Roll
-[GAME] Game aba95118-9194-4903-b6cf-9a616c07cd97 started.
+[GAME] Game c05b6659-1338-4e7b-8481-e68eee5be420 started.
 [ACTION] CreatorBot works overtime.
 [GAME] Player CreatorBot's turn has ended (AP depleted).
 [GAME] CreatorBot draws a Crossroads card for JoinerBot's turn.
@@ -14,12 +14,13 @@ Serving static files from: /app/public
 [GAME] Player JoinerBot's turn has ended (AP depleted).
 [GAME] Discarding unplayed Crossroads card from CreatorBot
 [GAME] JoinerBot draws a Crossroads card for CreatorBot's turn.
-[ACTION] CreatorBot works overtime.
+[ACTION] CreatorBot draws a card.
+⏰ Auto-transitioning from Roll to Tile (timeout)
+🔄 State transition: Roll → Tile
+[ACTION] CreatorBot draws a card.
 [GAME] Player CreatorBot's turn has ended (AP depleted).
 [GAME] Discarding unplayed Crossroads card from JoinerBot
 [GAME] CreatorBot draws a Crossroads card for JoinerBot's turn.
-⏰ Auto-transitioning from Roll to Tile (timeout)
-🔄 State transition: Roll → Tile
 [ACTION] JoinerBot works overtime.
 [GAME] Player JoinerBot's turn has ended (AP depleted).
 [GAME] Discarding unplayed Crossroads card from CreatorBot
@@ -30,11 +31,12 @@ Reshuffled Crossroads discard pile into deck.
 [GAME] Discarding unplayed Crossroads card from JoinerBot
 [GAME] CreatorBot draws a Crossroads card for JoinerBot's turn.
 [ACTION] JoinerBot works overtime.
+[MECHANIC] Crossroads trigger 'SIN_INCREASE' met by CreatorBot! Interrupting JoinerBot.
+[GAME] Player JoinerBot chose 'Pay the bribe (-$1000)'. New stats: { money: 20500, mentalHealth: 4, sin: 3, virtue: 0, socialCapital: 0 }
 [GAME] Player JoinerBot's turn has ended (AP depleted).
-[GAME] Discarding unplayed Crossroads card from CreatorBot
 [GAME] JoinerBot draws a Crossroads card for CreatorBot's turn.
-[MECHANIC] Player CreatorBot is now suffering from Burnout.
-[ACTION] CreatorBot works overtime.
+[ACTION] CreatorBot draws a card.
+[ACTION] CreatorBot draws a card.
 [GAME] Player CreatorBot's turn has ended (AP depleted).
 [GAME] Discarding unplayed Crossroads card from JoinerBot
 Reshuffled Crossroads discard pile into deck.
@@ -44,8 +46,8 @@ Reshuffled Crossroads discard pile into deck.
 [GAME] Player JoinerBot's turn has ended (AP depleted).
 [GAME] Discarding unplayed Crossroads card from CreatorBot
 [GAME] JoinerBot draws a Crossroads card for CreatorBot's turn.
-[MECHANIC] Player CreatorBot's burnout immunity has worn off.
-[ACTION] CreatorBot works overtime.
+[ACTION] CreatorBot draws a card.
+[ACTION] CreatorBot draws a card.
 [GAME] Player CreatorBot's turn has ended (AP depleted).
 [GAME] Discarding unplayed Crossroads card from JoinerBot
 [GAME] CreatorBot draws a Crossroads card for JoinerBot's turn.
@@ -55,5 +57,5 @@ Reshuffled Crossroads discard pile into deck.
 [GAME] Discarding unplayed Crossroads card from CreatorBot
 Reshuffled Crossroads discard pile into deck.
 [GAME] JoinerBot draws a Crossroads card for CreatorBot's turn.
-👋 User disconnected: lCUSEFlu948zUymRAAAB
-👋 User disconnected: sBNUGCoBUZHHeY81AAAD
+👋 User disconnected: _rGTNKvY_hfxdqDfAAAB
+👋 User disconnected: TUK3sAl8bvC2102nAAAD

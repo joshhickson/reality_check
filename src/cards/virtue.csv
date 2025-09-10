@@ -4,7 +4,7 @@ virtue_01,virtue,immediate,"You donate plasma to help pay for someone's medical 
 virtue_02,virtue,immediate,"You finally call your grandmother back",0,2,-1,2,0
 virtue_03,virtue,delayed,"You start volunteering at the local food bank",0,2,-2,4,2
 virtue_04,virtue,immediate,"You return the wallet you found with all the cash inside",0,1,-1,2,0
-virtue_05,virtue,immediate,"You adopt a senior dog from the shelter",-500,4,-1,3,0
+virtue_05,virtue,immediate,"You adopt a senior dog from the shelter",-1000,4,-1,3,0
 virtue_06,virtue,delayed,"You start teaching coding to underprivileged kids",0,3,-2,5,3
 virtue_07,virtue,immediate,"You pay for the coffee of the person behind you",-10,1,-1,1,0
 virtue_08,virtue,immediate,"You actually listen to your friend vent without making it about you",0,2,-1,2,0

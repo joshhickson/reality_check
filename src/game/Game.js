@@ -73,6 +73,7 @@ class Game {
     this.scheduler.advanceTurn();
     const currentPlayer = this.getCurrentPlayer();
     currentPlayer.actionPoints = 2;
+    currentPlayer.usedSocialActionThisTurn = false; // Reset for the new turn
 
     if (this.players.length > 1) {
         const crossroadsHolderIndex = (this.currentPlayerIndex + 1) % this.players.length;

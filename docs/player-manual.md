@@ -12,15 +12,14 @@ Are you ready for your Reality Check?
 
 ## 2. The Objective: What is "Winning"?
 
-In Reality Check, "winning" is as complicated as it is in real life. There is no single path to victory. At the end of the game, all players face **Judgment Day**, a final reckoning of the life they've lived.
+In Reality Check, "winning" is as complicated as it is in real life. The main way to win is by **achieving the highest final score** when all is said and done. Your score is a raw calculation of your life's successes and failures.
 
-You can win by:
+However, the story you tell is just as important. At the end of the game, players can also earn a number of thematic **Titles** based on their journey. These don't change the outcome of the game, but they are a great way to recognize different playstyles:
 
-*   **Achieving the Highest Score:** A raw calculation of your life's successes and failures.
-*   **Becoming The Saint:** Ending the game with the highest Virtue and lowest Sin.
-*   **Becoming The Hustler:** Amassing the most Money without completely selling your soul.
-*   **Becoming The Survivor:** Finishing with the highest Mental Health, proving your resilience against the chaos.
-*   **Becoming The Builder:** Having the most positive impact on the lives of the other players.
+*   **The Saint:** Awarded to the player with the highest Virtue.
+*   **The Hustler:** Awarded to the player with the most Money.
+*   **The Survivor:** Awarded to the player with the highest Mental Health.
+*   **The Builder:** Awarded to the player with the most positive Community Impact.
 
 The "best" victory is for you and your friends to decide. What kind of life do you value most?
 
@@ -36,11 +35,10 @@ The game board is a unique, mathematically generated set of nested rings, each r
 *   **Babel Events Ring (Purple):** The unpredictable, town-wide crises that affect all players.
 
 ### The Card Decks
-The narrative of the game is driven by three distinct decks of cards:
+The narrative of the game is driven by two primary decks of cards:
 
 *   **Sin Cards:** Temptations that offer immediate, often selfish, benefits at a moral or long-term cost.
 *   **Virtue Cards:** Opportunities for self-sacrifice and moral growth, often requiring a personal cost for a collective benefit.
-*   **Chaos Cards:** The random, uncontrollable events of life—from unexpected windfalls to mysterious illnesses.
 *   **Crossroads Cards:** Thematic interruptions to your turn, triggered by the other players.
 
 ### The Four Pillars of Life (Your Stats)
@@ -58,9 +56,8 @@ Every player must manage four core stats:
 
 1.  **Gather Your Friends:** The game is designed for 3-5 players.
 2.  **Join the Game:** All players connect to the game session.
-3.  **Receive Your Identity:** Each player is assigned a random starting character, complete with unique traits and a potential drawback that will influence their journey.
-4.  **Starting Stats:** All players begin with a baseline of Money, Mental Health, Sin, and Virtue.
-5.  **The First Turn:** The first player is chosen at random, and the game begins!
+3.  **Starting Stats:** All players begin with a baseline of Money, Mental Health, Sin, and Virtue.
+4.  **The First Turn:** The first player is chosen at random, and the game begins!
 
 ## 5. Gameplay: On Your Turn
 
@@ -71,7 +68,7 @@ A game of Reality Check consists of 10 rounds. On your turn, you will perform th
     *   The player to your right draws a secret **Crossroads Card**. If you meet its trigger condition during your turn, they will interrupt you!
     *   If your Mental Health is 3 or lower, you suffer from **"Burnout"** and cannot draw new cards.
 2.  **Perform Actions:** You have **2 Action Points (AP)** to spend on the following:
-    *   **Draw a Card (1 AP):** Draw a card from any deck.
+    *   **Draw a Card (1 AP):** Draw a card from the Sin or Virtue deck.
     *   **Play a Card (1 AP):** Play a card from your hand.
     *   **Work Overtime (2 AP):** Gain $500 Money, but lose 1 Mental Health.
 3.  **End Your Turn:** Your turn ends when you have no more Action Points. Play proceeds to the next player.
@@ -84,12 +81,19 @@ You can gain Social Capital (SC) by helping other players and making virtuous ch
 ### Crossroads Events
 Life is full of interruptions. During your turn, another player might reveal a Crossroads card that presents you with an unexpected new choice, adding a twist to your plans. Stay on your toes!
 
+### The Exile Protocol
+Sometimes, one player's financial success dramatically outpaces everyone else. To keep things interesting, the other players can vote to "Exile" a runaway leader. An Exiled player is given a new, secret objective. They can no longer win by having the highest score, but they can still achieve victory by completing their new personal goal, giving them a second chance to win in a different way.
+
 ## 7. End of Game: Judgment Day
 
 After the final round, the game ends and Judgment Day begins.
 
 1.  **Peer Testimony:** All players will secretly give one "Kudos" token to a player they wish to celebrate and one "Concern" token to a player whose actions they found problematic.
 2.  **Final Scoring:** Your final score is calculated based on your stats. Having a high Mental Health provides a significant bonus, while Kudos tokens from other players will boost your score and Concern tokens will lower it.
-3.  **Victory:** The player with the highest score is the "winner," but the group also determines winners for the other victory conditions (The Saint, The Hustler, The Survivor, The Builder).
+3.  **Victory:** The player with the highest score is declared the winner. The group can then award the thematic Titles (The Saint, The Hustler, etc.) to celebrate the unique stories that unfolded.
 
 The ultimate goal is to spark conversation. Who played the "best" game? What does that even mean? That's your final Reality Check.
+
+---
+### *A Note from the Designers*
+*You may have heard about other concepts like "Chaos Cards" or "Starting Characters." These are exciting ideas we are exploring for future expansions, but they are not part of the core game experience. Stay tuned!*

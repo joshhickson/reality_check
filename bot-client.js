@@ -108,16 +108,25 @@ class Bot {
     takeTurn(me) {
         if (me.actionPoints <= 0) return;
 
-        // Simple strategy for testing: always work overtime if possible.
+        // Enhanced strategy: randomly choose actions to better test the system.
         if (me.actionPoints >= 2) {
-            console.log(`[${this.name}] Decided to WORK_OVERTIME.`);
-            this.socket.emit('player_action', {
-                gameId: this.gameId,
-                playerId: this.playerId,
-                action: { type: 'WORK_OVERTIME' }
-            });
+            if (Math.random() > 0.5) {
+                console.log(`[${this.name}] Decided to WORK_OVERTIME.`);
+                this.socket.emit('player_action', {
+                    gameId: this.gameId,
+                    playerId: this.playerId,
+                    action: { type: 'WORK_OVERTIME' }
+                });
+            } else {
+                console.log(`[${this.name}] Decided to DRAW_CARD twice.`);
+                this.socket.emit('player_action', {
+                    gameId: this.gameId,
+                    playerId: this.playerId,
+                    action: { type: 'DRAW_CARD' }
+                });
+                // The bot will get another game_state_update and take its second action.
+            }
         } else if (me.actionPoints >= 1) {
-            // Fallback for when we have only 1 AP
              console.log(`[${this.name}] Decided to DRAW_CARD.`);
              this.socket.emit('player_action', {
                 gameId: this.gameId,

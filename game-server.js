@@ -30,7 +30,8 @@ const games = {};
 
 // --- Helper Functions ---
 function checkTurnEnd(game, player) {
-  if (player.actionPoints <= 0) {
+  // A turn can only end if there are no pending decisions
+  if (player.actionPoints <= 0 && !game.stateMachine.getContext().pendingDecision) {
     console.log(`[GAME] Player ${player.name}'s turn has ended (AP depleted).`);
     game.nextTurn();
   }
@@ -106,7 +107,7 @@ io.on('connection', (socket) => {
             cost = 2;
             if (player.actionPoints >= cost) {
                 player.actionPoints -= cost;
-                player.applyEffects({ money: 500, mentalHealth: -1 }, game.scheduler.getCurrentTurn());
+                player.applyEffects({ money: 500, mentalHealth: -1, sin: 1 }, game.scheduler.getCurrentTurn());
                 console.log(`[ACTION] ${player.name} works overtime.`);
                 actionSucceeded = true;
             }
@@ -130,6 +131,31 @@ io.on('connection', (socket) => {
                 player.actionPoints -= cost;
                 console.log(`[ACTION] ${player.name} plays a card. (Not implemented)`);
                 actionSucceeded = true;
+            }
+            break;
+
+        case 'SOCIAL_ACTION':
+            if (player.usedSocialActionThisTurn) {
+                return socket.emit('error', { message: 'You can only use one Social Action per turn.' });
+            }
+            let sc_cost = 0;
+            switch(action.subType) {
+                case 'LEAN_ON_YOUR_NETWORK':
+                    sc_cost = 1;
+                    if (player.stats.socialCapital >= sc_cost) {
+                        player.stats.socialCapital -= sc_cost;
+                        // This action negates a future mental health loss, which is complex to implement here.
+                        // For now, we'll just log it. A real implementation would set a temporary flag on the player.
+                        console.log(`[ACTION] ${player.name} leans on their network.`);
+                        player.usedSocialActionThisTurn = true;
+                        actionSucceeded = true;
+                    }
+                    break;
+                // Other social actions would go here
+            }
+            // Social actions do not cost AP, so they don't use the main success check.
+            if (!actionSucceeded) {
+                 return socket.emit('error', { message: "Not enough Social Capital." });
             }
             break;
     }
@@ -172,8 +198,6 @@ io.on('connection', (socket) => {
 
     game.stateMachine.updateContext({ pendingDecision: null });
 
-    // Only transition to EndTurn if it was a Crossroads decision.
-    // Regular card plays will be handled by the AP system.
     if (pendingDecision.type === 'CROSSROADS') {
         game.stateMachine.transition('EndTurn');
     }
