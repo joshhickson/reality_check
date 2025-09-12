@@ -6,66 +6,64 @@ class Player {
     this.name = name;
     this.socketId = socket.id;
 
-    // GDD v0.3: Starting stats are fixed for consistent testing.
+    // Starting stats based on docs/stats-system.md
     this.stats = {
-      money: 20000,
-      mentalHealth: 7,
-      sin: 0,
-      virtue: 0,
-      socialCapital: 0
+      money: Math.floor(Math.random() * 10001) + 15000, // $15,000 - $25,000
+      mentalHealth: Math.floor(Math.random() * 3) + 6, // 6-8
+      sin: Math.floor(Math.random() * 3), // 0-2
+      virtue: Math.floor(Math.random() * 3) // 0-2
     };
 
-    this.isBurnedOut = false; // Player is suffering from burnout this turn
-    this.isImmuneToBurnout = false; // Player is immune for one round after burnout
+    this.isImmuneToBurnout = false;
     this.burnoutImmunityRound = 0;
-    this.actionPoints = 0;
-    this.heldCrossroadsCard = null;
-    this.usedSocialActionThisTurn = false;
   }
 
   // Method to apply stat changes from events or choices
   applyEffects(effects, currentRound = 0) {
+    const oldMentalHealth = this.stats.mentalHealth;
+
     if (effects.money) this.stats.money += effects.money;
     if (effects.mentalHealth) this.stats.mentalHealth += effects.mentalHealth;
     if (effects.sin) this.stats.sin += effects.sin;
     if (effects.virtue) this.stats.virtue += effects.virtue;
-    if (effects.socialCapital) this.stats.socialCapital += effects.socialCapital;
 
     // Clamp values to their ranges
     this.stats.mentalHealth = Math.max(0, Math.min(10, this.stats.mentalHealth));
     this.stats.sin = Math.max(0, this.stats.sin);
     this.stats.virtue = Math.max(0, this.stats.virtue);
-    this.stats.socialCapital = Math.max(0, this.stats.socialCapital);
 
-    // After stats change, update the player's burnout status
-    this.updateBurnoutStatus(currentRound);
+    // Check for burnout if mental health decreased
+    if (this.stats.mentalHealth < oldMentalHealth) {
+      this.checkAndTriggerBurnout(currentRound);
+    }
   }
 
-  // GDD v0.3: Burnout is a deterministic state, not a probabilistic event.
-  updateBurnoutStatus(currentRound) {
-    this.checkBurnoutImmunity(currentRound); // Check if immunity has expired
-
+  // Burnout Mechanic
+  checkAndTriggerBurnout(currentRound) {
+    this.checkBurnoutImmunity(currentRound);
     if (this.isImmuneToBurnout) {
-      this.isBurnedOut = false;
+      console.log(`[MECHANIC] Player ${this.name} is immune to burnout this round.`);
       return;
     }
 
-    if (this.stats.mentalHealth <= 3) {
-      if (!this.isBurnedOut) {
-        console.log(`[MECHANIC] Player ${this.name} is now suffering from Burnout.`);
-        this.isBurnedOut = true;
-        // Set immunity for the *next* round (Circuit Breaker)
-        this.setBurnoutImmunity(currentRound);
-      }
-    } else {
-      if (this.isBurnedOut) {
-        console.log(`[MECHANIC] Player ${this.name} has recovered from Burnout.`);
-      }
-      this.isBurnedOut = false;
+    const mh = this.stats.mentalHealth;
+    let burnoutChance = 0;
+    if (mh <= 3) burnoutChance = 0.33;
+    if (mh <= 2) burnoutChance = 0.66;
+    if (mh <= 1) burnoutChance = 1.0;
+
+    if (Math.random() < burnoutChance) {
+      console.log(`[MECHANIC] Player ${this.name} suffered a burnout!`);
+      // Apply burnout consequences directly to avoid recursive loop
+      this.stats.mentalHealth = Math.max(0, this.stats.mentalHealth - 2);
+      this.stats.money -= 500;
+
+      this.setBurnoutImmunity(currentRound);
+      // In a full implementation, an event would be emitted to notify the client
     }
   }
 
-  // Method to set burnout immunity for the next round
+  // Method to set burnout immunity
   setBurnoutImmunity(currentRound) {
     this.isImmuneToBurnout = true;
     this.burnoutImmunityRound = currentRound;
@@ -73,9 +71,7 @@ class Player {
 
   // Method to check and clear burnout immunity
   checkBurnoutImmunity(currentRound) {
-    // Immunity lasts for one full round. It expires if the game is on a later round than the one immunity was granted in.
     if (this.isImmuneToBurnout && currentRound > this.burnoutImmunityRound) {
-      console.log(`[MECHANIC] Player ${this.name}'s burnout immunity has worn off.`);
       this.isImmuneToBurnout = false;
     }
   }
@@ -93,10 +89,7 @@ class Player {
     return {
       id: this.id,
       name: this.name,
-      stats: this.stats,
-      isBurnedOut: this.isBurnedOut, // Expose this to the client
-      actionPoints: this.actionPoints,
-      hasCrossroadsCard: !!this.heldCrossroadsCard
+      stats: this.stats
     };
   }
 }

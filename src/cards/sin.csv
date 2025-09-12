@@ -1,22 +1,22 @@
-
-id,deck,type,text,money,mental,sin,virtue,delay
-sin_01,sin,immediate,"You embezzle $2500 from your company's petty cash fund",2500,1,3,-2,0
-sin_02,sin,immediate,"You ghost your therapist after they called you out on your bullshit",0,-3,2,-1,0
-sin_03,sin,delayed,"You start a pyramid scheme selling essential oils",2000,1,4,-3,2
-sin_04,sin,immediate,"You lie on your resume about having a master's degree",1000,-1,2,-2,0
-sin_05,sin,immediate,"You steal your roommate's lunch from the office fridge",0,1,1,-1,0
-sin_06,sin,delayed,"You become a cryptocurrency influencer promoting shitcoins",3000,2,3,-4,3
-sin_07,sin,immediate,"You fake a sick day to binge Netflix",0,2,1,-1,0
-sin_08,sin,immediate,"You spread gossip about your ex on social media",0,-2,2,-2,0
-sin_09,sin,delayed,"You start dropshipping counterfeit designer goods",1500,1,3,-2,2
-sin_10,sin,immediate,"You take credit for your colleague's work in the meeting",500,-1,2,-2,0
-sin_11,sin,delayed,"Crypto Cash-Out: You cash out your crypto at peak hype",6000,0,1,0,0
-sin_12,sin,immediate,"Unethical Puppy Sponsorship: Your dog becomes an influencer",2000,1,2,0,0
-sin_13,sin,delayed,"Deepfake Resume: You use AI to fake your work experience",1000,0,2,-1,1
-sin_14,sin,delayed,"Soul Advance: You literally sell your soul for quick cash",10000,0,3,0,4
-sin_15,sin,immediate,"Tax Haven TikTok: You make videos about dodging taxes",0,1,2,-1,0
-sin_16,sin,immediate,"Drive-Thru Divorce: You end your marriage via app",-3000,1,2,0,0
-sin_17,sin,immediate,"MLM But Make It Vapes: You recruit friends into vape pyramid",1000,0,3,-2,0
-sin_18,sin,delayed,"Influencer Fyre Fest: You organize a fake luxury event",4000,1,3,-1,3
-sin_19,sin,immediate,"Secret Society Wellness Retreat: You join a sketchy cult",0,1,2,0,0
-sin_20,sin,immediate,"Cancel the Competition: You destroy a rival's reputation",0,-1,1,0,0
+id,deck,type,text,money,mental,sin,virtue,delay,socialCapital
+sin_01,sin,immediate,"You embezzle $5000 from your company's petty cash fund",-5000,2,3,-2,0,0
+sin_02,sin,immediate,"You ghost your therapist after they called you out on your bullshit",0,-3,2,-1,0,0
+sin_03,sin,delayed,"You start a pyramid scheme selling essential oils",2000,1,4,-3,2,0
+sin_04,sin,immediate,"You lie on your resume about having a master's degree",1000,-1,2,-2,0,0
+sin_05,sin,immediate,"You 'accidentally' take the artisanal, gluten-free sandwich your work nemesis was saving. It was delicious.",20,1,1,-1,0,0
+sin_06,sin,delayed,"You become a cryptocurrency influencer promoting shitcoins",3000,2,3,-4,3,0
+sin_07,sin,immediate,"You call in 'sick' to catch up on the hot new streaming series, but spend the whole day wracked with guilt and paranoia about getting caught.",0,-1,1,0,0,0
+sin_08,sin,immediate,"You spread gossip about your ex on social media",0,-2,2,-2,0,0
+sin_09,sin,delayed,"You start dropshipping counterfeit designer goods",1500,1,3,-2,2,0
+sin_10,sin,immediate,"You 'strategically re-allocate' credit for a successful project during a key presentation.",500,-1,2,-2,0,0
+sin_11,sin,immediate,"Crypto Cash-Out: You cash out your crypto at peak hype",6000,0,1,0,0,0
+sin_12,sin,immediate,"Unethical Puppy Sponsorship: Your dog becomes an influencer",2000,1,2,0,0,0
+sin_13,sin,delayed,"Deepfake Resume: You use AI to fake your work experience",1000,0,2,-1,1,0
+sin_14,sin,delayed,"Soul Advance: You literally sell your soul for quick cash",10000,0,3,0,4,0
+sin_15,sin,immediate,"Tax Haven TikTok: You make videos about dodging taxes",0,1,2,-1,0,0
+sin_16,sin,immediate,"Drive-Thru Divorce: You end your marriage via app",-3000,1,2,0,0,0
+sin_17,sin,immediate,"MLM But Make It Vapes: You recruit friends into vape pyramid",1000,0,3,-2,0,0
+sin_18,sin,delayed,"Influencer Fyre Fest: You organize a fake luxury event",4000,1,3,-1,3,0
+sin_19,sin,immediate,"Secret Society Wellness Retreat: You join a sketchy cult",0,1,2,0,0,0
+sin_20,sin,immediate,"Cancel the Competition: You discover your rival's embarrassing old blog and 'anonymously' send it to their boss.",0,-1,1,0,0,0
+sin_21,sin,delayed,"You sign up for a free trial with your credit card, knowing full well you will forget to cancel.",0,0,1,0,2,0
