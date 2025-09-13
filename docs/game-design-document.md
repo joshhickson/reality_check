@@ -1,15 +1,22 @@
 # Reality Check: Game Design Document (GDD)
-*Version 0.2 - Balanced Systems*
+*Version 0.4 - The Hybrid Model*
 
 ## 1. Core Game Loop & Vision
 
 **Vision:** To create a satirical, narrative-driven board game that mirrors the complexities of modern adult life. The game should encourage social interaction, moral ambiguity, and strategic thinking beyond simple resource accumulation. The primary goal is not just to "win," but to generate memorable stories and conversations.
 
-**Core Loop:**
-1.  **Start Turn:** Apply any ongoing effects.
-2.  **Take Action:** Spend Action Points (AP) on various actions.
-3.  **Resolve Action:** Apply effects and make choices.
-4.  **End Turn:** Pass play to the next player.
+**Core Loop: The "Narrative Momentum" System**
+The game's loop is designed to give players agency over the pacing and narrative depth of their experience. It is broken into two interconnected phases: "The Grind" and "The Turning Point."
+
+1.  **The Grind (Turn-to-Turn Gameplay):**
+    *   On their turn, a player spends **Action Points (AP)** on simple, fast-paced actions (e.g., drawing a card, working overtime).
+    *   These actions have clear, immediate effects on a player's core stats.
+    *   Crucially, these simple actions also generate a new resource: **Narrative Momentum**.
+
+2.  **The Turning Point (Player-Driven Narrative Events):**
+    *   At any time, a player can choose to spend their accumulated **Narrative Momentum** to trigger a "Life Happens" event.
+    *   This injects a deep, complex narrative choice into the game, presenting the player with a multi-faceted dilemma that can have significant short-term and long-term consequences.
+    *   This allows players to opt-in to deeper story moments at a pace they control, keeping the game accessible while offering rewarding strategic depth.
 
 ## 2. The Four Pillars: Core Stats & Economy
 
@@ -20,11 +27,30 @@ The game's economy is based on the four core stats, or "Pillars of Life." The fu
 *   **☠️ Sin:** A measure of your moral corruption.
 *   **✝️ Virtue:** A measure of your moral strength and altruism.
 
+### 2.1. The Fifth Resource: Narrative Momentum
+
+**Concept:** A spendable resource representing the accumulation of life experiences, stress, and minor events that build up between major life-altering moments. It serves as a currency that players use to buy into deeper narrative events, giving them control over the game's pacing.
+
+**Rules:**
+*   Players gain **Narrative Momentum (NM)** tokens by taking simple, everyday actions.
+    *   **Work Overtime:** +1 NM
+    *   **Draw a Card:** +1 NM
+*   At any time on their turn, a player may spend **5 NM** to trigger a **"Life Happens"** event. This does not cost an Action Point.
+
 ## 3. Core Mechanic Definitions
 
 This section provides concrete rules for the game's primary systems.
 
-### 3.1. The "Burnout" Mechanic (Low Mental Health)
+### 3.1. The "Life Happens" Deck
+
+**Concept:** The "Life Happens" deck is the heart of the hybrid model. These cards represent major, life-altering events that players choose to engage with. They are designed to be complex, with branching choices and significant consequences, providing the deep narrative experience of the "Constant Dilemma" model on an opt-in basis.
+
+**Rules:**
+*   When a player spends 5 NM to trigger an event, they draw one card from the "Life Happens" deck and resolve it immediately.
+*   Each card presents a scenario and 2-3 choices.
+*   The outcomes of these choices can be complex, affecting core stats, adding new cards to a player's hand or the main decks, or even adding "legacy" stickers to the game board that permanently alter rules for all players.
+
+### 3.2 The "Burnout" Mechanic
 
 **Concept:** Mechanically represents the consequences of poor mental health, limiting a player's choices and forcing them to deal with their current problems rather than taking on new ones.
 
@@ -34,7 +60,7 @@ This section provides concrete rules for the game's primary systems.
 *   If you have no other valid actions, you must spend your turn "recovering," which allows you to draw one card but immediately end your turn without playing it.
 *   **Circuit Breaker:** After a turn in which you suffered from Burnout, you are immune to its effects for one full round, giving you a window to recover.
 
-### 3.2. "Community Impact" & The Builder Victory
+### 3.3 "Community Impact" & The Builder Victory
 
 **Concept:** Quantifies a player's positive contributions to the group, making "The Builder" victory condition measurable and balancing it to prevent runaway leaders.
 
@@ -47,7 +73,7 @@ This section provides concrete rules for the game's primary systems.
     *   If V ≥ 10, bonus = **+3 points**.
     *   This system of diminishing returns ensures that while Virtue is valuable, hyper-focusing on it at the expense of all else is not a dominant strategy.
 
-### 3.3. Card & Action Economy
+### 3.4 Card & Action Economy
 
 **Concept:** Defines the flow of cards and actions to ensure a balanced and well-paced game.
 
@@ -60,7 +86,7 @@ This section provides concrete rules for the game's primary systems.
 *   **Hand Size:** Players have a maximum hand size of **5 cards**. If you must draw a card and are already at your hand limit, you must first discard a card of your choice.
 *   **Turn End:** A player's turn ends when they have spent all their Action Points.
 
-### 3.4. End Game: Judgment Day
+### 3.5 End Game: Judgment Day
 
 **Concept:** A multi-faceted end-game sequence that evaluates each player's journey and determines a winner based on multiple, value-driven victory conditions.
 
@@ -81,7 +107,7 @@ This section provides concrete rules for the game's primary systems.
 
 This section details the more complex systems that provide "Reality Check" with its unique strategic depth and narrative potential.
 
-### 4.1. The Exile Protocol (Replaces Red Line Protocol)
+### 4.1 The Exile Protocol
 
 **Concept:** A player-driven catch-up mechanism that addresses a runaway leader without resorting to player elimination. It transforms a dominant player into a new kind of disruptive force, keeping all players engaged.
 
