@@ -1,0 +1,56 @@
+[
+    {
+        "id": "lh_001",
+        "text": "Your landlord is selling your apartment building. The new owner plans to double the rent, effectively evicting you. What do you do?",
+        "choices": [
+            {
+                "text": "Organize a tenants union to fight the eviction.",
+                "effects": { "money": -500, "sin": -1, "virtue": 2, "socialCapital": 2 }
+            },
+            {
+                "text": "Accept a small buyout from the new landlord to leave quietly.",
+                "effects": { "money": 2000, "mentalHealth": -1, "sin": 1, "virtue": -1 }
+            },
+            {
+                "text": "Spend your savings to try and buy the apartment yourself.",
+                "effects": { "money": -20000, "mentalHealth": -2, "virtue": 1 }
+            }
+        ]
+    },
+    {
+        "id": "lh_002",
+        "text": "Your company announces a major 'restructuring.' Your entire department is being laid off, but you are offered a new, more demanding role in a different division.",
+        "choices": [
+            {
+                "text": "Accept the new role. It's a paycheck.",
+                "effects": { "money": 1000, "mentalHealth": -2, "sin": 1 }
+            },
+            {
+                "text": "Decline the offer and take the severance package.",
+                "effects": { "money": 5000, "mentalHealth": 1, "virtue": 1 }
+            },
+            {
+                "text": "Leak the layoff news to the press to try and create a public backlash.",
+                "effects": { "money": -1000, "mentalHealth": -1, "sin": 1, "virtue": 1, "socialCapital": 1 }
+            }
+        ]
+    },
+    {
+        "id": "lh_003",
+        "text": "A close friend comes to you with a brilliant but ethically questionable startup idea that requires an initial investment.",
+        "choices": [
+            {
+                "text": "Invest. It's a huge risk, but could pay off massively.",
+                "effects": { "money": -5000, "sin": 2, "virtue": -1 }
+            },
+            {
+                "text": "Refuse to invest, preserving your money and your morals.",
+                "effects": { "virtue": 1 }
+            },
+            {
+                "text": "Steal their idea and do it yourself.",
+                "effects": { "money": 1000, "mentalHealth": -2, "sin": 5, "virtue": -3 }
+            }
+        ]
+    }
+]

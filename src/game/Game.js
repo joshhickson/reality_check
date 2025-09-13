@@ -2,20 +2,21 @@ const { v4: uuidv4 } = require('uuid');
 const { StateMachine } = require('../engine/StateMachine.js');
 const { RingScheduler } = require('../engine/RingScheduler.js');
 const { Player } = require('./Player.js');
+const { LifeHappensDeck } = require('./decks/LifeHappensDeck.js');
 
 class Game {
   constructor(name, creatorSocket, gameId) {
     this.id = gameId;
     this.name = name;
     this.players = [];
-    this.status = 'waiting'; // waiting, in-progress, finished
+    this.status = 'waiting';
 
     this.stateMachine = new StateMachine();
     this.scheduler = new RingScheduler();
+    this.lifeHappensDeck = new LifeHappensDeck();
+    this.lifeHappensDeck.shuffle();
 
     this.currentPlayerIndex = 0;
-
-    // The creator will join through the 'join_game' event
   }
 
   addPlayer(socket, username) {
@@ -25,28 +26,15 @@ class Game {
     const player = new Player(username, socket);
     this.players.push(player);
 
-    // Welcome the new player
-    socket.emit('player_joined', {
-        gameId: this.id,
-        player: player.getPublicState(),
-        allPlayers: this.players.map(p => p.getPublicState())
-    });
-
-    // Notify all other players
-    socket.to(this.id).emit('player_joined', {
-        gameId: this.id,
-        player: player.getPublicState(),
-        allPlayers: this.players.map(p => p.getPublicState())
-    });
-
     return player;
   }
 
   start() {
-    if (this.players.length < 1) { // For testing, allow 1 player
+    if (this.players.length < 1) {
       throw new Error('Not enough players to start the game.');
     }
     this.status = 'in-progress';
+    this.getCurrentPlayer().stats.actionPoints = 2;
     this.stateMachine.updateContext({
         currentPlayer: this.getCurrentPlayer().id,
         turnNumber: this.scheduler.getCurrentTurn()
@@ -61,13 +49,13 @@ class Game {
   nextTurn() {
     this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     this.scheduler.advanceTurn();
+    this.getCurrentPlayer().stats.actionPoints = 2;
     this.stateMachine.updateContext({
       currentPlayer: this.getCurrentPlayer().id,
       turnNumber: this.scheduler.getCurrentTurn()
     });
     this.stateMachine.transition('Idle');
     this.stateMachine.transition('Roll');
-    // More logic here for processing global events, etc.
   }
 
   getGameState() {

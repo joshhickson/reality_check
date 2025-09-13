@@ -6,77 +6,66 @@ class Player {
     this.name = name;
     this.socketId = socket.id;
 
-    // Starting stats based on docs/stats-system.md
+    // Stats aligned with GDD v0.4
     this.stats = {
-      money: Math.floor(Math.random() * 10001) + 15000, // $15,000 - $25,000
-      mentalHealth: Math.floor(Math.random() * 3) + 6, // 6-8
-      sin: Math.floor(Math.random() * 3), // 0-2
-      virtue: Math.floor(Math.random() * 3) // 0-2
+      money: 20000,
+      mentalHealth: 7,
+      sin: 0,
+      virtue: 0,
+      actionPoints: 0,
+      narrativeMomentum: 0
     };
 
+    this.isBurnedOut = false;
     this.isImmuneToBurnout = false;
     this.burnoutImmunityRound = 0;
   }
 
-  // Method to apply stat changes from events or choices
   applyEffects(effects, currentRound = 0) {
-    const oldMentalHealth = this.stats.mentalHealth;
-
     if (effects.money) this.stats.money += effects.money;
     if (effects.mentalHealth) this.stats.mentalHealth += effects.mentalHealth;
     if (effects.sin) this.stats.sin += effects.sin;
     if (effects.virtue) this.stats.virtue += effects.virtue;
+    if (effects.narrativeMomentum) this.stats.narrativeMomentum += effects.narrativeMomentum;
 
     // Clamp values to their ranges
     this.stats.mentalHealth = Math.max(0, Math.min(10, this.stats.mentalHealth));
     this.stats.sin = Math.max(0, this.stats.sin);
     this.stats.virtue = Math.max(0, this.stats.virtue);
+    this.stats.narrativeMomentum = Math.max(0, this.stats.narrativeMomentum);
 
-    // Check for burnout if mental health decreased
-    if (this.stats.mentalHealth < oldMentalHealth) {
-      this.checkAndTriggerBurnout(currentRound);
-    }
+    this.updateBurnoutStatus(currentRound);
   }
 
-  // Burnout Mechanic
-  checkAndTriggerBurnout(currentRound) {
+  updateBurnoutStatus(currentRound) {
     this.checkBurnoutImmunity(currentRound);
+
     if (this.isImmuneToBurnout) {
-      console.log(`[MECHANIC] Player ${this.name} is immune to burnout this round.`);
+      this.isBurnedOut = false;
       return;
     }
 
-    const mh = this.stats.mentalHealth;
-    let burnoutChance = 0;
-    if (mh <= 3) burnoutChance = 0.33;
-    if (mh <= 2) burnoutChance = 0.66;
-    if (mh <= 1) burnoutChance = 1.0;
-
-    if (Math.random() < burnoutChance) {
-      console.log(`[MECHANIC] Player ${this.name} suffered a burnout!`);
-      // Apply burnout consequences directly to avoid recursive loop
-      this.stats.mentalHealth = Math.max(0, this.stats.mentalHealth - 2);
-      this.stats.money -= 500;
-
-      this.setBurnoutImmunity(currentRound);
-      // In a full implementation, an event would be emitted to notify the client
+    if (this.stats.mentalHealth <= 3) {
+      if (!this.isBurnedOut) {
+        this.isBurnedOut = true;
+        this.setBurnoutImmunity(currentRound);
+      }
+    } else {
+      this.isBurnedOut = false;
     }
   }
 
-  // Method to set burnout immunity
   setBurnoutImmunity(currentRound) {
     this.isImmuneToBurnout = true;
     this.burnoutImmunityRound = currentRound;
   }
 
-  // Method to check and clear burnout immunity
   checkBurnoutImmunity(currentRound) {
     if (this.isImmuneToBurnout && currentRound > this.burnoutImmunityRound) {
       this.isImmuneToBurnout = false;
     }
   }
 
-  // Community Impact Bonus Mechanic
   getCommunityImpactBonus() {
     const virtue = this.stats.virtue;
     if (virtue >= 10) return 3;
@@ -89,7 +78,8 @@ class Player {
     return {
       id: this.id,
       name: this.name,
-      stats: this.stats
+      stats: this.stats,
+      isBurnedOut: this.isBurnedOut
     };
   }
 }

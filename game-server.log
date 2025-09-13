@@ -1,0 +1,23 @@
+🚀 Server listening on port 5000
+🔌 New connection: rAnSTGpGh71EzZN1AAAB
+🔌 New connection: EbbnUGR0HmcaB9J1AAAD
+🔄 State transition: Idle → Roll
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+[GAME] Player JoinerBot's turn has ended (AP depleted).
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+[GAME] Player JoinerBot's turn has ended (AP depleted).
+⏰ Auto-transitioning from Roll to Tile (timeout)
+🔄 State transition: Roll → Tile
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+[GAME] Player JoinerBot's turn has ended (AP depleted).
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+[GAME] Player JoinerBot's turn has ended (AP depleted).
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+[GAME] Player JoinerBot's turn has ended (AP depleted).
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+[GAME] Player JoinerBot's turn has ended (AP depleted).
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+[GAME] Player JoinerBot's turn has ended (AP depleted).
+[GAME] Player CreatorBot's turn has ended (AP depleted).
+👋 User disconnected: rAnSTGpGh71EzZN1AAAB
+👋 User disconnected: EbbnUGR0HmcaB9J1AAAD
