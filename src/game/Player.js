@@ -13,13 +13,16 @@ class Player {
       sin: 0,
       virtue: 0,
       actionPoints: 0,
-      narrativeMomentum: 0
+      narrativeMomentum: 0,
+      kudos: 0,
+      concern: 0
     };
 
     this.isBurnedOut = false;
     this.isImmuneToBurnout = false;
     this.burnoutImmunityRound = 0;
     this.hand = [];
+    this.finalScore = null;
   }
 
   applyEffects(effects, currentRound = 0) {
@@ -81,7 +84,8 @@ class Player {
       name: this.name,
       stats: this.stats,
       isBurnedOut: this.isBurnedOut,
-      hand: this.hand
+      hand: this.hand,
+      finalScore: this.finalScore
     };
   }
 }

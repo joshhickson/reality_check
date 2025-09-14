@@ -300,6 +300,39 @@
             </div>
         </div>
 
+        <div id="judgmentDayArea" style="display: none; background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 30px; margin: 20px 0;">
+            <h2>Judgment Day</h2>
+            <p>The end has come. It's time to pass judgment on your peers.</p>
+            <div id="testimonyForm">
+                <h3>Give Kudos</h3>
+                <p>Which player deserves praise for their journey?</p>
+                <div id="kudosPlayers" style="text-align: left; max-width: 300px; margin: 10px auto;"></div>
+
+                <h3>Express Concern</h3>
+                <p>Which player's actions have raised concerns?</p>
+                <div id="concernPlayers" style="text-align: left; max-width: 300px; margin: 10px auto;"></div>
+
+                <button onclick="submitTestimony()">Submit Testimony</button>
+            </div>
+            <div id="testimonyStatus"></div>
+        </div>
+
+        <div id="gameOverArea" style="display: none; background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 30px; margin: 20px 0;">
+            <h2>Game Over</h2>
+            <h3 id="winnerAnnouncement"></h3>
+            <table id="finalScores" style="width: 100%; text-align: left; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(0,0,0,0.2);">
+                        <th style="padding: 10px;">Rank</th>
+                        <th style="padding: 10px;">Player</th>
+                        <th style="padding: 10px;">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
         <!-- Console Window -->
         <div id="consoleWindow" class="console-window" style="display: none;">
             <div class="console-header">

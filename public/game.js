@@ -70,6 +70,35 @@ function makeCardChoice(cardId, choiceIndex) {
 }
 
 // Socket event handlers
+
+socket.on('game_state_update', (data) => {
+  console.log('Game state update:', data);
+  gameState = data;
+  updatePlayersList(data.players);
+
+  const me = data.players.find(p => p.id === playerId);
+  if (me) {
+    currentPlayer = me;
+    updatePlayerStats(me.stats);
+  }
+
+  if (data.status === 'judgment_day') {
+    renderJudgmentDay(data.players);
+  }
+});
+
+socket.on('testimony_submitted', (data) => {
+  const statusDiv = document.getElementById('testimonyStatus');
+  if (statusDiv) {
+    statusDiv.textContent = `Waiting for ${data.totalPlayers - data.testimoniesCount} more players...`;
+  }
+});
+
+socket.on('game_over', (data) => {
+  console.log('Game over:', data);
+  renderGameOver(data);
+});
+
 socket.on('game_created', (data) => {
   gameId = data.gameId;
   console.log('Game created:', data);
@@ -254,6 +283,73 @@ function updateTurnControls(nextPlayerIndex) {
 function updatePlayersList(data) {
   // This would update the players list UI
   console.log('Players updated:', data);
+}
+
+function renderJudgmentDay(players) {
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('judgmentDayArea').style.display = 'block';
+
+  const kudosPlayersDiv = document.getElementById('kudosPlayers');
+  const concernPlayersDiv = document.getElementById('concernPlayers');
+
+  kudosPlayersDiv.innerHTML = '';
+  concernPlayersDiv.innerHTML = '';
+
+  players.forEach(p => {
+    if (p.id === playerId) return; // Can't vote for yourself
+
+    const kudosLabel = document.createElement('label');
+    kudosLabel.style.display = 'block';
+    kudosLabel.innerHTML = `<input type="radio" name="kudos" value="${p.id}"> ${p.name}`;
+    kudosPlayersDiv.appendChild(kudosLabel);
+
+    const concernLabel = document.createElement('label');
+    concernLabel.style.display = 'block';
+    concernLabel.innerHTML = `<input type="radio" name="concern" value="${p.id}"> ${p.name}`;
+    concernPlayersDiv.appendChild(concernLabel);
+  });
+}
+
+function submitTestimony() {
+  const kudosTargetId = document.querySelector('input[name="kudos"]:checked')?.value;
+  const concernTargetId = document.querySelector('input[name="concern"]:checked')?.value;
+
+  if (!kudosTargetId || !concernTargetId) {
+    alert('Please select a player for both Kudos and Concern.');
+    return;
+  }
+
+  socket.emit('submit_testimony', {
+    gameId,
+    playerId,
+    kudosTargetId,
+    concernTargetId
+  });
+
+  document.getElementById('testimonyForm').style.display = 'none';
+  document.getElementById('testimonyStatus').textContent = 'Waiting for other players...';
+}
+
+function renderGameOver(game) {
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('judgmentDayArea').style.display = 'none';
+  document.getElementById('gameOverArea').style.display = 'block';
+
+  if (game.winner) {
+    document.getElementById('winnerAnnouncement').textContent = `Winner: ${game.winner.name}!`;
+  }
+
+  const scoresBody = document.querySelector('#finalScores tbody');
+  scoresBody.innerHTML = '';
+
+  game.players.forEach((p, index) => {
+    const row = scoresBody.insertRow();
+    row.innerHTML = `
+      <td style="padding: 10px;">${index + 1}</td>
+      <td style="padding: 10px;">${p.name}</td>
+      <td style="padding: 10px;">${p.finalScore.toFixed(2)}</td>
+    `;
+  });
 }
 
 // Initialize game

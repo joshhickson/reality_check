@@ -192,6 +192,29 @@ io.on('connection', (socket) => {
       io.to(game.id).emit('game_state_update', game.getGameState());
   });
 
+  socket.on('submit_testimony', ({ gameId, playerId, kudosTargetId, concernTargetId }) => {
+    const game = games[gameId];
+    if (!game) return socket.emit('error', { message: 'Game not found.' });
+    if (game.status !== 'judgment_day') {
+      return socket.emit('error', { message: 'It is not time for testimony yet.' });
+    }
+
+    const result = game.addTestimony(playerId, kudosTargetId, concernTargetId);
+    if (result.error) {
+      return socket.emit('error', { message: result.error });
+    }
+
+    io.to(gameId).emit('testimony_submitted', {
+      playerId: playerId,
+      testimoniesCount: game.testimonies.length,
+      totalPlayers: game.players.length
+    });
+
+    if (game.status === 'finished') {
+      io.to(gameId).emit('game_over', game.getGameState());
+    }
+  });
+
   socket.on('disconnect', () => {
     console.log(`👋 User disconnected: ${socket.id}`);
   });
