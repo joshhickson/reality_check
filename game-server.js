@@ -26,22 +26,19 @@ app.use(express.static(publicPath));
 
 const games = {};
 
-// --- Helper Functions ---
 function checkTurnEnd(game, player) {
   if (player.stats.actionPoints <= 0 && !game.stateMachine.getContext().pendingDecision) {
     console.log(`[GAME] Player ${player.name}'s turn has ended (AP depleted).`);
     game.nextTurn();
-    return true; // Turn has ended
+    return true;
   }
-  return false; // Turn has not ended
+  return false;
 }
 
-// --- API Routes ---
 app.get('/api/games', (req, res) => {
   res.json(Object.keys(games));
 });
 
-// --- Socket.IO Game Logic ---
 io.on('connection', (socket) => {
   console.log(`🔌 New connection: ${socket.id}`);
 
@@ -93,14 +90,46 @@ io.on('connection', (socket) => {
             break;
 
         case 'DRAW_CARD':
-             if (player.isBurnedOut) {
+            if (player.isBurnedOut) {
                 return socket.emit('error', { message: "You cannot draw cards while suffering from Burnout." });
+            }
+            if (player.hand.length >= game.maxHandSize) {
+                return socket.emit('error', { message: "Your hand is full." });
             }
             cost = 1;
             if (player.stats.actionPoints >= cost) {
                 player.stats.actionPoints -= cost;
+                let card;
+                if (action.payload.deck === 'SIN') {
+                    card = game.sinDeck.draw();
+                } else if (action.payload.deck === 'VIRTUE') {
+                    card = game.virtueDeck.draw();
+                }
+                if (card) {
+                    player.hand.push(card);
+                }
                 player.applyEffects({ narrativeMomentum: 1 });
                 actionSucceeded = true;
+            }
+            break;
+
+        case 'PLAY_CARD':
+            cost = 1;
+            if (player.stats.actionPoints >= cost) {
+                const cardIndex = player.hand.findIndex(c => c.id === action.payload.cardId);
+                if (cardIndex > -1) {
+                    player.stats.actionPoints -= cost;
+                    const cardToPlay = player.hand.splice(cardIndex, 1)[0];
+                    const effects = {
+                        money: parseInt(cardToPlay.money) || 0,
+                        mentalHealth: parseInt(cardToPlay.mental) || 0,
+                        sin: parseInt(cardToPlay.sin) || 0,
+                        virtue: parseInt(cardToPlay.virtue) || 0,
+                        socialCapital: parseInt(cardToPlay.socialCapital) || 0
+                    };
+                    player.applyEffects(effects);
+                    actionSucceeded = true;
+                }
             }
             break;
 
@@ -131,8 +160,6 @@ io.on('connection', (socket) => {
     }
 
     const turnEnded = checkTurnEnd(game, player);
-    // Always emit a state update after an action. If the turn ended,
-    // this will be the state for the *new* player.
     io.to(game.id).emit('game_state_update', game.getGameState());
   });
 

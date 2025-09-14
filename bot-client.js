@@ -1,7 +1,7 @@
 const { io } = require("socket.io-client");
 
 const SERVER_URL = "http://localhost:5000";
-const TURN_LIMIT = 15; // Increased limit to see NM system play out
+const TURN_LIMIT = 20; // Increased limit for more actions
 
 class Bot {
     constructor(name) {
@@ -71,7 +71,7 @@ class Bot {
 
         if (currentPlayerId === this.playerId) {
             console.log(`\n--- [${this.name}] Turn ${currentTurn} ---`);
-            console.log(`My Stats: AP=${me.stats.actionPoints}, NM=${me.stats.narrativeMomentum}, MH=${me.stats.mentalHealth}`);
+            console.log(`My Stats: AP=${me.stats.actionPoints}, Hand=${me.hand.length}, MH=${me.stats.mentalHealth}`);
 
             setTimeout(() => {
                 if (pendingDecision && pendingDecision.playerId === this.playerId) {
@@ -79,34 +79,37 @@ class Bot {
                 } else if (me.stats.actionPoints > 0) {
                     this.takeTurn(me);
                 }
-            }, 1000);
+            }, 500); // Shorter delay for faster simulation
         }
     }
 
     takeTurn(me) {
-        // Strategy: If we can afford a "Life Happens" event, do it. Otherwise, take a basic action.
-        if (me.stats.narrativeMomentum >= 5) {
-            console.log(`[${this.name}] Spending 5 NM to trigger a 'Life Happens' event.`);
+        if (me.stats.actionPoints <= 0) return;
+
+        // New Strategy: Use the card system
+        if (me.hand.length >= 5) {
+            // Must play a card if hand is full
+            const cardToPlay = me.hand[0]; // Play the first card
+            console.log(`[${this.name}] Hand is full. Playing card: ${cardToPlay.text}`);
             this.socket.emit('player_action', {
                 gameId: this.gameId,
                 playerId: this.playerId,
-                action: { type: 'SPEND_MOMENTUM' }
+                action: { type: 'PLAY_CARD', payload: { cardId: cardToPlay.id } }
             });
         } else {
-            // Default action if we can't afford anything else, or as a primary strategy.
-            // This is the most reliable action for testing NM generation.
-            console.log(`[${this.name}] Taking 'WORK_OVERTIME' to build NM.`);
+            // Randomly draw a card
+            const deckToDraw = Math.random() > 0.5 ? 'SIN' : 'VIRTUE';
+            console.log(`[${this.name}] Drawing from ${deckToDraw} deck.`);
             this.socket.emit('player_action', {
                 gameId: this.gameId,
                 playerId: this.playerId,
-                action: { type: 'WORK_OVERTIME' }
+                action: { type: 'DRAW_CARD', payload: { deck: deckToDraw } }
             });
         }
     }
 
     handleDecision(pendingDecision) {
         console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
-        // Simple strategy: always choose the first option.
         const choiceIndex = 0;
         console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
         this.socket.emit('card_choice', {
@@ -122,15 +125,15 @@ class Bot {
 }
 
 async function runSimulation() {
-    console.log("--- Starting Hybrid Model Bot Simulation ---");
-    const bot1 = new Bot("CreatorBot");
-    const bot2 = new Bot("JoinerBot");
+    console.log("--- Starting Card System Bot Simulation ---");
+    const bot1 = new Bot("Alice");
+    const bot2 = new Bot("Bob");
 
     try {
         await bot1.connect();
         await bot2.connect();
 
-        const { gameId } = await bot1.createGame("Bot Test Game");
+        const { gameId } = await bot1.createGame("Card Game Test");
         await bot2.joinGame(gameId);
 
         console.log("\n--- Starting Game ---");

@@ -19,6 +19,7 @@ class Player {
     this.isBurnedOut = false;
     this.isImmuneToBurnout = false;
     this.burnoutImmunityRound = 0;
+    this.hand = [];
   }
 
   applyEffects(effects, currentRound = 0) {
@@ -79,7 +80,8 @@ class Player {
       id: this.id,
       name: this.name,
       stats: this.stats,
-      isBurnedOut: this.isBurnedOut
+      isBurnedOut: this.isBurnedOut,
+      hand: this.hand
     };
   }
 }

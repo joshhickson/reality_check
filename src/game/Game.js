@@ -3,6 +3,8 @@ const { StateMachine } = require('../engine/StateMachine.js');
 const { RingScheduler } = require('../engine/RingScheduler.js');
 const { Player } = require('./Player.js');
 const { LifeHappensDeck } = require('./decks/LifeHappensDeck.js');
+const { SinDeck } = require('./decks/SinDeck.js');
+const { VirtueDeck } = require('./decks/VirtueDeck.js');
 
 class Game {
   constructor(name, creatorSocket, gameId) {
@@ -10,11 +12,17 @@ class Game {
     this.name = name;
     this.players = [];
     this.status = 'waiting';
+    this.maxHandSize = 5;
 
     this.stateMachine = new StateMachine();
     this.scheduler = new RingScheduler();
     this.lifeHappensDeck = new LifeHappensDeck();
+    this.sinDeck = new SinDeck();
+    this.virtueDeck = new VirtueDeck();
+
     this.lifeHappensDeck.shuffle();
+    this.sinDeck.shuffle();
+    this.virtueDeck.shuffle();
 
     this.currentPlayerIndex = 0;
   }
