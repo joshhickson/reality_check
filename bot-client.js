@@ -1,7 +1,6 @@
 const { io } = require("socket.io-client");
 
 const SERVER_URL = "http://localhost:5000";
-const TURN_LIMIT = 20; // Increased limit for more actions
 
 class Bot {
     constructor(name) {
@@ -9,6 +8,7 @@ class Bot {
         this.socket = null;
         this.playerId = null;
         this.gameId = null;
+        this.voted = false;
     }
 
     connect() {
@@ -21,6 +21,15 @@ class Bot {
             this.socket.on('game_started', (data) => this.handleGameStateUpdate(data));
             this.socket.on('card_resolved', (data) => console.log(`[${this.name}] Card resolved: ${data.choiceText}`));
             this.socket.on('error', (data) => console.error(`[${this.name}] Server Error:`, data.message));
+            this.socket.on('game_over', (data) => {
+                console.log(`\n--- [${this.name}] GAME OVER ---`);
+                const finalGameState = data;
+                console.log('Final Scores:', finalGameState.players.map(p => ({ name: p.name, score: p.finalScore.toFixed(2) })));
+                if (finalGameState.winner) {
+                    console.log(`Winner: ${finalGameState.winner.name}`);
+                }
+                this.disconnect();
+            });
         });
     }
 
@@ -57,21 +66,26 @@ class Bot {
 
     handleGameStateUpdate(gameState) {
         if (!gameState || !gameState.players) return;
+        const { status, currentPlayerId, players, currentTurn, pendingDecision } = gameState;
 
-        const { currentPlayerId, players, currentTurn, pendingDecision } = gameState;
-
-        if (currentTurn > TURN_LIMIT) {
-            console.log("--- Reached turn limit. Ending simulation. ---");
-            this.disconnect();
+        if (status === 'finished') {
             return;
         }
 
         const me = players.find(p => p.id === this.playerId);
         if (!me) return;
 
+        if (status === 'judgment_day') {
+            if (!this.voted) {
+                this.submitTestimony(players);
+                this.voted = true;
+            }
+            return;
+        }
+
         if (currentPlayerId === this.playerId) {
             console.log(`\n--- [${this.name}] Turn ${currentTurn} ---`);
-            console.log(`My Stats: AP=${me.stats.actionPoints}, Hand=${me.hand.length}, MH=${me.stats.mentalHealth}`);
+            console.log(`My Stats: AP=${me.stats.actionPoints}, Hand=${me.hand.length}, MH=${me.stats.mentalHealth}, NM=${me.stats.narrativeMomentum}`);
 
             setTimeout(() => {
                 if (pendingDecision && pendingDecision.playerId === this.playerId) {
@@ -79,38 +93,54 @@ class Bot {
                 } else if (me.stats.actionPoints > 0) {
                     this.takeTurn(me);
                 }
-            }, 500); // Shorter delay for faster simulation
+            }, 500);
         }
     }
 
     takeTurn(me) {
         if (me.stats.actionPoints <= 0) return;
 
-        // New Strategy: Use the card system
-        if (me.hand.length >= 5) {
-            // Must play a card if hand is full
-            const cardToPlay = me.hand[0]; // Play the first card
-            console.log(`[${this.name}] Hand is full. Playing card: ${cardToPlay.text}`);
-            this.socket.emit('player_action', {
-                gameId: this.gameId,
-                playerId: this.playerId,
-                action: { type: 'PLAY_CARD', payload: { cardId: cardToPlay.id } }
-            });
-        } else {
-            // Randomly draw a card
-            const deckToDraw = Math.random() > 0.5 ? 'SIN' : 'VIRTUE';
-            console.log(`[${this.name}] Drawing from ${deckToDraw} deck.`);
-            this.socket.emit('player_action', {
-                gameId: this.gameId,
-                playerId: this.playerId,
-                action: { type: 'DRAW_CARD', payload: { deck: deckToDraw } }
-            });
+        const possibleActions = [];
+
+        if (me.stats.actionPoints >= 2) {
+            possibleActions.push({ type: 'WORK_OVERTIME' });
         }
+        if (me.stats.actionPoints >= 1 && me.hand.length < 5 && !me.isBurnedOut) {
+            possibleActions.push({ type: 'DRAW_CARD' });
+        }
+        if (me.stats.actionPoints >= 1 && me.hand.length > 0) {
+            possibleActions.push({ type: 'PLAY_CARD' });
+        }
+        if (me.stats.narrativeMomentum >= 5) {
+            possibleActions.push({ type: 'SPEND_MOMENTUM' });
+        }
+
+        if (possibleActions.length === 0) {
+            console.log(`[${this.name}] No possible actions.`);
+            return;
+        }
+
+        let action = possibleActions[Math.floor(Math.random() * possibleActions.length)];
+
+        if (action.type === 'DRAW_CARD') {
+            action.payload = { deck: Math.random() > 0.5 ? 'SIN' : 'VIRTUE' };
+        }
+        if (action.type === 'PLAY_CARD') {
+            const cardToPlay = me.hand[Math.floor(Math.random() * me.hand.length)];
+            action.payload = { cardId: cardToPlay.id };
+        }
+
+        console.log(`[${this.name}] Taking action:`, action.type, action.payload || '');
+        this.socket.emit('player_action', {
+            gameId: this.gameId,
+            playerId: this.playerId,
+            action: action
+        });
     }
 
     handleDecision(pendingDecision) {
         console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
-        const choiceIndex = 0;
+        const choiceIndex = Math.floor(Math.random() * pendingDecision.options.length);
         console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
         this.socket.emit('card_choice', {
             gameId: this.gameId,
@@ -119,31 +149,57 @@ class Bot {
         });
     }
 
+    submitTestimony(players) {
+        const otherPlayers = players.filter(p => p.id !== this.playerId);
+        if (otherPlayers.length === 0) {
+            return;
+        }
+
+        const kudosTarget = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+        const concernTarget = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+
+        console.log(`[${this.name}] Submitting testimony: Kudos for ${kudosTarget.name}, Concern for ${concernTarget.name}`);
+
+        this.socket.emit('submit_testimony', {
+            gameId: this.gameId,
+            playerId: this.playerId,
+            kudosTargetId: kudosTarget.id,
+            concernTargetId: concernTarget.id
+        });
+    }
+
     disconnect() {
         if (this.socket) this.socket.disconnect();
     }
 }
 
-async function runSimulation() {
-    console.log("--- Starting Card System Bot Simulation ---");
-    const bot1 = new Bot("Alice");
-    const bot2 = new Bot("Bob");
+async function runSimulation(numBots = 2) {
+    console.log(`--- Starting Bot Simulation with ${numBots} bots ---`);
+    const bots = [];
+    for (let i = 0; i < numBots; i++) {
+        bots.push(new Bot(`Bot-${i + 1}`));
+    }
 
     try {
-        await bot1.connect();
-        await bot2.connect();
+        for (const bot of bots) {
+            await bot.connect();
+        }
 
-        const { gameId } = await bot1.createGame("Card Game Test");
-        await bot2.joinGame(gameId);
+        const creatorBot = bots[0];
+        const { gameId } = await creatorBot.createGame("Bot Game");
+
+        for (let i = 1; i < bots.length; i++) {
+            await bots[i].joinGame(gameId);
+        }
 
         console.log("\n--- Starting Game ---");
-        bot1.startGame();
+        creatorBot.startGame();
 
     } catch (error) {
         console.error("Simulation failed:", error);
-        bot1.disconnect();
-        bot2.disconnect();
+        bots.forEach(b => b.disconnect());
     }
 }
 
-runSimulation();
+const numBotsToRun = process.argv[2] ? parseInt(process.argv[2]) : 2;
+runSimulation(numBotsToRun);

@@ -27,7 +27,7 @@ app.use(express.static(publicPath));
 const games = {};
 
 function checkTurnEnd(game, player) {
-  if (player.stats.actionPoints <= 0 && !game.stateMachine.getContext().pendingDecision) {
+  if (player.stats.actionPoints <= 0 && !game.pendingDecision) {
     console.log(`[GAME] Player ${player.name}'s turn has ended (AP depleted).`);
     game.nextTurn();
     return true;
@@ -139,16 +139,13 @@ io.on('connection', (socket) => {
                 player.stats.narrativeMomentum -= cost;
                 const card = game.lifeHappensDeck.draw();
                 if (card) {
-                    game.stateMachine.updateContext({
-                      pendingDecision: {
+                    game.pendingDecision = {
                         type: 'LIFE_HAPPENS',
                         playerId: player.id,
                         cardId: card.id,
                         text: card.text,
                         options: card.choices
-                      }
-                    });
-                    game.stateMachine.transition('Decision');
+                    };
                 }
                 actionSucceeded = true;
             }
@@ -159,7 +156,7 @@ io.on('connection', (socket) => {
       return socket.emit('error', { message: "Not enough resources." });
     }
 
-    const turnEnded = checkTurnEnd(game, player);
+    checkTurnEnd(game, player);
     io.to(game.id).emit('game_state_update', game.getGameState());
   });
 
@@ -170,7 +167,7 @@ io.on('connection', (socket) => {
       const player = game.players.find(p => p.id === playerId);
       if (!player) return;
 
-      const pendingDecision = game.stateMachine.getContext().pendingDecision;
+      const pendingDecision = game.pendingDecision;
       if (!pendingDecision || pendingDecision.playerId !== playerId) {
         return socket.emit('error', { message: 'Not a valid decision time for this player.' });
       }
@@ -179,8 +176,7 @@ io.on('connection', (socket) => {
       if (!chosenOption) return socket.emit('error', { message: 'Invalid choice index.' });
 
       player.applyEffects(chosenOption.effects);
-      game.stateMachine.updateContext({ pendingDecision: null });
-      game.stateMachine.transition('EndTurn');
+      game.pendingDecision = null;
 
       io.to(game.id).emit('card_resolved', {
           playerId: player.id,
@@ -188,7 +184,7 @@ io.on('connection', (socket) => {
           choiceText: chosenOption.text
       });
 
-      const turnEnded = checkTurnEnd(game, player);
+      checkTurnEnd(game, player);
       io.to(game.id).emit('game_state_update', game.getGameState());
   });
 
