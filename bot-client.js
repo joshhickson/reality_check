@@ -1,10 +1,14 @@
 const { io } = require("socket.io-client");
+const { RandomStrategy } = require("./strategies/random.js");
+const { HustlerStrategy } = require("./strategies/hustler.js");
+const { ZenStrategy } = require("./strategies/zen.js");
 
 const SERVER_URL = "http://localhost:5000";
 
 class Bot {
-    constructor(name) {
+    constructor(name, strategy) {
         this.name = name;
+        this.strategy = strategy;
         this.socket = null;
         this.playerId = null;
         this.gameId = null;
@@ -98,49 +102,22 @@ class Bot {
     }
 
     takeTurn(me) {
-        if (me.stats.actionPoints <= 0) return;
-
-        const possibleActions = [];
-
-        if (me.stats.actionPoints >= 2) {
-            possibleActions.push({ type: 'WORK_OVERTIME' });
-        }
-        if (me.stats.actionPoints >= 1 && me.hand.length < 5 && !me.isBurnedOut) {
-            possibleActions.push({ type: 'DRAW_CARD' });
-        }
-        if (me.stats.actionPoints >= 1 && me.hand.length > 0) {
-            possibleActions.push({ type: 'PLAY_CARD' });
-        }
-        if (me.stats.narrativeMomentum >= 5) {
-            possibleActions.push({ type: 'SPEND_MOMENTUM' });
-        }
-
-        if (possibleActions.length === 0) {
+        const action = this.strategy.chooseAction(me);
+        if (action) {
+            console.log(`[${this.name}] Taking action:`, action.type, action.payload || '');
+            this.socket.emit('player_action', {
+                gameId: this.gameId,
+                playerId: this.playerId,
+                action: action
+            });
+        } else {
             console.log(`[${this.name}] No possible actions.`);
-            return;
         }
-
-        let action = possibleActions[Math.floor(Math.random() * possibleActions.length)];
-
-        if (action.type === 'DRAW_CARD') {
-            action.payload = { deck: Math.random() > 0.5 ? 'SIN' : 'VIRTUE' };
-        }
-        if (action.type === 'PLAY_CARD') {
-            const cardToPlay = me.hand[Math.floor(Math.random() * me.hand.length)];
-            action.payload = { cardId: cardToPlay.id };
-        }
-
-        console.log(`[${this.name}] Taking action:`, action.type, action.payload || '');
-        this.socket.emit('player_action', {
-            gameId: this.gameId,
-            playerId: this.playerId,
-            action: action
-        });
     }
 
     handleDecision(pendingDecision) {
+        const choiceIndex = this.strategy.makeDecision(pendingDecision);
         console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
-        const choiceIndex = Math.floor(Math.random() * pendingDecision.options.length);
         console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
         this.socket.emit('card_choice', {
             gameId: this.gameId,
@@ -150,21 +127,20 @@ class Bot {
     }
 
     submitTestimony(players) {
-        const otherPlayers = players.filter(p => p.id !== this.playerId);
-        if (otherPlayers.length === 0) {
-            return;
-        }
+        const testimony = this.strategy.giveTestimony(this.playerId, players);
+        if (!testimony) return;
 
-        const kudosTarget = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
-        const concernTarget = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+        const { kudosTargetId, concernTargetId } = testimony;
+        const kudosTarget = players.find(p => p.id === kudosTargetId);
+        const concernTarget = players.find(p => p.id === concernTargetId);
 
         console.log(`[${this.name}] Submitting testimony: Kudos for ${kudosTarget.name}, Concern for ${concernTarget.name}`);
 
         this.socket.emit('submit_testimony', {
             gameId: this.gameId,
             playerId: this.playerId,
-            kudosTargetId: kudosTarget.id,
-            concernTargetId: concernTarget.id
+            kudosTargetId,
+            concernTargetId
         });
     }
 
@@ -173,11 +149,20 @@ class Bot {
     }
 }
 
-async function runSimulation(numBots = 2) {
-    console.log(`--- Starting Bot Simulation with ${numBots} bots ---`);
+async function runSimulation(strategyTypes) {
+    console.log(`--- Starting Bot Simulation with bots: ${strategyTypes.join(', ')} ---`);
     const bots = [];
-    for (let i = 0; i < numBots; i++) {
-        bots.push(new Bot(`Bot-${i + 1}`));
+    for (let i = 0; i < strategyTypes.length; i++) {
+        const strategyName = strategyTypes[i];
+        let strategy;
+        if (strategyName === 'hustler') {
+            strategy = new HustlerStrategy();
+        } else if (strategyName === 'zen') {
+            strategy = new ZenStrategy();
+        } else {
+            strategy = new RandomStrategy();
+        }
+        bots.push(new Bot(`${strategyName.charAt(0).toUpperCase() + strategyName.slice(1)}Bot-${i + 1}`, strategy));
     }
 
     try {
@@ -201,5 +186,27 @@ async function runSimulation(numBots = 2) {
     }
 }
 
-const numBotsToRun = process.argv[2] ? parseInt(process.argv[2]) : 2;
-runSimulation(numBotsToRun);
+const scenario = process.argv[2] || 'baseline';
+let strategies;
+
+switch (scenario) {
+    case 'hustler_test':
+        console.log("Running Hustler Dominance Test...");
+        strategies = ['hustler', 'random', 'random', 'random'];
+        break;
+    case 'zen_test':
+        console.log("Running Zen Viability Test...");
+        strategies = ['zen', 'random', 'random', 'random'];
+        break;
+    case 'clash':
+        console.log("Running Clash of Ideologies Test...");
+        strategies = ['hustler', 'hustler', 'zen', 'zen'];
+        break;
+    case 'baseline':
+    default:
+        console.log("Running Baseline Test...");
+        strategies = ['random', 'random', 'random', 'random'];
+        break;
+}
+
+runSimulation(strategies);
