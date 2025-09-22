@@ -46,7 +46,7 @@ This section provides concrete rules for the game's primary systems.
 **Concept:** The "Life Happens" deck is the heart of the hybrid model. These cards represent major, life-altering events that players choose to engage with. They are designed to be complex, with branching choices and significant consequences, providing the deep narrative experience of the "Constant Dilemma" model on an opt-in basis.
 
 **Rules:**
-*   When a player spends 5 NM to trigger an event, they draw one card from the "Life Happens" deck and resolve it immediately.
+*   **Foresight Mechanic:** When a player spends 5 NM to trigger an event, they draw two cards from the "Life Happens" deck. They secretly choose one to resolve and discard the other. This increases player agency and mitigates purely random negative outcomes.
 *   Each card presents a scenario and 2-3 choices.
 *   The outcomes of these choices can be complex, affecting core stats, adding new cards to a player's hand or the main decks, or even adding "legacy" stickers to the game board that permanently alter rules for all players.
 
@@ -58,16 +58,16 @@ This section provides concrete rules for the game's primary systems.
 *   At the start of your turn, if your **Mental Health** is **3 or lower**, you are suffering from **"Burnout."**
 *   While suffering from Burnout, you **cannot** perform the "Draw a Card" action. You must choose another action, such as "Play a Card" from your hand.
 *   If you have no other valid actions, you must spend your turn "recovering," which allows you to draw one card but immediately end your turn without playing it.
-*   **Circuit Breaker:** After a turn in which you suffered from Burnout, you are immune to its effects for one full round, giving you a window to recover.
+*   **Circuit Breaker:** After a turn in which you suffered from Burnout, you are immune to its effects for one full round (i.e., until your turn comes up again), giving you a window to recover.
 
 ### 3.3 "Community Impact" & The Builder Victory
 
 **Concept:** Quantifies a player's positive contributions to the group, making "The Builder" victory condition measurable and balancing it to prevent runaway leaders.
 
 **Rule:**
-*   A new global tracker, the **"Community Impact Track,"** is added to the game (0-20).
-*   Players gain Community Impact points via Direct Aid, Virtue Cards, and Babel Events.
-*   **The Builder Bonus:** At the end of the game, the player with the highest score on the Community Impact Track wins **"The Builder"** title. This title grants a tiered bonus to their final score, based on their final Virtue (V):
+*   Each player has a **`communityImpact`** stat that tracks their positive contributions to the group.
+*   Players can gain Community Impact points via Direct Aid, Virtue Cards, and Babel Events.
+*   **The Builder Bonus:** At the end of the game, the player with the highest `communityImpact` stat is named "The Builder" and receives a tiered bonus to their final score, based on their final Virtue (V):
     *   If 1 ≤ V ≤ 4, bonus = **+1 point**.
     *   If 5 ≤ V ≤ 9, bonus = **+2 points**.
     *   If V ≥ 10, bonus = **+3 points**.
@@ -116,8 +116,11 @@ This section details the more complex systems that provide "Reality Check" with 
 *   **The Vote:** The player whose turn it is may propose a vote to "Exile" the wealthy player. The vote requires a simple majority to pass. The wealthy player does not get a vote.
 *   **Consequences of Exile:**
     *   The Exiled player immediately loses 50% of their Money, which is redistributed equally among all other players.
-    *   The Exiled player receives a new secret objective card (e.g., "Cause two other players to fall below 3 Mental Health," or "Ensure the player with the highest Virtue does not win.").
+    *   The Exiled player receives a new secret objective card from the `exile-objectives.json` deck.
     *   The Exiled player no longer pursues the standard victory conditions. They can only win by achieving their new secret objective. They are still part of the game, but their goals are now fundamentally different and often disruptive.
+*   **Exile Objectives:**
+    *   **Saboteur's Gambit:** Win if the player who was the leader in money at the time of your exile comes in last place.
+    *   **Anarchist's Dream:** Win if at least two other players are in burnout at the end of the game.
 
 ### 4.2. Social Capital Resource System
 
