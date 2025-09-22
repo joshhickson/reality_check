@@ -5,7 +5,7 @@
         "choices": [
             {
                 "text": "Organize a tenants union to fight the eviction.",
-                "effects": { "money": -500, "sin": -1, "virtue": 2, "socialCapital": 2 }
+                "effects": { "money": -500, "sin": -1, "virtue": 2, "socialCapital": 2, "communityImpact": 2 }
             },
             {
                 "text": "Accept a small buyout from the new landlord to leave quietly.",
@@ -31,7 +31,7 @@
             },
             {
                 "text": "Leak the layoff news to the press to try and create a public backlash.",
-                "effects": { "money": -1000, "mentalHealth": -1, "sin": 1, "virtue": 1, "socialCapital": 1 }
+                "effects": { "money": -1000, "mentalHealth": -1, "sin": 1, "virtue": 1, "socialCapital": 1, "communityImpact": 1 }
             }
         ]
     },

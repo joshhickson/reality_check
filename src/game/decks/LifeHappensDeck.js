@@ -28,18 +28,41 @@ class LifeHappensDeck {
 
     draw() {
         if (this.deck.length === 0) {
-            if (this.discard.length === 0) {
-                console.warn("Life Happens deck is empty and cannot be reshuffled.");
-                return null;
-            }
-            this.deck = [...this.discard];
-            this.discard = [];
-            this.shuffle();
-            console.log("Reshuffled Life Happens discard pile into deck.");
+            this.reshuffle();
+        }
+        if (this.deck.length === 0) {
+            console.warn("Life Happens deck is empty and cannot draw a card.");
+            return null;
         }
         const card = this.deck.pop();
         this.discard.push(card);
         return card;
+    }
+
+    drawTwo() {
+        if (this.deck.length < 2) {
+            this.reshuffle();
+        }
+        if (this.deck.length < 2) {
+            console.warn("Not enough cards in Life Happens deck to draw two.");
+            // Draw as many as possible
+            const cards = [...this.deck];
+            this.deck = [];
+            cards.forEach(card => this.discard.push(card));
+            return cards;
+        }
+        const cards = [this.deck.pop(), this.deck.pop()];
+        this.discard.push(...cards);
+        return cards;
+    }
+
+    reshuffle() {
+        if (this.discard.length > 0) {
+            this.deck = [...this.deck, ...this.discard];
+            this.discard = [];
+            this.shuffle();
+            console.log("Reshuffled Life Happens discard pile into deck.");
+        }
     }
 }
 

@@ -56,6 +56,9 @@ class Bot {
                     this.playerId = me.id;
                     this.gameId = gameId;
                     console.log(`[${this.name}] Joined game ${this.gameId} as player ${this.playerId}`);
+                    if (scenario === 'test_exile' && this.name.startsWith('Hustler')) {
+                        this.socket.emit('set_money', { gameId, playerId: this.playerId, amount: 100000 });
+                    }
                     resolve();
                 }
             });
@@ -87,6 +90,14 @@ class Bot {
             return;
         }
 
+        if (pendingDecision && pendingDecision.type === 'exile-vote') {
+            if (pendingDecision.voters.includes(this.playerId) && !this.hasVoted) {
+                setTimeout(() => this.handleDecision(pendingDecision), 500);
+            }
+        } else {
+            this.hasVoted = false;
+        }
+
         if (currentPlayerId === this.playerId) {
             console.log(`\n--- [${this.name}] Turn ${currentTurn} ---`);
             console.log(`My Stats: AP=${me.stats.actionPoints}, Hand=${me.hand.length}, MH=${me.stats.mentalHealth}, NM=${me.stats.narrativeMomentum}`);
@@ -94,9 +105,7 @@ class Bot {
             setTimeout(() => {
                 if (pendingDecision && pendingDecision.playerId === this.playerId) {
                     this.handleDecision(pendingDecision);
-                } else {
-                    // The strategy will determine if any action is possible,
-                    // including spending momentum at 0 AP.
+                } else if (!pendingDecision) {
                     this.takeTurn(me);
                 }
             }, 500);
@@ -118,14 +127,43 @@ class Bot {
     }
 
     handleDecision(pendingDecision) {
-        const choiceIndex = this.strategy.makeDecision(pendingDecision);
-        console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
-        console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
-        this.socket.emit('card_choice', {
-            gameId: this.gameId,
-            playerId: this.playerId,
-            choiceIndex: choiceIndex
-        });
+        if (this.hasVoted) return;
+
+        if (pendingDecision.type === 'foresight') {
+            const chosenCard = this.strategy.makeDecision(pendingDecision);
+            console.log(`[${this.name}] Foresight: Choosing card ${chosenCard.id}`);
+            this.socket.emit('resolve_foresight', {
+                gameId: this.gameId,
+                playerId: this.playerId,
+                chosenCardId: chosenCard.id
+            });
+        } else if (pendingDecision.type === 'propose-exile') {
+            const shouldPropose = this.strategy.makeDecision(pendingDecision);
+            console.log(`[${this.name}] Propose exile vote: ${shouldPropose}`);
+            this.socket.emit('player_action', {
+                gameId: this.gameId,
+                playerId: this.playerId,
+                action: { type: 'PROPOSE_EXILE_VOTE', payload: { propose: shouldPropose } }
+            });
+        } else if (pendingDecision.type === 'exile-vote') {
+            this.hasVoted = true;
+            const vote = this.strategy.makeDecision(pendingDecision);
+            console.log(`[${this.name}] Voting to exile: ${vote}`);
+            this.socket.emit('submit_exile_vote', {
+                gameId: this.gameId,
+                playerId: this.playerId,
+                vote: vote
+            });
+        } else {
+            const choiceIndex = this.strategy.makeDecision(pendingDecision);
+            console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
+            console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
+            this.socket.emit('card_choice', {
+                gameId: this.gameId,
+                playerId: this.playerId,
+                choiceIndex: choiceIndex
+            });
+        }
     }
 
     submitTestimony(players) {
@@ -192,6 +230,10 @@ const scenario = process.argv[2] || 'baseline';
 let strategies;
 
 switch (scenario) {
+    case 'test_exile':
+        console.log("Running Exile Test...");
+        strategies = ['hustler', 'random', 'random', 'random'];
+        break;
     case 'hustler_test':
         console.log("Running Hustler Dominance Test...");
         strategies = ['hustler', 'random', 'random', 'random'];

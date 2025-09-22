@@ -1,7 +1,7 @@
 class HustlerStrategy {
     chooseAction(me) {
-        // Priority 1: WORK_OVERTIME, but only if not on the verge of a breakdown.
-        if (me.stats.actionPoints >= 2 && me.stats.mentalHealth > 2) {
+        // Priority 1: Always work overtime if possible.
+        if (me.stats.actionPoints >= 2) {
             return { type: 'WORK_OVERTIME' };
         }
 

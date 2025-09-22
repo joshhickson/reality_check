@@ -84,13 +84,16 @@ io.on('connection', (socket) => {
             cost = 2;
             if (player.stats.actionPoints >= cost) {
                 player.stats.actionPoints -= cost;
-                player.applyEffects({ money: 500, mentalHealth: -1, sin: 1, narrativeMomentum: 1 });
+                player.applyEffects({ money: 500, mentalHealth: -1, sin: 1, narrativeMomentum: 1 }, game.scheduler.getCurrentTurn(), game.players.length);
                 actionSucceeded = true;
             }
             break;
 
         case 'DRAW_CARD':
-            cost = player.isBurnedOut ? 2 : 1; // Burnout increases AP cost
+            if (player.isBurnedOut) {
+                return socket.emit('error', { message: "You are burned out and cannot draw cards."});
+            }
+            cost = 1;
 
             if (player.hand.length >= game.maxHandSize) {
                 return socket.emit('error', { message: "Your hand is full." });
@@ -107,7 +110,7 @@ io.on('connection', (socket) => {
                 if (card) {
                     player.hand.push(card);
                 }
-                player.applyEffects({ narrativeMomentum: 1 });
+                player.applyEffects({ narrativeMomentum: 1 }, game.scheduler.getCurrentTurn(), game.players.length);
                 actionSucceeded = true;
             }
             break;
@@ -124,38 +127,62 @@ io.on('connection', (socket) => {
                         mentalHealth: parseInt(cardToPlay.mental) || 0,
                         sin: parseInt(cardToPlay.sin) || 0,
                         virtue: parseInt(cardToPlay.virtue) || 0,
-                        socialCapital: parseInt(cardToPlay.socialCapital) || 0
+                        socialCapital: parseInt(cardToPlay.socialCapital) || 0,
+                        communityImpact: parseInt(cardToPlay.communityImpact) || 0
                     };
-                    player.applyEffects(effects);
+                    player.applyEffects(effects, game.scheduler.getCurrentTurn(), game.players.length);
                     actionSucceeded = true;
                 }
             }
             break;
 
         case 'SPEND_MOMENTUM':
-            cost = 5;
-            if (player.stats.narrativeMomentum >= cost) {
-                player.stats.narrativeMomentum -= cost;
-                const card = game.lifeHappensDeck.draw();
-                if (card) {
-                    game.pendingDecision = {
-                        type: 'LIFE_HAPPENS',
-                        playerId: player.id,
-                        cardId: card.id,
-                        text: card.text,
-                        options: card.choices
-                    };
-                }
+            const result = game.handleAction(playerId, action);
+            if (result.success) {
                 actionSucceeded = true;
             }
             break;
     }
 
+    if (action.type === 'PROPOSE_EXILE_VOTE') {
+        const result = game.proposeExileVote(playerId, action.payload);
+        if (result.error) {
+            return socket.emit('error', { message: result.error });
+        }
+        actionSucceeded = true;
+    }
+
     if (!actionSucceeded) {
-      return socket.emit('error', { message: "Not enough resources." });
+      return socket.emit('error', { message: "Action failed or not enough resources." });
     }
 
     checkTurnEnd(game, player);
+    io.to(game.id).emit('game_state_update', game.getGameState());
+  });
+
+  socket.on('submit_exile_vote', (data) => {
+    const { gameId, playerId, vote } = data;
+    const game = games[gameId];
+    if (!game) return;
+
+    const result = game.submitExileVote(playerId, vote);
+    if (result.error) {
+        return socket.emit('error', { message: result.error });
+    }
+
+    io.to(game.id).emit('game_state_update', game.getGameState());
+  });
+
+  socket.on('resolve_foresight', (data) => {
+    const { gameId, playerId, chosenCardId } = data;
+    const game = games[gameId];
+    if (!game) return;
+
+    const result = game.resolveForesight(playerId, chosenCardId);
+    if (result.error) {
+        return socket.emit('error', { message: result.error });
+    }
+
     io.to(game.id).emit('game_state_update', game.getGameState());
   });
 
@@ -174,7 +201,7 @@ io.on('connection', (socket) => {
       const chosenOption = pendingDecision.options[choiceIndex];
       if (!chosenOption) return socket.emit('error', { message: 'Invalid choice index.' });
 
-      player.applyEffects(chosenOption.effects);
+      player.applyEffects(chosenOption.effects, game.scheduler.getCurrentTurn(), game.players.length);
       game.pendingDecision = null;
 
       io.to(game.id).emit('card_resolved', {
@@ -212,6 +239,15 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log(`👋 User disconnected: ${socket.id}`);
+  });
+
+  socket.on('set_money', ({ gameId, playerId, amount }) => {
+    const game = games[gameId];
+    if (!game) return;
+    const player = game.players.find(p => p.id === playerId);
+    if (!player) return;
+    player.stats.money = amount;
+    io.to(gameId).emit('game_state_update', game.getGameState());
   });
 });
 

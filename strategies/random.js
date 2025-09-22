@@ -33,6 +33,15 @@ class RandomStrategy {
     }
 
     makeDecision(pendingDecision) {
+        if (pendingDecision.type === 'foresight') {
+            return pendingDecision.options[Math.floor(Math.random() * pendingDecision.options.length)];
+        }
+        if (pendingDecision.type === 'propose-exile') {
+            return Math.random() > 0.5; // 50% chance to propose exile
+        }
+        if (pendingDecision.type === 'exile-vote') {
+            return Math.random() > 0.5; // 50% chance to vote yes
+        }
         return Math.floor(Math.random() * pendingDecision.options.length);
     }
 
