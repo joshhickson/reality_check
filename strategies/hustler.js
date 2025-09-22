@@ -1,9 +1,7 @@
 class HustlerStrategy {
     chooseAction(me) {
-        if (me.stats.actionPoints <= 0) return null;
-
-        // Priority 1: WORK_OVERTIME is the most reliable way to get money.
-        if (me.stats.actionPoints >= 2) {
+        // Priority 1: WORK_OVERTIME, but only if not on the verge of a breakdown.
+        if (me.stats.actionPoints >= 2 && me.stats.mentalHealth > 2) {
             return { type: 'WORK_OVERTIME' };
         }
 
@@ -18,6 +16,7 @@ class HustlerStrategy {
         }
 
         // Priority 3: If no direct money actions, spend momentum for a chance at a big score.
+        // This action costs 0 AP, so it can be a last resort.
         if (me.stats.narrativeMomentum >= 5) {
             return { type: 'SPEND_MOMENTUM' };
         }

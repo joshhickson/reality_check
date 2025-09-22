@@ -94,7 +94,9 @@ class Bot {
             setTimeout(() => {
                 if (pendingDecision && pendingDecision.playerId === this.playerId) {
                     this.handleDecision(pendingDecision);
-                } else if (me.stats.actionPoints > 0) {
+                } else {
+                    // The strategy will determine if any action is possible,
+                    // including spending momentum at 0 AP.
                     this.takeTurn(me);
                 }
             }, 500);

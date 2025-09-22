@@ -1,7 +1,5 @@
 class RandomStrategy {
     chooseAction(me) {
-        if (me.stats.actionPoints <= 0) return null;
-
         const possibleActions = [];
 
         if (me.stats.actionPoints >= 2) {

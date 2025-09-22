@@ -1,7 +1,5 @@
 class ZenStrategy {
     chooseAction(me) {
-        if (me.stats.actionPoints <= 0) return null;
-
         const { actionPoints, mentalHealth, hand, narrativeMomentum, isBurnedOut } = me.stats;
         const handSize = me.hand.length;
 
