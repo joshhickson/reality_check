@@ -90,13 +90,12 @@ io.on('connection', (socket) => {
             break;
 
         case 'DRAW_CARD':
-            if (player.isBurnedOut) {
-                return socket.emit('error', { message: "You cannot draw cards while suffering from Burnout." });
-            }
+            cost = player.isBurnedOut ? 2 : 1; // Burnout increases AP cost
+
             if (player.hand.length >= game.maxHandSize) {
                 return socket.emit('error', { message: "Your hand is full." });
             }
-            cost = 1;
+
             if (player.stats.actionPoints >= cost) {
                 player.stats.actionPoints -= cost;
                 let card;

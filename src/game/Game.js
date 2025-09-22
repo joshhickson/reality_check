@@ -112,7 +112,7 @@ class Game {
       } else if (mentalHealth >= 5) {
         mhBonus = 5;
       }
-      const score = (money / 1000) + (virtue * 2) - (sin * 2) + mhBonus + (kudos * 3) - (concern * 1);
+      const score = (money / 200) + (virtue * 1.5) - (sin * 1.5) + mhBonus + (kudos * 2) - (concern * 2);
       player.finalScore = score;
     });
 
