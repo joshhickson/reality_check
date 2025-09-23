@@ -59,6 +59,11 @@ class RandomStrategy {
             concernTargetId: concernTarget.id
         };
     }
+
+    handleReactiveEffect(pendingEffect, me) {
+        // Random strategy doesn't use reactive effects
+        return { type: pendingEffect.type, payload: { use_effect: false } };
+    }
 }
 
 module.exports = { RandomStrategy };

@@ -62,7 +62,7 @@ class Game {
 
   nextTurn() {
     this.scheduler.advanceTurn();
-    if (this.scheduler.getCurrentTurn() > this.maxTurns && this.maxTurns > 0) {
+    if ((this.scheduler.getCurrentTurn() > this.maxTurns && this.maxTurns > 0) || this.scheduler.getCurrentTurn() > 50) {
         this.status = 'judgment_day';
         this.stateMachine.transition('JudgmentDay');
         return;

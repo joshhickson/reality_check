@@ -2,6 +2,7 @@ const { io } = require("socket.io-client");
 const { RandomStrategy } = require("./strategies/random.js");
 const { HustlerStrategy } = require("./strategies/hustler.js");
 const { ZenStrategy } = require("./strategies/zen.js");
+const { PuppeteerStrategy } = require("./strategies/puppeteer.js");
 
 const SERVER_URL = "http://localhost:5000";
 
@@ -18,7 +19,12 @@ class Bot {
     connect() {
         return new Promise((resolve, reject) => {
             this.socket = io(SERVER_URL, { reconnection: false, transports: ["websocket"] });
-            this.socket.on('connect', () => resolve());
+            this.socket.on('connect', () => {
+                setInterval(() => {
+                    this.socket.emit('heartbeat', { name: this.name });
+                }, 5000);
+                resolve();
+            });
             this.socket.on('connect_error', (err) => reject(err));
             this.socket.on('disconnect', () => console.log(`[${this.name}] Disconnected.`));
             this.socket.on('game_state_update', (data) => this.handleGameStateUpdate(data));
@@ -28,13 +34,9 @@ class Bot {
             this.socket.on('game_over', (data) => {
                 console.log(`\n--- [${this.name}] GAME OVER ---`);
                 const finalGameState = data;
-                console.log('Final Scores:', finalGameState.players.map(p => ({ name: p.name, score: p.finalScore.toFixed(2), titles: p.titles })));
+                console.log('Final Scores:', finalGameState.players.map(p => ({ name: p.name, score: p.finalScore.toFixed(2) })));
                 if (finalGameState.winner) {
                     console.log(`Winner: ${finalGameState.winner.name}`);
-                }
-                if (finalGameState.titles && finalGameState.titles.length > 0) {
-                    console.log('Titles Awarded:');
-                    finalGameState.titles.forEach(t => console.log(`- ${t.title}: ${t.winner}`));
                 }
                 this.disconnect();
             });
@@ -60,9 +62,6 @@ class Bot {
                     this.playerId = me.id;
                     this.gameId = gameId;
                     console.log(`[${this.name}] Joined game ${this.gameId} as player ${this.playerId}`);
-                    if (scenario === 'test_exile' && this.name.startsWith('Hustler')) {
-                        this.socket.emit('set_money', { gameId, playerId: this.playerId, amount: 100000 });
-                    }
                     resolve();
                 }
             });
@@ -86,20 +85,14 @@ class Bot {
         const me = players.find(p => p.id === this.playerId);
         if (!me) return;
 
+        console.log(`[${this.name}] GameState: ${status}, CurrentPlayer: ${currentPlayerId}, Me: ${this.playerId}`);
+
         if (status === 'judgment_day') {
             if (!this.voted) {
                 this.submitTestimony(players);
                 this.voted = true;
             }
             return;
-        }
-
-        if (pendingDecision && pendingDecision.type === 'exile-vote') {
-            if (pendingDecision.voters.includes(this.playerId) && !this.hasVoted) {
-                setTimeout(() => this.handleDecision(pendingDecision), 500);
-            }
-        } else {
-            this.hasVoted = false;
         }
 
         if (currentPlayerId === this.playerId) {
@@ -109,7 +102,9 @@ class Bot {
             setTimeout(() => {
                 if (pendingDecision && pendingDecision.playerId === this.playerId) {
                     this.handleDecision(pendingDecision);
-                } else if (!pendingDecision) {
+                } else {
+                    // The strategy will determine if any action is possible,
+                    // including spending momentum at 0 AP.
                     this.takeTurn(me);
                 }
             }, 500);
@@ -131,43 +126,15 @@ class Bot {
     }
 
     handleDecision(pendingDecision) {
-        if (this.hasVoted) return;
-
-        if (pendingDecision.type === 'foresight') {
-            const chosenCard = this.strategy.makeDecision(pendingDecision);
-            console.log(`[${this.name}] Foresight: Choosing card ${chosenCard.id}`);
-            this.socket.emit('resolve_foresight', {
-                gameId: this.gameId,
-                playerId: this.playerId,
-                chosenCardId: chosenCard.id
-            });
-        } else if (pendingDecision.type === 'propose-exile') {
-            const shouldPropose = this.strategy.makeDecision(pendingDecision);
-            console.log(`[${this.name}] Propose exile vote: ${shouldPropose}`);
-            this.socket.emit('player_action', {
-                gameId: this.gameId,
-                playerId: this.playerId,
-                action: { type: 'PROPOSE_EXILE_VOTE', payload: { propose: shouldPropose } }
-            });
-        } else if (pendingDecision.type === 'exile-vote') {
-            this.hasVoted = true;
-            const vote = this.strategy.makeDecision(pendingDecision);
-            console.log(`[${this.name}] Voting to exile: ${vote}`);
-            this.socket.emit('submit_exile_vote', {
-                gameId: this.gameId,
-                playerId: this.playerId,
-                vote: vote
-            });
-        } else {
-            const choiceIndex = this.strategy.makeDecision(pendingDecision);
-            console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
-            console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
-            this.socket.emit('card_choice', {
-                gameId: this.gameId,
-                playerId: this.playerId,
-                choiceIndex: choiceIndex
-            });
-        }
+        console.log(`[${this.name}] Handling decision: ${pendingDecision.type}`);
+        const choiceIndex = this.strategy.makeDecision(pendingDecision);
+        console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
+        console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
+        this.socket.emit('card_choice', {
+            gameId: this.gameId,
+            playerId: this.playerId,
+            choiceIndex: choiceIndex
+        });
     }
 
     submitTestimony(players) {
@@ -203,6 +170,8 @@ async function runSimulation(strategyTypes) {
             strategy = new HustlerStrategy();
         } else if (strategyName === 'zen') {
             strategy = new ZenStrategy();
+        } else if (strategyName === 'puppeteer') {
+            strategy = new PuppeteerStrategy();
         } else {
             strategy = new RandomStrategy();
         }
@@ -234,9 +203,9 @@ const scenario = process.argv[2] || 'baseline';
 let strategies;
 
 switch (scenario) {
-    case 'test_exile':
-        console.log("Running Exile Test...");
-        strategies = ['hustler', 'random', 'random', 'random'];
+    case 'puppeteer_test':
+        console.log("Running Puppeteer Test...");
+        strategies = ['puppeteer', 'random', 'random', 'random'];
         break;
     case 'hustler_test':
         console.log("Running Hustler Dominance Test...");

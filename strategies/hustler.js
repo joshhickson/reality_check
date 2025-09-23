@@ -64,6 +64,11 @@ class HustlerStrategy {
             concernTargetId: concernTarget.id
         };
     }
+
+    handleReactiveEffect(pendingEffect, me) {
+        // Hustler strategy doesn't use reactive effects, it wants to save SC
+        return { type: pendingEffect.type, payload: { use_effect: false } };
+    }
 }
 
 module.exports = { HustlerStrategy };

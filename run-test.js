@@ -25,7 +25,7 @@ let botsProcess;
 
 function startBots() {
     // 2. Start the bot client simulation
-    botsProcess = spawn('node', ['bot-client.js', NUM_BOTS]);
+    botsProcess = spawn('node', ['bot-client.js', 'puppeteer_test']);
 
     botsProcess.stdout.on('data', (data) => {
         console.log(`[Bots]: ${data}`);

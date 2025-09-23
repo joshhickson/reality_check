@@ -15,8 +15,7 @@ class Player {
       actionPoints: 0,
       narrativeMomentum: 0,
       kudos: 0,
-      concern: 0,
-      communityImpact: 0
+      concern: 0
     };
 
     this.isBurnedOut = false;
@@ -24,22 +23,14 @@ class Player {
     this.burnoutImmunityRound = 0;
     this.hand = [];
     this.finalScore = null;
-    this.isExiled = false;
-    this.secretObjective = null;
-    this.titles = [];
   }
 
-  applyEffects(effects, currentTurn = 0) {
+  applyEffects(effects, currentRound = 0) {
     if (effects.money) this.stats.money += effects.money;
     if (effects.mentalHealth) this.stats.mentalHealth += effects.mentalHealth;
     if (effects.sin) this.stats.sin += effects.sin;
     if (effects.virtue) this.stats.virtue += effects.virtue;
     if (effects.narrativeMomentum) this.stats.narrativeMomentum += effects.narrativeMomentum;
-    if (effects.socialCapital) { // Assuming socialCapital might be an effect
-        this.stats.socialCapital = (this.stats.socialCapital || 0) + effects.socialCapital;
-    }
-    if (effects.communityImpact) this.stats.communityImpact += effects.communityImpact;
-
 
     // Clamp values to their ranges
     this.stats.mentalHealth = Math.max(0, Math.min(10, this.stats.mentalHealth));
@@ -47,11 +38,11 @@ class Player {
     this.stats.virtue = Math.max(0, this.stats.virtue);
     this.stats.narrativeMomentum = Math.max(0, this.stats.narrativeMomentum);
 
-    this.updateBurnoutStatus(currentTurn);
+    this.updateBurnoutStatus(currentRound);
   }
 
-  updateBurnoutStatus(currentTurn, numPlayers) {
-    this.checkBurnoutImmunity(currentTurn, numPlayers);
+  updateBurnoutStatus(currentRound) {
+    this.checkBurnoutImmunity(currentRound);
 
     if (this.isImmuneToBurnout) {
       this.isBurnedOut = false;
@@ -60,31 +51,22 @@ class Player {
 
     if (this.stats.mentalHealth <= 3) {
       if (!this.isBurnedOut) {
-        console.log(`[Player: ${this.name}] Entering burnout!`);
         this.isBurnedOut = true;
-        this.setBurnoutImmunity(currentTurn);
+        this.setBurnoutImmunity(currentRound);
       }
     } else {
-      if (this.isBurnedOut) {
-        console.log(`[Player: ${this.name}] Recovered from burnout.`);
-      }
       this.isBurnedOut = false;
     }
   }
 
-  setBurnoutImmunity(turnBurnoutOccurred) {
+  setBurnoutImmunity(currentRound) {
     this.isImmuneToBurnout = true;
-    // Immunity lasts until the start of the player's next turn after the *next* turn.
-    // So, if burnout happens on turn N, they are immune for turn N+1.
-    // The check will happen at the start of turn N+2.
-    this.burnoutImmunityRound = turnBurnoutOccurred;
+    this.burnoutImmunityRound = currentRound;
   }
 
-  checkBurnoutImmunity(currentTurn, numPlayers) {
-    // Immunity wears off if the current turn is at least one full round (i.e., numPlayers turns) after the burnout
-    if (this.isImmuneToBurnout && currentTurn > this.burnoutImmunityRound + numPlayers) {
-        console.log(`[Player: ${this.name}] Burnout immunity has worn off.`);
-        this.isImmuneToBurnout = false;
+  checkBurnoutImmunity(currentRound) {
+    if (this.isImmuneToBurnout && currentRound > this.burnoutImmunityRound) {
+      this.isImmuneToBurnout = false;
     }
   }
 
@@ -103,9 +85,7 @@ class Player {
       stats: this.stats,
       isBurnedOut: this.isBurnedOut,
       hand: this.hand,
-      finalScore: this.finalScore,
-      isExiled: this.isExiled,
-      titles: this.titles
+      finalScore: this.finalScore
     };
   }
 }
