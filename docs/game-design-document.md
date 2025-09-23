@@ -102,6 +102,13 @@ This section provides concrete rules for the game's primary systems.
         *   If 5 ≤ MH ≤ 7, MH_Bonus = 5 points.
         *   If MH < 5, MH_Bonus = 0 points.
     *   **Final Score = (M / 1000) + (V * 2) - (S * 2) + MH_Bonus + (Kudos * 3) - (Concern * 1)**
+3.  **End-Game Titles (Accolades):**
+    *   After the final scores are calculated, a series of titles are awarded to recognize different philosophies of "winning." These titles do not affect the final score but add a narrative layer to the game's conclusion.
+    *   The titles are defined in `src/game/titles.js` and can be easily extended. The current titles include:
+        *   **The Saint:** Highest virtue with minimal sin.
+        *   **The Hustler:** Maximum money while staying morally neutral.
+        *   **The Survivor:** Highest mental health.
+        *   **The Influencer:** Most kudos received.
 
 ## 4. Advanced Mechanics & Systems
 

@@ -6,6 +6,7 @@ const { LifeHappensDeck } = require('./decks/LifeHappensDeck.js');
 const { SinDeck } = require('./decks/SinDeck.js');
 const { VirtueDeck } = require('./decks/VirtueDeck.js');
 const { ExileObjectivesDeck } = require('./decks/ExileObjectivesDeck.js');
+const { TITLES } = require('./titles.js');
 
 class Game {
   constructor(name, creatorSocket, gameId) {
@@ -32,6 +33,7 @@ class Game {
     this.maxTurns = 0;
     this.testimonies = [];
     this.winner = null;
+    this.titles = [];
   }
 
   addPlayer(socket, username) {
@@ -245,8 +247,23 @@ class Game {
       this.winner = this.players.filter(p => !p.isExiled)[0];
     }
 
+    this.awardTitles();
+
     this.status = 'finished';
     this.stateMachine.transition('Finished');
+  }
+
+  awardTitles() {
+      TITLES.forEach(title => {
+          const winner = title.isAwardedTo(this.players);
+          if (winner) {
+              this.titles.push({ title: title.name, winner: winner.name });
+              const player = this.players.find(p => p.id === winner.id);
+              if(player) {
+                  player.titles.push(title.name);
+              }
+          }
+      });
   }
 
   checkExileWinConditions() {
@@ -336,7 +353,8 @@ class Game {
       currentTurn: this.scheduler.getCurrentTurn(),
       currentState: this.stateMachine.getCurrentState(),
       pendingDecision: this.pendingDecision,
-      winner: this.winner
+      winner: this.winner,
+      titles: this.titles
     };
   }
 }

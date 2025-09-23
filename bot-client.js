@@ -28,9 +28,13 @@ class Bot {
             this.socket.on('game_over', (data) => {
                 console.log(`\n--- [${this.name}] GAME OVER ---`);
                 const finalGameState = data;
-                console.log('Final Scores:', finalGameState.players.map(p => ({ name: p.name, score: p.finalScore.toFixed(2) })));
+                console.log('Final Scores:', finalGameState.players.map(p => ({ name: p.name, score: p.finalScore.toFixed(2), titles: p.titles })));
                 if (finalGameState.winner) {
                     console.log(`Winner: ${finalGameState.winner.name}`);
+                }
+                if (finalGameState.titles && finalGameState.titles.length > 0) {
+                    console.log('Titles Awarded:');
+                    finalGameState.titles.forEach(t => console.log(`- ${t.title}: ${t.winner}`));
                 }
                 this.disconnect();
             });

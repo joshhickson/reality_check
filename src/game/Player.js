@@ -26,6 +26,7 @@ class Player {
     this.finalScore = null;
     this.isExiled = false;
     this.secretObjective = null;
+    this.titles = [];
   }
 
   applyEffects(effects, currentTurn = 0) {
@@ -103,7 +104,8 @@ class Player {
       isBurnedOut: this.isBurnedOut,
       hand: this.hand,
       finalScore: this.finalScore,
-      isExiled: this.isExiled
+      isExiled: this.isExiled,
+      titles: this.titles
     };
   }
 }
