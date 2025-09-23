@@ -121,7 +121,12 @@ class Bot {
                 action: action
             });
         } else {
-            console.log(`[${this.name}] No possible actions.`);
+            console.log(`[${this.name}] No possible actions. Passing turn.`);
+            this.socket.emit('player_action', {
+                gameId: this.gameId,
+                playerId: this.playerId,
+                action: { type: 'PASS_TURN' }
+            });
         }
     }
 

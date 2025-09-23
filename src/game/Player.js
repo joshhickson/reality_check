@@ -23,6 +23,7 @@ class Player {
     this.burnoutImmunityRound = 0;
     this.hand = [];
     this.finalScore = null;
+    this.titles = [];
   }
 
   applyEffects(effects, currentRound = 0) {

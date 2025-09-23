@@ -165,6 +165,11 @@ io.on('connection', (socket) => {
                 actionSucceeded = true;
             }
             break;
+
+        case 'PASS_TURN':
+            player.stats.actionPoints = 0;
+            actionSucceeded = true;
+            break;
     }
 
     if (!actionSucceeded) {
