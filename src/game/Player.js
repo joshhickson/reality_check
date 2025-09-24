@@ -12,6 +12,7 @@ class Player {
       mentalHealth: 7,
       sin: 0,
       virtue: 0,
+      socialCapital: 0,
       actionPoints: 0,
       narrativeMomentum: 0,
       kudos: 0,
@@ -31,12 +32,14 @@ class Player {
     if (effects.mentalHealth) this.stats.mentalHealth += effects.mentalHealth;
     if (effects.sin) this.stats.sin += effects.sin;
     if (effects.virtue) this.stats.virtue += effects.virtue;
+    if (effects.socialCapital) this.stats.socialCapital += effects.socialCapital;
     if (effects.narrativeMomentum) this.stats.narrativeMomentum += effects.narrativeMomentum;
 
     // Clamp values to their ranges
     this.stats.mentalHealth = Math.max(0, Math.min(10, this.stats.mentalHealth));
     this.stats.sin = Math.max(0, this.stats.sin);
     this.stats.virtue = Math.max(0, this.stats.virtue);
+    this.stats.socialCapital = Math.max(0, this.stats.socialCapital);
     this.stats.narrativeMomentum = Math.max(0, this.stats.narrativeMomentum);
 
     this.updateBurnoutStatus(currentRound);

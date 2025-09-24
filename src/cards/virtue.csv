@@ -1,15 +1,15 @@
 id,deck,type,text,money,mental,sin,virtue,delay,socialCapital
-virtue_01,virtue,immediate,"You donate plasma to help pay for someone's medical bills",200,3,-1,3,0,0
+virtue_01,virtue,immediate,"You donate plasma to help pay for someone's medical bills",200,3,-1,3,0,1
 virtue_02,virtue,immediate,"After weeks of putting it off, you have a genuinely lovely, hour-long conversation with your grandmother. She is so proud of you.",0,2,-1,2,0,0
 virtue_03,virtue,delayed,"You start volunteering at the local food bank",0,2,-2,4,2,1
 virtue_04,virtue,immediate,"You return the wallet you found with all the cash inside",0,1,-1,2,0,0
-virtue_05,virtue,immediate,"You adopt a senior dog from the shelter",-500,4,-1,3,0,0
+virtue_05,virtue,immediate,"You adopt a senior dog from the shelter",-500,4,-1,3,0,2
 virtue_06,virtue,delayed,"You start teaching coding to underprivileged kids",0,3,-2,5,3,2
 virtue_07,virtue,immediate,"You pay for the coffee of the person behind you",-10,1,-1,1,0,0
 virtue_08,virtue,immediate,"You actually listen to your friend vent without making it about you",0,2,-1,2,0,1
 virtue_09,virtue,delayed,"You organize a community garden in your neighborhood",-200,3,-2,4,2,2
 virtue_10,virtue,immediate,"You give up your seat on the crowded bus to someone carrying a heavy load, even though your feet are killing you.",0,1,-1,1,0,0
-virtue_11,virtue,immediate,"Therapy Breakthrough: You finally process your trauma",-1000,2,-1,2,0,0
+virtue_11,virtue,immediate,"Therapy Breakthrough: You finally process your trauma",-1000,2,-1,2,0,2
 virtue_12,virtue,immediate,"Rent-A-Room to Refugee: You house someone in need",-2000,1,0,2,0,1
 virtue_13,virtue,immediate,"You log off all social media for a month. The world doesn't end, and you have the time and energy to reconnect with your actual community.",0,2,0,2,0,2
 virtue_14,virtue,immediate,"Anonymous Bail Fund: You help strangers get out of jail",-1500,0,0,2,0,0
@@ -18,5 +18,5 @@ virtue_16,virtue,immediate,"Pay It Forward Coffee Chain: You start a kindness tr
 virtue_17,virtue,immediate,"Public Apology (and Mean It): You own your mistakes",0,-1,-1,1,0,1
 virtue_18,virtue,immediate,"Donate Organs Early: You become a living donor",-500,2,0,10,0,0
 virtue_19,virtue,immediate,"Climate Protest Arrest: You get arrested for the planet",-500,1,0,2,0,0
-virtue_20,virtue,immediate,"Forgive the Fraudster: You show grace to someone who wronged you",0,1,-1,1,0,0
+virtue_20,virtue,immediate,"Forgive the Fraudster: You show grace to someone who wronged you",0,1,-1,1,0,1
 virtue_21,virtue,immediate,"You spend your Saturday helping a friend move. It's exhausting, but they buy you pizza and you strengthen your bond.",0,1,0,1,0,1

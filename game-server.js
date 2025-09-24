@@ -170,6 +170,17 @@ io.on('connection', (socket) => {
             player.stats.actionPoints = 0;
             actionSucceeded = true;
             break;
+
+        case 'USE_SOCIAL_CAPITAL':
+            // For now, only implementing "Lean on Your Network"
+            const sc_cost = 2;
+            const ap_cost = 1;
+            if (player.stats.socialCapital >= sc_cost && player.stats.actionPoints >= ap_cost) {
+                player.stats.actionPoints -= ap_cost;
+                player.applyEffects({ socialCapital: -sc_cost, mentalHealth: 2 });
+                actionSucceeded = true;
+            }
+            break;
     }
 
     if (!actionSucceeded) {
