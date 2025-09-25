@@ -155,6 +155,29 @@ This section details the more complex systems that provide "Reality Check" with 
 *   **Resolution:** The active player (Player A) must then resolve the choice presented on the Crossroads Card before continuing their turn. This can dramatically alter their plans and the game state.
 *   If the trigger condition is not met by the end of the turn, the Crossroads Card is discarded without effect.
 
+### 4.4. Bot AI & Personalities
+
+**Concept:** To enhance replayability and create more dynamic, human-like opponents, the game will feature distinct AI "personalities" or strategies that bots can adopt, especially after being exiled. These strategies go beyond simple random actions and are designed to pursue specific, thematic goals.
+
+#### 4.4.1. The Agitator
+
+**Concept:** A chaotic, disruptive force. Once exiled, this bot's primary goal is to tear down the other players, especially the front-runners. It's a high-risk, self-destructive strategy that aims to upset the game's balance, making it a perfect fit for the "Agent of Chaos" exile objective.
+
+*   **Objective Alignment:** This strategy is primarily designed for the **Agent of Chaos** exile objective (make the last-place player win). It will also work for the **Revolution** objective (end with zero money).
+*   **Core Logic:**
+    *   **Card Evaluation:** The Agitator scores Sin cards based on their potential for disruption, prioritizing those that affect all other players or cause the most significant stat damage.
+    *   **Targeting:** It relentlessly targets the player with the highest score.
+    *   **Resource Management:** It will attempt to balance its attacks with actions like "Work Overtime" to ensure it remains a persistent threat, but its self-destructive nature means it will likely burn out.
+
+#### 4.4.2. The Government-in-Exile
+
+**Concept:** A patient, vengeful strategist. This bot plays the long game. After being exiled, it focuses on accumulating resources quietly while holding a grudge against the player who initiated its exile. It aims to enact its revenge in the final stages of the game.
+
+*   **Objective Alignment:** This strategy is ideal for the **Kingmaker** exile objective, where it needs to subtly manipulate the game's outcome.
+*   **Core Logic:**
+    *   **Stateful Memory (The Grudge):** This bot must be able to identify and remember the player who initiated the exile vote against it. This becomes its primary target.
+    *   **Phase-Based Strategy:** It operates in two phases: an "Accumulation" phase, where it gathers resources and avoids conflict, and an "Attack" phase, where it unleashes its hoarded power on its grudge target in the game's final turns.
+
 ## 5. UI/UX Principles & Information Design
 
 **Objective:** To mitigate "Analysis Paralysis" and ensure the game is intuitive and enjoyable, the presentation of information is critical.

@@ -195,49 +195,17 @@ io.on('connection', (socket) => {
       const chosenOption = pendingDecision.options[choiceIndex];
       if (!chosenOption) return socket.emit('error', { message: 'Invalid choice index.' });
 
-      if (pendingDecision.type === 'PROPOSE_EXILE') {
-        if (chosenOption.action === 'PROPOSE') {
-          const result = game.proposeExileVote(playerId);
-          if (result.error) {
-            return socket.emit('error', { message: result.error });
-          }
-          io.to(gameId).emit('exile_vote_started', game.getGameState());
-        } else {
-          game.pendingDecision = null;
-        }
-      } else { // Handles LIFE_HAPPENS
-        player.applyEffects(chosenOption.effects);
-        game.pendingDecision = null;
-        io.to(game.id).emit('card_resolved', {
-            playerId: player.id,
-            newStats: player.stats,
-            choiceText: chosenOption.text
-        });
-      }
+      player.applyEffects(chosenOption.effects);
+      game.pendingDecision = null;
 
-      // Only check turn end if a decision was fully resolved (i.e. not waiting for votes)
-      if (!game.pendingDecision) {
-        checkTurnEnd(game, player);
-      }
+      io.to(game.id).emit('card_resolved', {
+          playerId: player.id,
+          newStats: player.stats,
+          choiceText: chosenOption.text
+      });
+
+      checkTurnEnd(game, player);
       io.to(game.id).emit('game_state_update', game.getGameState());
-  });
-
-  socket.on('submit_exile_vote', (data) => {
-    const { gameId, playerId, vote } = data;
-    const game = games[gameId];
-    if (!game) return;
-
-    const result = game.submitExileVote(playerId, vote);
-    if (result.error) {
-        return socket.emit('error', { message: result.error });
-    }
-
-    // Check if the vote concluded and state changed
-    if (game.status === 'in-progress' || game.status === 'finished') {
-        io.to(gameId).emit('game_state_update', game.getGameState());
-    } else {
-        io.to(gameId).emit('vote_registered', { playerId, votes: Object.keys(game.pendingDecision.votes).length });
-    }
   });
 
   socket.on('submit_testimony', ({ gameId, playerId, kudosTargetId, concernTargetId }) => {
