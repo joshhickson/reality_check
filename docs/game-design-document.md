@@ -86,7 +86,15 @@ This section provides concrete rules for the game's primary systems.
 *   **Hand Size:** Players have a maximum hand size of **5 cards**. If you must draw a card and are already at your hand limit, you must first discard a card of your choice.
 *   **Turn End:** A player's turn ends when they have spent all their Action Points.
 
-### 3.5 End Game: Judgment Day
+### 3.5 End Game Trigger: The Final Chapter
+
+**Concept:** The game's conclusion is not tied to a fixed number of rounds, but is instead triggered by a player choosing to capstone their personal story. This ensures the game ends at a moment of high narrative tension.
+
+**Rule:**
+*   The end of the game is triggered immediately when any player accumulates **20 or more Narrative Momentum** points.
+*   When this threshold is met, the game transitions to the "Judgment Day" phase at the end of the current player's turn.
+
+### 3.6 Judgment Day: Final Scoring
 
 **Concept:** A multi-faceted end-game sequence that evaluates each player's journey and determines a winner based on multiple, value-driven victory conditions.
 
@@ -119,76 +127,57 @@ This section details the more complex systems that provide "Reality Check" with 
 **Concept:** A player-driven catch-up mechanism that addresses a runaway leader without resorting to player elimination. It transforms a dominant player into a new kind of disruptive force, keeping all players engaged.
 
 **Rules:**
-*   **Trigger Condition:** The Exile Protocol can be initiated at the start of any player's turn if one player's **Money** is more than double the combined total of the two players with the least Money.
+*   **Trigger Condition:** The Exile Protocol can be initiated at the start of any player's turn if one player's **Money** is more than **2.5 times the average** of all players. This condition only applies if there are 3 or more players.
 *   **The Vote:** The player whose turn it is may propose a vote to "Exile" the wealthy player. The vote requires a simple majority to pass. The wealthy player does not get a vote.
 *   **Consequences of Exile:**
-    *   The Exiled player immediately loses 50% of their Money, which is redistributed equally among all other players.
+    *   The Exiled player immediately loses **33%** of their Money, which is redistributed equally among all other players.
     *   The Exiled player receives a new secret objective card from the `exile-objectives.json` deck.
     *   The Exiled player no longer pursues the standard victory conditions. They can only win by achieving their new secret objective. They are still part of the game, but their goals are now fundamentally different and often disruptive.
 *   **Exile Objectives:**
     *   **Saboteur's Gambit:** Win if the player who was the leader in money at the time of your exile comes in last place.
     *   **Anarchist's Dream:** Win if at least two other players are in burnout at the end of the game.
 
-### 4.2. Social Capital Resource System
+### 4.2. Social Capital as a Spendable Resource
 
-**Concept:** A spendable resource representing a player's reputation, social clout, and network of favors. It mechanizes the power of social influence.
+**Concept:** Social Capital is a spendable resource representing a player's reputation, social clout, and network of favors. It mechanizes the power of social influence, allowing players to take powerful actions that are not tied to the game's economic engine.
 
 **Rules:**
-*   **Gaining Social Capital:** Players gain Social Capital tokens (SC) through:
-    *   **Virtue Cards:** Specific choices on Virtue cards will award SC.
-    *   **Community Events:** Pro-social choices during Babel Events can award SC.
+*   **Gaining Social Capital:** Players gain Social Capital points (SC) through:
+    *   **Card Effects:** Specific choices on Virtue, Sin, or Life Happens cards can award SC.
+    *   **Community Events:** Pro-social choices during certain events can award SC.
     *   **Direct Aid:** When you give another player a resource voluntarily (not as part of a card effect that forces you to), you may gain 1 SC.
-*   **Spending Social Capital:** A player can spend their accumulated SC on their turn to perform powerful social actions. A player may only perform one Social Capital action per turn.
-    *   **1 SC: "Call in a Favor"** - Reroll any one die roll you make this turn.
-    *   **2 SC: "Lean on Your Network"** - Negate a Mental Health loss of 2 points or less.
-    *   **4 SC: "Community Organizer"** - Add an additional vote to any group decision or Babel Event vote.
+*   **Spending Social Capital:** On their turn, a player can spend their accumulated SC to perform one of the following special actions. This does not cost an Action Point.
+    *   **1 SC: "Call in a Favor"** - Reroll any single die roll you make this turn.
+    *   **3 SC: "Lean on Your Network"** - Negate a Mental Health loss of 2 points or less that you would suffer from a card or event.
+    *   **5 SC: "Community Organizer"** - Add an additional vote to your side during any group decision or Exile vote.
 
 ### 4.3. "Crossroads" Interrupt System
 
-**Concept:** A system of thematic, player-driven interruptions that makes the game more interactive and the narrative more emergent.
+**Concept:** A system of thematic, player-driven interruptions that makes the game more interactive and the narrative more emergent. This system is modeled after the "Crossroads" mechanic in the game *Dead of Winter*.
 
 **Rules:**
 *   **Crossroads Deck:** A new deck of "Crossroads Cards" is added to the game.
-*   **Turn Procedure:** At the start of Player A's turn, the player to their right (Player B) draws one Crossroads Card and holds it, keeping it secret.
-*   **Trigger Condition:** Each Crossroads Card has a specific trigger condition (e.g., "If the active player moves to the Health Ring," "If the active player's Sin increases").
-*   **Interrupt:** If the trigger condition on the Crossroads Card is met at any point during Player A's turn, Player B immediately interrupts the game by shouting "Crossroads!" and reading the card aloud.
-*   **Resolution:** The active player (Player A) must then resolve the choice presented on the Crossroads Card before continuing their turn. This can dramatically alter their plans and the game state.
-*   If the trigger condition is not met by the end of the turn, the Crossroads Card is discarded without effect.
+*   **Turn Procedure:** At the start of each player's turn, a new `Crossroads Card` is drawn from the deck and becomes the active card for that turn.
+*   **Trigger Condition:** Each Crossroads Card has a specific, contextual trigger condition. These triggers are tied to game events, such as:
+    *   `ACTION`: Triggered when a player takes a specific type of action (e.g., `WORK_OVERTIME`).
+    *   `STAT_CHANGE`: Triggered when a player's core stat increases or decreases (e.g., `sin` increases).
+*   **Interrupt:** If the active player takes an action that meets the trigger condition of the active `Crossroads Card`, the game is immediately paused.
+*   **Resolution:** The active player is presented with the thematic choice from the card. They must resolve the choice and its effects before their turn can continue. This can dramatically alter their plans and the game state.
+*   If the trigger condition is not met by the end of the player's turn, the `Crossroads Card` is discarded without effect.
 
-### 4.4. Bot AI & Personalities
+### 3.7 End-Game Accolades (Titles)
 
-**Concept:** To enhance replayability and create more dynamic, human-like opponents, the game will feature distinct AI "personalities" or strategies that bots can adopt, especially after being exiled. These strategies go beyond simple random actions and are designed to pursue specific, thematic goals.
+**Concept:** At the end of the game, a series of over 20 unique "Titles" are awarded to players based on their stats and actions throughout the game. These serve as a narrative summary of their playstyle and achievements, similar to accolades in games like *Counter-Strike 2*. These titles do not affect the final score but provide a fun, narrative conclusion to the game.
 
-#### 4.4.1. The Agitator
-
-**Concept:** A chaotic, disruptive force. Once exiled, this bot's primary goal is to tear down the other players, especially the front-runners. It's a high-risk, self-destructive strategy that aims to upset the game's balance, making it a perfect fit for the "Agent of Chaos" exile objective.
-
-*   **Objective Alignment:** This strategy is primarily designed for the **Agent of Chaos** exile objective (make the last-place player win). It will also work for the **Revolution** objective (end with zero money).
-*   **Core Logic:**
-    *   **Card Evaluation:** The Agitator scores Sin cards based on their potential for disruption, prioritizing those that affect all other players or cause the most significant stat damage.
-    *   **Targeting:** It relentlessly targets the player with the highest score.
-    *   **Resource Management:** It will attempt to balance its attacks with actions like "Work Overtime" to ensure it remains a persistent threat, but its self-destructive nature means it will likely burn out.
-
-#### 4.4.2. The Government-in-Exile
-
-**Concept:** A patient, vengeful strategist. This bot plays the long game. After being exiled, it focuses on accumulating resources quietly while holding a grudge against the player who initiated its exile. It aims to enact its revenge in the final stages of the game.
-
-*   **Objective Alignment:** This strategy is ideal for the **Kingmaker** exile objective, where it needs to subtly manipulate the game's outcome.
-*   **Core Logic:**
-    *   **Stateful Memory (The Grudge):** This bot must be able to identify and remember the player who initiated the exile vote against it. This becomes its primary target.
-    *   **Phase-Based Strategy:** It operates in two phases: an "Accumulation" phase, where it gathers resources and avoids conflict, and an "Attack" phase, where it unleashes its hoarded power on its grudge target in the game's final turns.
-
-#### 4.4.3. The Puppeteer
-
-*   **Core Motivation:** To win through influence and control, not through direct wealth or overt morality. The Puppeteer believes that the most powerful asset in the game is not Money in the bank, but the other players themselves.
-*   **Primary Focus:** The Puppeteer's primary resource is **Social Capital**. They will treat it as their main currency, spending other resources on "Direct Aid" actions as a calculated investment to gain influence.
-*   **Key Strategic Choice:** A Puppeteer might spend their own resources to help another player, an action that seems financially irrational, solely to gain the Social Capital needed to force that player to vote in their favor on a critical decision.
-
-#### 4.4.4. The Community Pillar
-
-*   **Core Motivation:** To achieve victory through collective prosperity and civic leadership, rejecting a zero-sum mindset. They believe that true success is measured by the strength of the community they help build.
-*   **Primary Focus:** Their entire strategy is oriented around maximizing the **Community Impact** stat. Their endgame is to secure the "Builder Bonus" to overcome any personal resource deficits.
-*   **Key Strategic Choice:** When faced with a decision between an action that grants them a large personal reward and one that grants a smaller reward to all players but increases Community Impact, the Community Pillar will always choose the latter.
+**Examples of Titles:**
+*   **The Capitalist:** Finished with the most money.
+*   **The Saint:** Finished with the most virtue.
+*   **The Survivor:** Finished with the highest mental health.
+*   **The Influencer:** Received the most "Kudos" tokens.
+*   **The Penny Pincher:** Finished with high money and low sin.
+*   **The Martyr:** Finished with the lowest mental health but highest virtue.
+*   **The Socialite:** Finished with the most Social Capital.
+*   *(And many more...)*
 
 ## 5. UI/UX Principles & Information Design
 
