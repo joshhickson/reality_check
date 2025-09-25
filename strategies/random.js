@@ -14,9 +14,6 @@ class RandomStrategy {
         if (me.stats.narrativeMomentum >= 5) {
             possibleActions.push({ type: 'SPEND_MOMENTUM' });
         }
-        if (me.stats.actionPoints >= 1 && me.stats.socialCapital >= 2 && me.stats.mentalHealth < 10) {
-            possibleActions.push({ type: 'USE_SOCIAL_CAPITAL' });
-        }
 
         if (possibleActions.length === 0) {
             return null;

@@ -3,6 +3,7 @@ const { RandomStrategy } = require("./strategies/random.js");
 const { HustlerStrategy } = require("./strategies/hustler.js");
 const { ZenStrategy } = require("./strategies/zen.js");
 const { PuppeteerStrategy } = require("./strategies/puppeteer.js");
+const { RichStrategy } = require("./strategies/rich.js");
 
 const SERVER_URL = "http://localhost:5000";
 
@@ -13,7 +14,8 @@ class Bot {
         this.socket = null;
         this.playerId = null;
         this.gameId = null;
-        this.voted = false;
+        this.hasVotedInCurrentExile = false;
+        this.hasVotedInTestimony = false;
     }
 
     connect() {
@@ -29,6 +31,7 @@ class Bot {
             this.socket.on('disconnect', () => console.log(`[${this.name}] Disconnected.`));
             this.socket.on('game_state_update', (data) => this.handleGameStateUpdate(data));
             this.socket.on('game_started', (data) => this.handleGameStateUpdate(data));
+            this.socket.on('exile_vote_started', (data) => this.handleExileVote(data));
             this.socket.on('card_resolved', (data) => console.log(`[${this.name}] Card resolved: ${data.choiceText}`));
             this.socket.on('error', (data) => console.error(`[${this.name}] Server Error:`, data.message));
             this.socket.on('game_over', (data) => {
@@ -88,11 +91,20 @@ class Bot {
         console.log(`[${this.name}] GameState: ${status}, CurrentPlayer: ${currentPlayerId}, Me: ${this.playerId}`);
 
         if (status === 'judgment_day') {
-            if (!this.voted) {
+            if (!this.hasVotedInTestimony) {
                 this.submitTestimony(players);
-                this.voted = true;
+                this.hasVotedInTestimony = true;
             }
             return;
+        }
+
+        if (status === 'AWAITING_VOTE') {
+            return; // Do nothing and wait for the vote to resolve
+        }
+
+        // Reset vote flag if a new turn starts and the vote is over
+        if (this.hasVotedInCurrentExile && !pendingDecision) {
+            this.hasVotedInCurrentExile = false;
         }
 
         if (currentPlayerId === this.playerId) {
@@ -103,8 +115,6 @@ class Bot {
                 if (pendingDecision && pendingDecision.playerId === this.playerId) {
                     this.handleDecision(pendingDecision);
                 } else {
-                    // The strategy will determine if any action is possible,
-                    // including spending momentum at 0 AP.
                     this.takeTurn(me);
                 }
             }, 500);
@@ -140,6 +150,22 @@ class Bot {
             playerId: this.playerId,
             choiceIndex: choiceIndex
         });
+    }
+
+    handleExileVote(gameState) {
+        const { pendingDecision } = gameState;
+        if (!pendingDecision || pendingDecision.type !== 'exile-vote') return;
+
+        if (pendingDecision.voters.includes(this.playerId) && !this.hasVotedInCurrentExile) {
+            console.log(`[${this.name}] Voting on exile of player ${pendingDecision.targetId}`);
+            const vote = this.strategy.makeDecision(pendingDecision);
+            this.socket.emit('submit_exile_vote', {
+                gameId: this.gameId,
+                playerId: this.playerId,
+                vote: vote
+            });
+            this.hasVotedInCurrentExile = true;
+        }
     }
 
     submitTestimony(players) {
@@ -223,6 +249,10 @@ switch (scenario) {
     case 'clash':
         console.log("Running Clash of Ideologies Test...");
         strategies = ['hustler', 'hustler', 'zen', 'zen'];
+        break;
+    case 'exile_test':
+        console.log("Running Exile Protocol Test...");
+        strategies = ['rich', 'random', 'random', 'random'];
         break;
     case 'baseline':
     default:

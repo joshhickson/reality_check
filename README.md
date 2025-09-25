@@ -169,14 +169,6 @@ socket.on('roll_dice', ({ gameId, playerId }) => {
 
 ## Development Notes
 
-### Server Logging
-
-The game server (`game-server.js`) uses `console.log` for its output, which is directed to `stderr`. To capture all server logs to a file, use the `2>&1` redirection operator:
-
-```bash
-node game-server.js > game-server.log 2>&1 &
-```
-
 ### Key Files Modified for Bot Simulation
 
 1. **`game-server.js`**: 

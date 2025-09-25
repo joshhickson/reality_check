@@ -5,12 +5,6 @@ const path = require('path');
 const cors = require('cors');
 const { Game } = require('./src/game/Game.js');
 const { v4: uuidv4 } = require('uuid');
-const { handleWorkOvertime } = require('./src/game/actions/workOvertime.js');
-const { handleDrawCard } = require('./src/game/actions/drawCard.js');
-const { handlePlayCard } = require('./src/game/actions/playCard.js');
-const { handleSpendMomentum } = require('./src/game/actions/spendMomentum.js');
-const { handlePassTurn } = require('./src/game/actions/passTurn.js');
-const { handleUseSocialCapital } = require('./src/game/actions/useSocialCapital.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -98,24 +92,88 @@ io.on('connection', (socket) => {
       return socket.emit('error', { message: 'Not your turn.' });
     }
 
-    const actionHandlers = {
-      'WORK_OVERTIME': (player) => handleWorkOvertime(player),
-      'DRAW_CARD': (player, game, payload) => handleDrawCard(player, game, payload),
-      'PLAY_CARD': (player, game, payload) => handlePlayCard(player, payload),
-      'SPEND_MOMENTUM': (player, game) => handleSpendMomentum(player, game),
-      'PASS_TURN': (player) => handlePassTurn(player),
-      'USE_SOCIAL_CAPITAL': (player) => handleUseSocialCapital(player),
-    };
+    let actionSucceeded = false;
+    let cost = 0;
 
-    const handler = actionHandlers[action.type];
-    if (!handler) {
-      return socket.emit('error', { message: `Unknown action type: ${action.type}` });
+    switch(action.type) {
+        case 'WORK_OVERTIME':
+            cost = 2;
+            if (player.stats.actionPoints >= cost) {
+                player.stats.actionPoints -= cost;
+                player.applyEffects({ money: 500, mentalHealth: -1, sin: 1, narrativeMomentum: 1 });
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'DRAW_CARD':
+            cost = player.isBurnedOut ? 2 : 1; // Burnout increases AP cost
+
+            if (player.hand.length >= game.maxHandSize) {
+                return socket.emit('error', { message: "Your hand is full." });
+            }
+
+            if (player.stats.actionPoints >= cost) {
+                player.stats.actionPoints -= cost;
+                let card;
+                if (action.payload.deck === 'SIN') {
+                    card = game.sinDeck.draw();
+                } else if (action.payload.deck === 'VIRTUE') {
+                    card = game.virtueDeck.draw();
+                }
+                if (card) {
+                    player.hand.push(card);
+                }
+                player.applyEffects({ narrativeMomentum: 1 });
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'PLAY_CARD':
+            cost = 1;
+            if (player.stats.actionPoints >= cost) {
+                const cardIndex = player.hand.findIndex(c => c.id === action.payload.cardId);
+                if (cardIndex > -1) {
+                    player.stats.actionPoints -= cost;
+                    const cardToPlay = player.hand.splice(cardIndex, 1)[0];
+                    const effects = {
+                        money: parseInt(cardToPlay.money) || 0,
+                        mentalHealth: parseInt(cardToPlay.mental) || 0,
+                        sin: parseInt(cardToPlay.sin) || 0,
+                        virtue: parseInt(cardToPlay.virtue) || 0,
+                        socialCapital: parseInt(cardToPlay.socialCapital) || 0
+                    };
+                    player.applyEffects(effects);
+                    actionSucceeded = true;
+                }
+            }
+            break;
+
+        case 'SPEND_MOMENTUM':
+            cost = 5;
+            if (player.stats.narrativeMomentum >= cost) {
+                player.stats.narrativeMomentum -= cost;
+                const card = game.lifeHappensDeck.draw();
+                if (card) {
+                    game.pendingDecision = {
+                        type: 'LIFE_HAPPENS',
+                        playerId: player.id,
+                        cardId: card.id,
+                        text: card.text,
+                        options: card.choices
+                    };
+                }
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'PASS_TURN':
+            player.stats.actionPoints = 0;
+            actionSucceeded = true;
+            break;
     }
 
-    const actionSucceeded = handler(player, game, action.payload);
-
     if (!actionSucceeded) {
-      return socket.emit('error', { message: "Action failed or not enough resources." });
+      return socket.emit('error', { message: "Not enough resources." });
     }
 
     checkTurnEnd(game, player);
@@ -137,17 +195,49 @@ io.on('connection', (socket) => {
       const chosenOption = pendingDecision.options[choiceIndex];
       if (!chosenOption) return socket.emit('error', { message: 'Invalid choice index.' });
 
-      player.applyEffects(chosenOption.effects);
-      game.pendingDecision = null;
+      if (pendingDecision.type === 'PROPOSE_EXILE') {
+        if (chosenOption.action === 'PROPOSE') {
+          const result = game.proposeExileVote(playerId);
+          if (result.error) {
+            return socket.emit('error', { message: result.error });
+          }
+          io.to(gameId).emit('exile_vote_started', game.getGameState());
+        } else {
+          game.pendingDecision = null;
+        }
+      } else { // Handles LIFE_HAPPENS
+        player.applyEffects(chosenOption.effects);
+        game.pendingDecision = null;
+        io.to(game.id).emit('card_resolved', {
+            playerId: player.id,
+            newStats: player.stats,
+            choiceText: chosenOption.text
+        });
+      }
 
-      io.to(game.id).emit('card_resolved', {
-          playerId: player.id,
-          newStats: player.stats,
-          choiceText: chosenOption.text
-      });
-
-      checkTurnEnd(game, player);
+      // Only check turn end if a decision was fully resolved (i.e. not waiting for votes)
+      if (!game.pendingDecision) {
+        checkTurnEnd(game, player);
+      }
       io.to(game.id).emit('game_state_update', game.getGameState());
+  });
+
+  socket.on('submit_exile_vote', (data) => {
+    const { gameId, playerId, vote } = data;
+    const game = games[gameId];
+    if (!game) return;
+
+    const result = game.submitExileVote(playerId, vote);
+    if (result.error) {
+        return socket.emit('error', { message: result.error });
+    }
+
+    // Check if the vote concluded and state changed
+    if (game.status === 'in-progress' || game.status === 'finished') {
+        io.to(gameId).emit('game_state_update', game.getGameState());
+    } else {
+        io.to(gameId).emit('vote_registered', { playerId, votes: Object.keys(game.pendingDecision.votes).length });
+    }
   });
 
   socket.on('submit_testimony', ({ gameId, playerId, kudosTargetId, concernTargetId }) => {

@@ -1,12 +1,19 @@
 [
-    {
-        "id": "exile_001",
-        "title": "Saboteur's Gambit",
-        "description": "Win if the player who was the leader in money at the time of your exile comes in last place."
-    },
-    {
-        "id": "exile_002",
-        "title": "Anarchist's Dream",
-        "description": "Win if at least two other players are in burnout at the end of the game."
+  {
+    "id": "exile_01",
+    "title": "Saboteur's Gambit",
+    "description": "You win if the player who was the leader in money at the time of your exile comes in last place.",
+    "condition": {
+      "type": "SABOTAGE"
     }
+  },
+  {
+    "id": "exile_02",
+    "title": "Anarchist's Dream",
+    "description": "You win if at least two other players are in burnout at the end of the game.",
+    "condition": {
+      "type": "ANARCHY",
+      "burnout_count": 2
+    }
+  }
 ]

@@ -8,7 +8,7 @@ class Player {
 
     // Stats aligned with GDD v0.4
     this.stats = {
-      money: 20000,
+      money: name.startsWith('RichBot') ? 100000 : 20000,
       mentalHealth: 7,
       sin: 0,
       virtue: 0,
@@ -25,6 +25,8 @@ class Player {
     this.hand = [];
     this.finalScore = null;
     this.titles = [];
+    this.isExiled = false;
+    this.exileObjective = null;
   }
 
   applyEffects(effects, currentRound = 0) {
@@ -88,6 +90,8 @@ class Player {
       name: this.name,
       stats: this.stats,
       isBurnedOut: this.isBurnedOut,
+      isExiled: this.isExiled,
+      exileObjective: this.exileObjective,
       hand: this.hand,
       finalScore: this.finalScore
     };

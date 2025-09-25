@@ -77,30 +77,33 @@ class Game {
   }
 
   checkExileCondition() {
-    if (this.players.length < 3) return;
+    if (this.players.length < 3 || this.pendingDecision) return;
 
     const sortedPlayers = [...this.players].sort((a, b) => a.stats.money - b.stats.money);
     const richestPlayer = sortedPlayers[sortedPlayers.length - 1];
     const poorestTwoPlayers = sortedPlayers.slice(0, 2);
     const combinedWealthOfPoorestTwo = poorestTwoPlayers.reduce((sum, p) => sum + p.stats.money, 0);
 
-    if (richestPlayer.stats.money > combinedWealthOfPoorestTwo * 2) {
-      this.status = 'propose-exile-vote';
+    if (richestPlayer.id !== this.getCurrentPlayer().id && richestPlayer.stats.money > combinedWealthOfPoorestTwo * 2) {
       this.pendingDecision = {
-        type: 'propose-exile',
+        type: 'PROPOSE_EXILE',
         playerId: this.getCurrentPlayer().id,
         targetId: richestPlayer.id,
-        text: `Player ${richestPlayer.name} is eligible for exile. Do you want to start a vote?`
+        text: `Player ${richestPlayer.name} is eligible for exile. Do you want to start a vote?`,
+        options: [
+          { text: 'Propose a vote to exile.', action: 'PROPOSE' },
+          { text: 'Do nothing.', action: 'PASS' }
+        ]
       };
     }
   }
 
   proposeExileVote(playerId) {
-    if (this.status !== 'propose-exile-vote' || this.pendingDecision.playerId !== playerId) {
+    if (this.pendingDecision.type !== 'PROPOSE_EXILE' || this.pendingDecision.playerId !== playerId) {
       return { error: 'Not the right time to propose an exile vote.' };
     }
 
-    this.status = 'awaiting-exile-vote';
+    this.status = 'AWAITING_VOTE';
     const targetPlayer = this.players.find(p => p.id === this.pendingDecision.targetId);
     this.pendingDecision = {
       type: 'exile-vote',
@@ -113,7 +116,7 @@ class Game {
   }
 
   submitExileVote(playerId, vote) {
-    if (this.status !== 'awaiting-exile-vote' || !this.pendingDecision.voters.includes(playerId)) {
+    if (this.status !== 'AWAITING_VOTE' || !this.pendingDecision.voters.includes(playerId)) {
       return { error: 'Not the right time to vote for exile.' };
     }
 
@@ -132,14 +135,14 @@ class Game {
     const noVotes = votes.length - yesVotes;
 
     if (yesVotes > noVotes) {
-      this.handleExile();
+      this.handleExile(this.pendingDecision.targetId);
     } else {
       this.pendingDecision = null;
       this.status = 'in-progress';
     }
   }
 
-  handleExile() {
+  handleExile(leaderAtTimeOfExileId) {
     const exiledPlayer = this.players.find(p => p.id === this.pendingDecision.targetId);
     if (!exiledPlayer) return;
 
@@ -155,10 +158,8 @@ class Game {
     }
 
     exiledPlayer.isExiled = true;
-    exiledPlayer.secretObjective = this.exileDeck.draw();
-    if (exiledPlayer.secretObjective.id === 'exile_001') {
-        exiledPlayer.secretObjective.data = { leaderId: this.pendingDecision.targetId };
-    }
+    exiledPlayer.exileObjective = this.exileDeck.draw();
+    exiledPlayer.exileObjective.leaderIdAtTimeOfExile = leaderAtTimeOfExileId;
 
     this.pendingDecision = null;
     this.status = 'in-progress';
@@ -190,8 +191,6 @@ class Game {
   }
 
   calculateFinalScores() {
-    this.checkExileWinConditions();
-
     this.testimonies.forEach(testimony => {
       const kudosPlayer = this.players.find(p => p.id === testimony.kudosTargetId);
       if (kudosPlayer) {
@@ -232,16 +231,7 @@ class Game {
 
     this.players.sort((a, b) => b.finalScore - a.finalScore);
 
-    const exiledPlayers = this.players.filter(p => p.isExiled);
-    exiledPlayers.forEach(exiledPlayer => {
-        if (exiledPlayer.secretObjective && exiledPlayer.secretObjective.id === 'exile_001') { // Saboteur's Gambit
-            const leaderAtExile = this.players.find(p => p.id === exiledPlayer.secretObjective.data.leaderId);
-            if (leaderAtExile && leaderAtExile === this.players[this.players.length - 1]) {
-                this.winner = exiledPlayer;
-                console.log(`[GAME] ${exiledPlayer.name} wins by completing the Saboteur's Gambit objective!`);
-            }
-        }
-    });
+    this.checkExileWinConditions();
 
     if (!this.winner && this.players.length > 0) {
       this.winner = this.players.filter(p => !p.isExiled)[0];
@@ -268,79 +258,32 @@ class Game {
 
   checkExileWinConditions() {
     const exiledPlayers = this.players.filter(p => p.isExiled);
-    exiledPlayers.forEach(exiledPlayer => {
-      if (!exiledPlayer.secretObjective) return;
+    if (exiledPlayers.length === 0) return;
 
-      switch (exiledPlayer.secretObjective.id) {
-        case 'exile_002': // Anarchist's Dream
+    // Note: a player's finalScore must be calculated before this method is called.
+    const sortedPlayers = [...this.players].sort((a, b) => b.finalScore - a.finalScore);
+
+    exiledPlayers.forEach(exiledPlayer => {
+      if (!exiledPlayer.exileObjective) return;
+
+      switch (exiledPlayer.exileObjective.id) {
+        case 'exile_01': // Saboteur's Gambit
+          const leaderAtExile = this.players.find(p => p.id === exiledPlayer.exileObjective.leaderIdAtTimeOfExile);
+          if (leaderAtExile && sortedPlayers[sortedPlayers.length - 1].id === leaderAtExile.id) {
+            this.winner = exiledPlayer;
+            console.log(`[GAME] ${exiledPlayer.name} wins by completing the Saboteur's Gambit objective!`);
+          }
+          break;
+
+        case 'exile_02': // Anarchist's Dream
           const burnedOutPlayers = this.players.filter(p => p.isBurnedOut && p.id !== exiledPlayer.id);
-          if (burnedOutPlayers.length >= 2) {
+          if (burnedOutPlayers.length >= exiledPlayer.exileObjective.condition.burnout_count) {
             this.winner = exiledPlayer;
             console.log(`[GAME] ${exiledPlayer.name} wins by completing the Anarchist's Dream objective!`);
           }
           break;
       }
     });
-  }
-
-  handleAction(playerId, action) {
-    const player = this.players.find(p => p.id === playerId);
-    if (!player || player !== this.getCurrentPlayer()) {
-      return { error: 'Not your turn.' };
-    }
-
-    if (action.type === 'SPEND_MOMENTUM') {
-      if (player.stats.narrativeMomentum < 5) {
-        return { error: 'Not enough Narrative Momentum.' };
-      }
-      player.stats.narrativeMomentum -= 5;
-      this.triggerForesight(player);
-      return { success: true, game: this };
-    }
-
-    // Other actions would be handled here
-    return { error: 'Unknown action type.' };
-  }
-
-  triggerForesight(player) {
-    console.log(`Triggering foresight for player ${player.id}`);
-    const cards = this.lifeHappensDeck.drawTwo();
-    if (cards.length === 0) {
-      // No cards to draw, refund momentum
-      console.log('No cards to draw for foresight, refunding momentum.');
-      player.stats.narrativeMomentum += 5;
-      return;
-    }
-
-    this.status = 'awaiting-foresight-decision';
-    this.pendingDecision = {
-      type: 'foresight',
-      playerId: player.id,
-      options: cards
-    };
-    console.log(`Awaiting foresight decision from ${player.id} with options:`, cards.map(c => c.id));
-  }
-
-  resolveForesight(playerId, chosenCardId) {
-    if (this.status !== 'awaiting-foresight-decision' || !this.pendingDecision || this.pendingDecision.playerId !== playerId) {
-      return { error: 'Not awaiting a foresight decision from this player.' };
-    }
-
-    console.log(`Resolving foresight for player ${playerId} with chosen card ${chosenCardId}`);
-    const chosenCard = this.pendingDecision.options.find(c => c.id === chosenCardId);
-    if (!chosenCard) {
-      return { error: 'Invalid card chosen.' };
-    }
-
-    const player = this.players.find(p => p.id === playerId);
-    // This is a simplification. A real implementation would have the player choose a card *choice*.
-    // For now, we'll just apply the effects of the first choice on the card.
-    player.applyEffects(chosenCard.choices[0].effects, this.scheduler.getCurrentTurn(), this.players.length);
-
-    this.pendingDecision = null;
-    this.status = 'in-progress';
-
-    return { success: true };
   }
 
   getGameState() {
