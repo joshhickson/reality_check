@@ -178,6 +178,18 @@ This section details the more complex systems that provide "Reality Check" with 
     *   **Stateful Memory (The Grudge):** This bot must be able to identify and remember the player who initiated the exile vote against it. This becomes its primary target.
     *   **Phase-Based Strategy:** It operates in two phases: an "Accumulation" phase, where it gathers resources and avoids conflict, and an "Attack" phase, where it unleashes its hoarded power on its grudge target in the game's final turns.
 
+#### 4.4.3. The Puppeteer
+
+*   **Core Motivation:** To win through influence and control, not through direct wealth or overt morality. The Puppeteer believes that the most powerful asset in the game is not Money in the bank, but the other players themselves.
+*   **Primary Focus:** The Puppeteer's primary resource is **Social Capital**. They will treat it as their main currency, spending other resources on "Direct Aid" actions as a calculated investment to gain influence.
+*   **Key Strategic Choice:** A Puppeteer might spend their own resources to help another player, an action that seems financially irrational, solely to gain the Social Capital needed to force that player to vote in their favor on a critical decision.
+
+#### 4.4.4. The Community Pillar
+
+*   **Core Motivation:** To achieve victory through collective prosperity and civic leadership, rejecting a zero-sum mindset. They believe that true success is measured by the strength of the community they help build.
+*   **Primary Focus:** Their entire strategy is oriented around maximizing the **Community Impact** stat. Their endgame is to secure the "Builder Bonus" to overcome any personal resource deficits.
+*   **Key Strategic Choice:** When faced with a decision between an action that grants them a large personal reward and one that grants a smaller reward to all players but increases Community Impact, the Community Pillar will always choose the latter.
+
 ## 5. UI/UX Principles & Information Design
 
 **Objective:** To mitigate "Analysis Paralysis" and ensure the game is intuitive and enjoyable, the presentation of information is critical.
@@ -190,3 +202,5 @@ This section details the more complex systems that provide "Reality Check" with 
 
 ---
 *Designer's Note on "Work Overtime": The efficiency of the "Work Overtime" action must be carefully calibrated during playtesting. It should be a viable fallback option when a player has no other good moves, but it should not be so efficient that it becomes a dominant, low-interaction strategy. It should feel like a safe, but slightly suboptimal, choice compared to engaging with the game's core card-play mechanics.*
+
+*Designer's Note on Card Impact: A comprehensive review of the "Life Happens" deck should be conducted to tune the impact of individual cards. Underpowered cards that offer negligible benefits should be buffed or redesigned. The goal of this review should be to ensure that every card draw has the potential to be a meaningful strategic moment, thereby increasing the value and excitement of interacting with the system.*
