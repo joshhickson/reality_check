@@ -1,0 +1,136 @@
+--- Starting Test Runner ---
+Starting game server...
+[Server]: 🚀 Server listening on port 5000
+
+Server is running. Starting bots...
+[Bots]: Running Puppeteer Test...
+
+[Bots]: --- Starting Bot Simulation with bots: puppeteer, random, random, random ---
+
+[Server]: [DEBUG] New connection: lzdxT7RAHiIGWEMiAAAB
+
+[Server]: [DEBUG] New connection: iotOEjRSG9D9_q1fAAAD
+
+[Server]: [DEBUG] New connection: Wngrs7LbP0eA8UmHAAAF
+
+[Server]: [DEBUG] New connection: Ishcv_wknE8RGkWqAAAH
+[DEBUG][SERVER][IN] create_game from lzdxT7RAHiIGWEMiAAAB: {"gameName":"Bot Game"}
+
+[Server]: [SERVER][OUT] game_created to lzdxT7RAHiIGWEMiAAAB: { gameId: 'd4047473-e830-45fa-869e-d9b4d1d6dcb6' }
+
+[Server]: [DEBUG][SERVER][IN] join_game from lzdxT7RAHiIGWEMiAAAB: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","username":"PuppeteerBot-1"}
+
+[Bots]: [PuppeteerBot-1] Joined game d4047473-e830-45fa-869e-d9b4d1d6dcb6 as player 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b
+
+[Server]: [DEBUG][SERVER][IN] join_game from iotOEjRSG9D9_q1fAAAD: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","username":"RandomBot-2"}
+
+[Bots]: [RandomBot-2] Joined game d4047473-e830-45fa-869e-d9b4d1d6dcb6 as player d9a84209-cfcf-4c15-94d0-adccdb7387e6
+
+[Server]: [DEBUG][SERVER][IN] join_game from Wngrs7LbP0eA8UmHAAAF: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","username":"RandomBot-3"}
+
+[Bots]: [RandomBot-3] Joined game d4047473-e830-45fa-869e-d9b4d1d6dcb6 as player f7c57eed-7957-496a-b678-2166f1c37a9d
+
+[Server]: [DEBUG][SERVER][IN] join_game from Ishcv_wknE8RGkWqAAAH: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","username":"RandomBot-4"}
+
+[Bots]: [RandomBot-4] Joined game d4047473-e830-45fa-869e-d9b4d1d6dcb6 as player 9cfa76d1-3a75-4efe-ba4a-d9ec02840d3d
+
+--- Starting Game ---
+
+[Server]: [DEBUG][SERVER][IN] start_game from lzdxT7RAHiIGWEMiAAAB: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6"}
+
+[Server]: 🔄 Game Phase transition: Waiting → InProgress
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b
+
+[Bots]:
+--- [PuppeteerBot-1] Turn 1 ---
+
+[Bots]: My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: d9a84209-cfcf-4c15-94d0-adccdb7387e6
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: f7c57eed-7957-496a-b678-2166f1c37a9d
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: 9cfa76d1-3a75-4efe-ba4a-d9ec02840d3d
+
+[Bots]: [PuppeteerBot-1] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [DEBUG][SERVER][IN] player_action from lzdxT7RAHiIGWEMiAAAB: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"3953e6bc-9f79-4064-8b72-aa18bc3f7a2b","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+
+[Server]: [DEBUG] Handling player_action: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"3953e6bc-9f79-4064-8b72-aa18bc3f7a2b","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+
+[Server]: [DEBUG] Game handling action for player 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b: {"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}
+
+[Server]: [GAME] Checking turn end for PuppeteerBot-1. AP: 1, PendingDecision: null
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b
+
+--- [PuppeteerBot-1] Turn 1 ---
+My Stats: AP=1, Hand=1, MH=7, NM=1
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: d9a84209-cfcf-4c15-94d0-adccdb7387e6
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: f7c57eed-7957-496a-b678-2166f1c37a9d
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b, Me: 9cfa76d1-3a75-4efe-ba4a-d9ec02840d3d
+
+[Bots]: [PuppeteerBot-1] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [DEBUG][SERVER][IN] player_action from lzdxT7RAHiIGWEMiAAAB: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"3953e6bc-9f79-4064-8b72-aa18bc3f7a2b","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+[DEBUG] Handling player_action: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"3953e6bc-9f79-4064-8b72-aa18bc3f7a2b","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+
+[Server]: [DEBUG] Game handling action for player 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b: {"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}
+
+[Server]: [GAME] Checking turn end for PuppeteerBot-1. AP: 0, PendingDecision: null
+[GAME] Player PuppeteerBot-1's turn has ended (AP depleted).
+
+[Server]: [DEBUG] Advancing turn. Current player index: 0
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: d9a84209-cfcf-4c15-94d0-adccdb7387e6
+
+--- [RandomBot-2] Turn 2 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: f7c57eed-7957-496a-b678-2166f1c37a9d
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: 9cfa76d1-3a75-4efe-ba4a-d9ec02840d3d
+
+[Bots]: [RandomBot-2] Taking action: WORK_OVERTIME
+
+[Server]: [DEBUG][SERVER][IN] player_action from iotOEjRSG9D9_q1fAAAD: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"d9a84209-cfcf-4c15-94d0-adccdb7387e6","action":{"type":"WORK_OVERTIME"}}
+
+[Server]: [DEBUG] Handling player_action: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"d9a84209-cfcf-4c15-94d0-adccdb7387e6","action":{"type":"WORK_OVERTIME"}}
+
+[Server]: [DEBUG] Game handling action for player d9a84209-cfcf-4c15-94d0-adccdb7387e6: {"type":"WORK_OVERTIME"}
+[GAME] Crossroads event triggered for RandomBot-2: crossroads_002
+[GAME] Checking turn end for RandomBot-2. AP: 0, PendingDecision: {"type":"crossroads","playerId":"d9a84209-cfcf-4c15-94d0-adccdb7387e6","card":{"id":"crossroads_002","trigger":{"type":"ACTION","actionType":"WORK_OVERTIME"},"text":"As you're about to head home after a long day, your boss stops you. 'Big project just landed. I need all hands on deck this weekend. It's optional, of course...' The unspoken pressure hangs in the air.","choices":[{"text":"Agree to work the weekend. (Gain Money, lose Mental Health)","effects":{"money":750,"mentalHealth":-2}},{"text":"Politely decline. (Preserve your weekend, but risk your boss's favor)","effects":{"socialCapital":-1}}]}}
+
+[Bots]: [PuppeteerBot-1] GameState: awaiting-crossroads-decision, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: 3953e6bc-9f79-4064-8b72-aa18bc3f7a2b
+
+[Bots]: [RandomBot-2] GameState: awaiting-crossroads-decision, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: d9a84209-cfcf-4c15-94d0-adccdb7387e6
+
+--- [RandomBot-2] Turn 2 ---
+My Stats: AP=0, Hand=0, MH=6, NM=1
+
+[Bots]: [RandomBot-3] GameState: awaiting-crossroads-decision, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: f7c57eed-7957-496a-b678-2166f1c37a9d
+
+[Bots]: [RandomBot-4] GameState: awaiting-crossroads-decision, CurrentPlayer: d9a84209-cfcf-4c15-94d0-adccdb7387e6, Me: 9cfa76d1-3a75-4efe-ba4a-d9ec02840d3d
+
+[Bots]: [RandomBot-2] Handling decision: crossroads
+
+[Bots]: [RandomBot-2] Decision: "As you're about to head home after a long day, your boss stops you. 'Big project just landed. I need all hands on deck this weekend. It's optional, of course...' The unspoken pressure hangs in the air."
+[RandomBot-2] Choosing option 1: "Politely decline. (Preserve your weekend, but risk your boss's favor)"
+
+[Server]: [DEBUG][SERVER][IN] card_choice from iotOEjRSG9D9_q1fAAAD: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"d9a84209-cfcf-4c15-94d0-adccdb7387e6","choiceIndex":1}
+
+[Server]: [DEBUG] Handling card_choice: {"gameId":"d4047473-e830-45fa-869e-d9b4d1d6dcb6","playerId":"d9a84209-cfcf-4c15-94d0-adccdb7387e6","choiceIndex":1}
+
+[Bots]: [PuppeteerBot-1] Disconnected.
+
+[Bots]: [RandomBot-2] Disconnected.
+
+[Bots]: [RandomBot-3] Disconnected.
+
+[Bots]: [RandomBot-4] Disconnected.

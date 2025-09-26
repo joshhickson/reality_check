@@ -88,6 +88,9 @@ class AgitatorStrategy {
         if (pendingDecision.type === 'exile-vote') {
             return 0;
         }
+        if (pendingDecision.type === 'crossroads') {
+            return Math.floor(Math.random() * pendingDecision.card.choices.length);
+        }
         return Math.floor(Math.random() * pendingDecision.options.length);
     }
 

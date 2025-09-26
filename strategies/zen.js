@@ -2,48 +2,59 @@ class ZenStrategy {
     chooseAction(me) {
         const { actionPoints, mentalHealth, hand, narrativeMomentum, isBurnedOut } = me.stats;
         const handSize = me.hand.length;
+        const possibleActions = [];
 
-        // Priority 1: If mental health is suffering, play a card to recover it.
-        if (actionPoints >= 1 && mentalHealth <= 5 && handSize > 0) {
-            const recoveryCards = me.hand.filter(card => card.mental && parseInt(card.mental) > 0);
-            if (recoveryCards.length > 0) {
-                recoveryCards.sort((a, b) => parseInt(b.mental) - parseInt(a.mental));
-                return { type: 'PLAY_CARD', payload: { cardId: recoveryCards[0].id } };
-            }
-        }
-
-        // Priority 2: Play cards that grant Virtue.
-        if (actionPoints >= 1 && handSize > 0) {
-            const virtueCards = me.hand.filter(card => card.virtue && parseInt(card.virtue) > 0);
-            if (virtueCards.length > 0) {
-                virtueCards.sort((a, b) => parseInt(b.virtue) - parseInt(a.virtue));
-                return { type: 'PLAY_CARD', payload: { cardId: virtueCards[0].id } };
-            }
-        }
-
-        // Priority 3: Draw from the Virtue deck.
-        if (actionPoints >= 1 && handSize < 5 && !isBurnedOut) {
-            return { type: 'DRAW_CARD', payload: { deck: 'VIRTUE' } };
-        }
-
-        // Priority 4: Spend narrative momentum for a life event.
-        if (narrativeMomentum >= 5) {
-            return { type: 'SPEND_MOMENTUM' };
-        }
-
-        // Last resort: Work overtime if absolutely no other choice.
+        // Evaluate all possible actions
         if (actionPoints >= 2) {
-            return { type: 'WORK_OVERTIME' };
+            possibleActions.push({ type: 'WORK_OVERTIME', score: -5 }); // Zen bot avoids this
+        }
+        if (actionPoints >= 1 && handSize < 5 && !isBurnedOut) {
+            possibleActions.push({ type: 'DRAW_CARD', deck: 'VIRTUE', score: 5 });
+            possibleActions.push({ type: 'DRAW_CARD', deck: 'SIN', score: -5 });
+        }
+        if (actionPoints >= 1 && handSize > 0) {
+            hand.forEach(card => {
+                const virtueScore = (parseInt(card.virtue) || 0) * 2;
+                const mentalScore = (parseInt(card.mental) || 0);
+                const sinScore = (parseInt(card.sin) || 0) * 2;
+                const score = virtueScore + mentalScore - sinScore;
+                possibleActions.push({ type: 'PLAY_CARD', cardId: card.id, score });
+            });
+        }
+        if (narrativeMomentum >= 5) {
+            possibleActions.push({ type: 'SPEND_MOMENTUM', score: 4 });
+        }
+        if (narrativeMomentum > 15) {
+            possibleActions.forEach(action => {
+                if (action.type === 'DRAW_CARD') action.score += 5;
+            });
         }
 
-        return null;
+        if (possibleActions.length === 0) {
+            return { type: 'PASS_TURN' };
+        }
+
+        possibleActions.sort((a, b) => b.score - a.score);
+        const bestAction = possibleActions[0];
+
+        const action = { type: bestAction.type };
+        if (bestAction.type === 'DRAW_CARD') {
+            action.payload = { deck: bestAction.deck };
+        }
+        if (bestAction.type === 'PLAY_CARD') {
+            action.payload = { cardId: bestAction.cardId };
+        }
+
+        return action;
     }
 
     makeDecision(pendingDecision) {
         let bestOptionIndex = 0;
         let bestScore = -Infinity;
 
-        pendingDecision.options.forEach((option, index) => {
+        const options = pendingDecision.type === 'crossroads' ? pendingDecision.card.choices : pendingDecision.options;
+
+        options.forEach((option, index) => {
             const effects = option.effects;
             const virtue = effects.virtue || 0;
             const mentalHealth = effects.mentalHealth || 0;

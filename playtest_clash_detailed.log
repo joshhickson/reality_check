@@ -1,0 +1,1295 @@
+--- Starting Test Runner ---
+Starting game server...
+[Server]: 🚀 Server listening on port 5000
+
+Server is running. Starting bots...
+[Bots]: Running Puppeteer Test...
+
+[Bots]: --- Starting Bot Simulation with bots: puppeteer, random, random, random ---
+
+[Server]: [DEBUG] New connection: IYhcD4CHVDavIEjrAAAB
+
+[Server]: [DEBUG] New connection: pjMexGHFwPpp40mxAAAD
+
+[Server]: [DEBUG] New connection: EKE6MllIO_mlAZXeAAAF
+
+[Server]: [DEBUG] New connection: FaTgmqh5ctwFiQajAAAH
+
+[Server]: [DEBUG][SERVER][IN] create_game from IYhcD4CHVDavIEjrAAAB: {"gameName":"Bot Game"}
+
+[Server]: [SERVER][OUT] game_created to IYhcD4CHVDavIEjrAAAB: { gameId: 'c68d1716-9ab4-4147-ab15-5689d9b97b45' }
+
+[Server]: [DEBUG][SERVER][IN] join_game from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","username":"PuppeteerBot-1"}
+
+[Bots]: [PuppeteerBot-1] Joined game c68d1716-9ab4-4147-ab15-5689d9b97b45 as player 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+[RandomBot-2] Joined game c68d1716-9ab4-4147-ab15-5689d9b97b45 as player 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+[RandomBot-3] Joined game c68d1716-9ab4-4147-ab15-5689d9b97b45 as player ef4f8362-c826-4d6d-91a1-b899044b8f9f
+
+[Server]: [DEBUG][SERVER][IN] join_game from pjMexGHFwPpp40mxAAAD: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","username":"RandomBot-2"}
+[DEBUG][SERVER][IN] join_game from EKE6MllIO_mlAZXeAAAF: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","username":"RandomBot-3"}
+[DEBUG][SERVER][IN] join_game from FaTgmqh5ctwFiQajAAAH: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","username":"RandomBot-4"}
+
+[Bots]: [RandomBot-4] Joined game c68d1716-9ab4-4147-ab15-5689d9b97b45 as player fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+
+--- Starting Game ---
+
+[Server]: [DEBUG][SERVER][IN] start_game from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: 🔄 Game Phase transition: Waiting → InProgress
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+
+[Bots]:
+--- [PuppeteerBot-1] Turn 1 ---
+
+[Bots]: My Stats: AP=2, Hand=0, MH=7, NM=0
+[RandomBot-2] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+[RandomBot-3] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: ef4f8362-c826-4d6d-91a1-b899044b8f9f
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+
+[Server]: [DEBUG][SERVER][IN] get_full_game_state from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: [SERVER][OUT] full_game_state to IYhcD4CHVDavIEjrAAAB: {
+  id: 'c68d1716-9ab4-4147-ab15-5689d9b97b45',
+  name: 'Bot Game',
+  status: 'in-progress',
+  players: [
+    {
+      id: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+      name: 'PuppeteerBot-1',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+      name: 'RandomBot-2',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+      name: 'RandomBot-3',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+      name: 'RandomBot-4',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    }
+  ],
+  currentPlayerId: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+  currentTurn: 1,
+  currentState: 'InProgress',
+  pendingDecision: null,
+  winner: null,
+  titles: []
+}
+
+[Bots]: --- FULL GAME STATE ---
+
+[Bots]: {
+  "id": "c68d1716-9ab4-4147-ab15-5689d9b97b45",
+  "name": "Bot Game",
+  "status": "in-progress",
+  "players": [
+    {
+      "id": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+      "name": "PuppeteerBot-1",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 2,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+      "name": "RandomBot-2",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+      "name": "RandomBot-3",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+      "name": "RandomBot-4",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    }
+  ],
+  "currentPlayerId": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+  "currentTurn": 1,
+  "currentState": "InProgress",
+  "pendingDecision": null,
+  "winner": null,
+  "titles": []
+}
+-----------------------
+
+[Bots]: [PuppeteerBot-1] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [DEBUG][SERVER][IN] player_action from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"72828e48-9d05-4d4b-ac0d-0274d0c19a17","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+
+[Server]: [DEBUG] Handling player_action: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"72828e48-9d05-4d4b-ac0d-0274d0c19a17","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+
+[Server]: [DEBUG] Game handling action for player 72828e48-9d05-4d4b-ac0d-0274d0c19a17: {"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}
+
+[Server]: [GAME] Checking turn end for PuppeteerBot-1. AP: 1, PendingDecision: null
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+
+--- [PuppeteerBot-1] Turn 1 ---
+My Stats: AP=1, Hand=1, MH=7, NM=1
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: ef4f8362-c826-4d6d-91a1-b899044b8f9f
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 72828e48-9d05-4d4b-ac0d-0274d0c19a17, Me: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+
+[Server]: [DEBUG][SERVER][IN] get_full_game_state from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: [SERVER][OUT] full_game_state to IYhcD4CHVDavIEjrAAAB: {
+  id: 'c68d1716-9ab4-4147-ab15-5689d9b97b45',
+  name: 'Bot Game',
+  status: 'in-progress',
+  players: [
+    {
+      id: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+      name: 'PuppeteerBot-1',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [Array],
+      finalScore: null
+    },
+    {
+      id: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+      name: 'RandomBot-2',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+      name: 'RandomBot-3',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+      name: 'RandomBot-4',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    }
+  ],
+  currentPlayerId: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+  currentTurn: 1,
+  currentState: 'InProgress',
+  pendingDecision: null,
+  winner: null,
+  titles: []
+}
+
+[Bots]: --- FULL GAME STATE ---
+{
+  "id": "c68d1716-9ab4-4147-ab15-5689d9b97b45",
+  "name": "Bot Game",
+  "status": "in-progress",
+  "players": [
+    {
+      "id": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+      "name": "PuppeteerBot-1",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 1,
+        "narrativeMomentum": 1,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [
+        {
+          "id": "virtue_18",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"Donate Organs Early: You become a living donor\"",
+          "money": "-500",
+          "mental": "2",
+          "sin": "0",
+          "virtue": "10",
+          "delay": "0",
+          "socialCapital": "0"
+        }
+      ],
+      "finalScore": null
+    },
+    {
+      "id": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+      "name": "RandomBot-2",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+      "name": "RandomBot-3",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+      "name": "RandomBot-4",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    }
+  ],
+  "currentPlayerId": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+  "currentTurn": 1,
+  "currentState": "InProgress",
+  "pendingDecision": null,
+  "winner": null,
+  "titles": []
+}
+
+[Bots]: -----------------------
+
+[Bots]: [PuppeteerBot-1] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [DEBUG][SERVER][IN] player_action from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"72828e48-9d05-4d4b-ac0d-0274d0c19a17","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+
+[Server]: [DEBUG] Handling player_action: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"72828e48-9d05-4d4b-ac0d-0274d0c19a17","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+[DEBUG] Game handling action for player 72828e48-9d05-4d4b-ac0d-0274d0c19a17: {"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}
+[GAME] Checking turn end for PuppeteerBot-1. AP: 0, PendingDecision: null
+[GAME] Player PuppeteerBot-1's turn has ended (AP depleted).
+
+[Server]: [DEBUG] Advancing turn. Current player index: 0
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+
+--- [RandomBot-2] Turn 2 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: ef4f8362-c826-4d6d-91a1-b899044b8f9f
+[RandomBot-4] GameState: in-progress, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+
+[Server]: [DEBUG][SERVER][IN] get_full_game_state from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: [SERVER][OUT] full_game_state to IYhcD4CHVDavIEjrAAAB: {
+  id: 'c68d1716-9ab4-4147-ab15-5689d9b97b45',
+  name: 'Bot Game',
+  status: 'in-progress',
+  players: [
+    {
+      id: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+      name: 'PuppeteerBot-1',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [Array],
+      finalScore: null
+    },
+    {
+      id: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+      name: 'RandomBot-2',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+      name: 'RandomBot-3',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+      name: 'RandomBot-4',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    }
+  ],
+  currentPlayerId: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+  currentTurn: 2,
+  currentState: 'InProgress',
+  pendingDecision: null,
+  winner: null,
+  titles: []
+}
+
+[Bots]: --- FULL GAME STATE ---
+
+[Bots]: {
+  "id": "c68d1716-9ab4-4147-ab15-5689d9b97b45",
+  "name": "Bot Game",
+  "status": "in-progress",
+  "players": [
+    {
+      "id": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+      "name": "PuppeteerBot-1",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 2,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [
+        {
+          "id": "virtue_18",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"Donate Organs Early: You become a living donor\"",
+          "money": "-500",
+          "mental": "2",
+          "sin": "0",
+          "virtue": "10",
+          "delay": "0",
+          "socialCapital": "0"
+        },
+        {
+          "id": "virtue_01",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"You donate plasma to help pay for someone's medical bills\"",
+          "money": "200",
+          "mental": "3",
+          "sin": "-1",
+          "virtue": "3",
+          "delay": "0",
+          "socialCapital": "0"
+        }
+      ],
+      "finalScore": null
+    },
+    {
+      "id": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+      "name": "RandomBot-2",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 2,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+      "name": "RandomBot-3",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+      "name": "RandomBot-4",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    }
+  ],
+  "currentPlayerId": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+  "currentTurn": 2,
+  "currentState": "InProgress",
+  "pendingDecision": null,
+  "winner": null,
+  "titles": []
+}
+-----------------------
+
+[Bots]: [RandomBot-2] Taking action: WORK_OVERTIME
+
+[Server]: [DEBUG][SERVER][IN] player_action from pjMexGHFwPpp40mxAAAD: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"6cc93810-1b2f-4cda-bf7d-57f0646b7da3","action":{"type":"WORK_OVERTIME"}}
+
+[Server]: [DEBUG] Handling player_action: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"6cc93810-1b2f-4cda-bf7d-57f0646b7da3","action":{"type":"WORK_OVERTIME"}}
+[DEBUG] Game handling action for player 6cc93810-1b2f-4cda-bf7d-57f0646b7da3: {"type":"WORK_OVERTIME"}
+[GAME] Crossroads event triggered for RandomBot-2: crossroads_002
+[GAME] Checking turn end for RandomBot-2. AP: 0, PendingDecision: {"type":"crossroads","playerId":"6cc93810-1b2f-4cda-bf7d-57f0646b7da3","card":{"id":"crossroads_002","trigger":{"type":"ACTION","actionType":"WORK_OVERTIME"},"text":"As you're about to head home after a long day, your boss stops you. 'Big project just landed. I need all hands on deck this weekend. It's optional, of course...' The unspoken pressure hangs in the air.","choices":[{"text":"Agree to work the weekend. (Gain Money, lose Mental Health)","effects":{"money":750,"mentalHealth":-2}},{"text":"Politely decline. (Preserve your weekend, but risk your boss's favor)","effects":{"socialCapital":-1}}]}}
+
+[Bots]: [PuppeteerBot-1] GameState: awaiting-crossroads-decision, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+
+[Bots]: [RandomBot-2] GameState: awaiting-crossroads-decision, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+
+[Bots]:
+--- [RandomBot-2] Turn 2 ---
+My Stats: AP=0, Hand=0, MH=6, NM=1
+
+[Bots]: [RandomBot-3] GameState: awaiting-crossroads-decision, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: ef4f8362-c826-4d6d-91a1-b899044b8f9f
+
+[Bots]: [RandomBot-4] GameState: awaiting-crossroads-decision, CurrentPlayer: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3, Me: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+
+[Server]: [DEBUG][SERVER][IN] get_full_game_state from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: [SERVER][OUT] full_game_state to IYhcD4CHVDavIEjrAAAB: {
+  id: 'c68d1716-9ab4-4147-ab15-5689d9b97b45',
+  name: 'Bot Game',
+  status: 'awaiting-crossroads-decision',
+  players: [
+    {
+      id: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+      name: 'PuppeteerBot-1',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [Array],
+      finalScore: null
+    },
+    {
+      id: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+      name: 'RandomBot-2',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+      name: 'RandomBot-3',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+      name: 'RandomBot-4',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    }
+  ],
+  currentPlayerId: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+  currentTurn: 2,
+  currentState: 'InProgress',
+  pendingDecision: {
+    type: 'crossroads',
+    playerId: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+    card: CrossroadsCard {
+      id: 'crossroads_002',
+      trigger: [Object],
+      text: "As you're about to head home after a long day, your boss stops you. 'Big project just landed. I need all hands on deck this weekend. It's optional, of course...' The unspoken pressure hangs in the air.",
+      choices: [Array]
+    }
+  },
+  winner: null,
+  titles: []
+}
+
+[Bots]: --- FULL GAME STATE ---
+
+[Bots]: {
+  "id": "c68d1716-9ab4-4147-ab15-5689d9b97b45",
+  "name": "Bot Game",
+  "status": "awaiting-crossroads-decision",
+  "players": [
+    {
+      "id": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+      "name": "PuppeteerBot-1",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 2,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [
+        {
+          "id": "virtue_18",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"Donate Organs Early: You become a living donor\"",
+          "money": "-500",
+          "mental": "2",
+          "sin": "0",
+          "virtue": "10",
+          "delay": "0",
+          "socialCapital": "0"
+        },
+        {
+          "id": "virtue_01",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"You donate plasma to help pay for someone's medical bills\"",
+          "money": "200",
+          "mental": "3",
+          "sin": "-1",
+          "virtue": "3",
+          "delay": "0",
+          "socialCapital": "0"
+        }
+      ],
+      "finalScore": null
+    },
+    {
+      "id": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+      "name": "RandomBot-2",
+      "stats": {
+        "money": 20500,
+        "mentalHealth": 6,
+        "sin": 1,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 1,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+      "name": "RandomBot-3",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+      "name": "RandomBot-4",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    }
+  ],
+  "currentPlayerId": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+  "currentTurn": 2,
+  "currentState": "InProgress",
+  "pendingDecision": {
+    "type": "crossroads",
+    "playerId": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+    "card": {
+      "id": "crossroads_002",
+      "trigger": {
+        "type": "ACTION",
+        "actionType": "WORK_OVERTIME"
+      },
+      "text": "As you're about to head home after a long day, your boss stops you. 'Big project just landed. I need all hands on deck this weekend. It's optional, of course...' The unspoken pressure hangs in the air.",
+      "choices": [
+        {
+          "text": "Agree to work the weekend. (Gain Money, lose Mental Health)",
+          "effects": {
+            "money": 750,
+            "mentalHealth": -2
+          }
+        },
+        {
+          "text": "Politely decline. (Preserve your weekend, but risk your boss's favor)",
+          "effects": {
+            "socialCapital": -1
+          }
+        }
+      ]
+    }
+  },
+  "winner": null,
+  "titles": []
+}
+-----------------------
+
+[Bots]: [RandomBot-2] Handling decision: crossroads
+
+[Bots]: [RandomBot-2] Decision: "As you're about to head home after a long day, your boss stops you. 'Big project just landed. I need all hands on deck this weekend. It's optional, of course...' The unspoken pressure hangs in the air."
+[RandomBot-2] Choosing option 0: "Agree to work the weekend. (Gain Money, lose Mental Health)"
+
+[Server]: [DEBUG][SERVER][IN] card_choice from pjMexGHFwPpp40mxAAAD: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"6cc93810-1b2f-4cda-bf7d-57f0646b7da3","choiceIndex":0}
+
+[Server]: [DEBUG] Handling card_choice: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"6cc93810-1b2f-4cda-bf7d-57f0646b7da3","choiceIndex":0}
+
+[Server]: [GAME] Checking turn end for RandomBot-2. AP: 0, PendingDecision: null
+[GAME] Player RandomBot-2's turn has ended (AP depleted).
+[DEBUG] Advancing turn. Current player index: 1
+
+[Bots]: [PuppeteerBot-1] Card resolved: Agree to work the weekend. (Gain Money, lose Mental Health)
+
+[Bots]: [RandomBot-2] Card resolved: Agree to work the weekend. (Gain Money, lose Mental Health)
+
+[Bots]: [RandomBot-3] Card resolved: Agree to work the weekend. (Gain Money, lose Mental Health)
+[RandomBot-4] Card resolved: Agree to work the weekend. (Gain Money, lose Mental Health)
+[RandomBot-4] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+[RandomBot-2] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+[RandomBot-3] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: ef4f8362-c826-4d6d-91a1-b899044b8f9f
+
+--- [RandomBot-3] Turn 3 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+[PuppeteerBot-1] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+
+[Server]: [DEBUG][SERVER][IN] get_full_game_state from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: [SERVER][OUT] full_game_state to IYhcD4CHVDavIEjrAAAB: {
+  id: 'c68d1716-9ab4-4147-ab15-5689d9b97b45',
+  name: 'Bot Game',
+  status: 'awaiting-crossroads-decision',
+  players: [
+    {
+      id: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+      name: 'PuppeteerBot-1',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [Array],
+      finalScore: null
+    },
+    {
+      id: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+      name: 'RandomBot-2',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+      name: 'RandomBot-3',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+      name: 'RandomBot-4',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    }
+  ],
+  currentPlayerId: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+  currentTurn: 3,
+  currentState: 'InProgress',
+  pendingDecision: null,
+  winner: null,
+  titles: []
+}
+
+[Bots]: --- FULL GAME STATE ---
+
+[Bots]: {
+  "id": "c68d1716-9ab4-4147-ab15-5689d9b97b45",
+  "name": "Bot Game",
+  "status": "awaiting-crossroads-decision",
+  "players": [
+    {
+      "id": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+      "name": "PuppeteerBot-1",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 2,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [
+        {
+          "id": "virtue_18",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"Donate Organs Early: You become a living donor\"",
+          "money": "-500",
+          "mental": "2",
+          "sin": "0",
+          "virtue": "10",
+          "delay": "0",
+          "socialCapital": "0"
+        },
+        {
+          "id": "virtue_01",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"You donate plasma to help pay for someone's medical bills\"",
+          "money": "200",
+          "mental": "3",
+          "sin": "-1",
+          "virtue": "3",
+          "delay": "0",
+          "socialCapital": "0"
+        }
+      ],
+      "finalScore": null
+    },
+    {
+      "id": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+      "name": "RandomBot-2",
+      "stats": {
+        "money": 21250,
+        "mentalHealth": 4,
+        "sin": 1,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 1,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+      "name": "RandomBot-3",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 2,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+      "name": "RandomBot-4",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    }
+  ],
+  "currentPlayerId": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+  "currentTurn": 3,
+  "currentState": "InProgress",
+  "pendingDecision": null,
+  "winner": null,
+  "titles": []
+}
+-----------------------
+
+[Bots]: [RandomBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [DEBUG][SERVER][IN] player_action from EKE6MllIO_mlAZXeAAAF: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"ef4f8362-c826-4d6d-91a1-b899044b8f9f","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+
+[Server]: [DEBUG] Handling player_action: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"ef4f8362-c826-4d6d-91a1-b899044b8f9f","action":{"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}}
+[DEBUG] Game handling action for player ef4f8362-c826-4d6d-91a1-b899044b8f9f: {"type":"DRAW_CARD","payload":{"deck":"VIRTUE"}}
+[GAME] Checking turn end for RandomBot-3. AP: 1, PendingDecision: null
+
+[Bots]: [PuppeteerBot-1] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+
+[Bots]: [RandomBot-2] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+
+[Bots]: [RandomBot-3] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: ef4f8362-c826-4d6d-91a1-b899044b8f9f
+
+--- [RandomBot-3] Turn 3 ---
+My Stats: AP=1, Hand=1, MH=7, NM=1
+
+[Bots]: [RandomBot-4] GameState: awaiting-crossroads-decision, CurrentPlayer: ef4f8362-c826-4d6d-91a1-b899044b8f9f, Me: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+
+[Server]: [DEBUG][SERVER][IN] get_full_game_state from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: [SERVER][OUT] full_game_state to IYhcD4CHVDavIEjrAAAB: {
+  id: 'c68d1716-9ab4-4147-ab15-5689d9b97b45',
+  name: 'Bot Game',
+  status: 'awaiting-crossroads-decision',
+  players: [
+    {
+      id: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+      name: 'PuppeteerBot-1',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [Array],
+      finalScore: null
+    },
+    {
+      id: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+      name: 'RandomBot-2',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+      name: 'RandomBot-3',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [Array],
+      finalScore: null
+    },
+    {
+      id: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+      name: 'RandomBot-4',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    }
+  ],
+  currentPlayerId: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+  currentTurn: 3,
+  currentState: 'InProgress',
+  pendingDecision: null,
+  winner: null,
+  titles: []
+}
+
+[Bots]: --- FULL GAME STATE ---
+{
+  "id": "c68d1716-9ab4-4147-ab15-5689d9b97b45",
+  "name": "Bot Game",
+  "status": "awaiting-crossroads-decision",
+  "players": [
+    {
+      "id": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+      "name": "PuppeteerBot-1",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 2,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [
+        {
+          "id": "virtue_18",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"Donate Organs Early: You become a living donor\"",
+          "money": "-500",
+          "mental": "2",
+          "sin": "0",
+          "virtue": "10",
+          "delay": "0",
+          "socialCapital": "0"
+        },
+        {
+          "id": "virtue_01",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"You donate plasma to help pay for someone's medical bills\"",
+          "money": "200",
+          "mental": "3",
+          "sin": "-1",
+          "virtue": "3",
+          "delay": "0",
+          "socialCapital": "0"
+        }
+      ],
+      "finalScore": null
+    },
+    {
+      "id": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+      "name": "RandomBot-2",
+      "stats": {
+        "money": 21250,
+        "mentalHealth": 4,
+        "sin": 1,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 1,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+      "name": "RandomBot-3",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 1,
+        "narrativeMomentum": 1,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [
+        {
+          "id": "virtue_09",
+          "deck": "virtue",
+          "type": "delayed",
+          "text": "\"You organize a community garden in your neighborhood\"",
+          "money": "-200",
+          "mental": "3",
+          "sin": "-2",
+          "virtue": "4",
+          "delay": "2",
+          "socialCapital": "2"
+        }
+      ],
+      "finalScore": null
+    },
+    {
+      "id": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+      "name": "RandomBot-4",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    }
+  ],
+  "currentPlayerId": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+  "currentTurn": 3,
+  "currentState": "InProgress",
+  "pendingDecision": null,
+  "winner": null,
+  "titles": []
+}
+-----------------------
+
+[Bots]: [RandomBot-3] Taking action: PLAY_CARD { cardId: 'virtue_09' }
+
+[Server]: [DEBUG][SERVER][IN] player_action from EKE6MllIO_mlAZXeAAAF: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"ef4f8362-c826-4d6d-91a1-b899044b8f9f","action":{"type":"PLAY_CARD","payload":{"cardId":"virtue_09"}}}
+[DEBUG] Handling player_action: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45","playerId":"ef4f8362-c826-4d6d-91a1-b899044b8f9f","action":{"type":"PLAY_CARD","payload":{"cardId":"virtue_09"}}}
+[DEBUG] Game handling action for player ef4f8362-c826-4d6d-91a1-b899044b8f9f: {"type":"PLAY_CARD","payload":{"cardId":"virtue_09"}}
+[GAME] Checking turn end for RandomBot-3. AP: 0, PendingDecision: null
+[GAME] Player RandomBot-3's turn has ended (AP depleted).
+[DEBUG] Advancing turn. Current player index: 2
+
+[Bots]: [PuppeteerBot-1] GameState: awaiting-crossroads-decision, CurrentPlayer: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38, Me: 72828e48-9d05-4d4b-ac0d-0274d0c19a17
+
+[Bots]: [RandomBot-2] GameState: awaiting-crossroads-decision, CurrentPlayer: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38, Me: 6cc93810-1b2f-4cda-bf7d-57f0646b7da3
+
+[Bots]: [RandomBot-3] GameState: awaiting-crossroads-decision, CurrentPlayer: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38, Me: ef4f8362-c826-4d6d-91a1-b899044b8f9f
+
+[Bots]: [RandomBot-4] GameState: awaiting-crossroads-decision, CurrentPlayer: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38, Me: fc3192ec-cdf6-4ef8-832a-c60aa21a6f38
+
+--- [RandomBot-4] Turn 4 ---
+
+[Bots]: My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Server]: [DEBUG][SERVER][IN] get_full_game_state from IYhcD4CHVDavIEjrAAAB: {"gameId":"c68d1716-9ab4-4147-ab15-5689d9b97b45"}
+
+[Server]: [SERVER][OUT] full_game_state to IYhcD4CHVDavIEjrAAAB: {
+  id: 'c68d1716-9ab4-4147-ab15-5689d9b97b45',
+  name: 'Bot Game',
+  status: 'awaiting-crossroads-decision',
+  players: [
+    {
+      id: '72828e48-9d05-4d4b-ac0d-0274d0c19a17',
+      name: 'PuppeteerBot-1',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [Array],
+      finalScore: null
+    },
+    {
+      id: '6cc93810-1b2f-4cda-bf7d-57f0646b7da3',
+      name: 'RandomBot-2',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'ef4f8362-c826-4d6d-91a1-b899044b8f9f',
+      name: 'RandomBot-3',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    },
+    {
+      id: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+      name: 'RandomBot-4',
+      stats: [Object],
+      isBurnedOut: false,
+      hand: [],
+      finalScore: null
+    }
+  ],
+  currentPlayerId: 'fc3192ec-cdf6-4ef8-832a-c60aa21a6f38',
+  currentTurn: 4,
+  currentState: 'InProgress',
+  pendingDecision: null,
+  winner: null,
+  titles: []
+}
+
+[Bots]: --- FULL GAME STATE ---
+
+[Bots]: {
+  "id": "c68d1716-9ab4-4147-ab15-5689d9b97b45",
+  "name": "Bot Game",
+  "status": "awaiting-crossroads-decision",
+  "players": [
+    {
+      "id": "72828e48-9d05-4d4b-ac0d-0274d0c19a17",
+      "name": "PuppeteerBot-1",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 2,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [
+        {
+          "id": "virtue_18",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"Donate Organs Early: You become a living donor\"",
+          "money": "-500",
+          "mental": "2",
+          "sin": "0",
+          "virtue": "10",
+          "delay": "0",
+          "socialCapital": "0"
+        },
+        {
+          "id": "virtue_01",
+          "deck": "virtue",
+          "type": "immediate",
+          "text": "\"You donate plasma to help pay for someone's medical bills\"",
+          "money": "200",
+          "mental": "3",
+          "sin": "-1",
+          "virtue": "3",
+          "delay": "0",
+          "socialCapital": "0"
+        }
+      ],
+      "finalScore": null
+    },
+    {
+      "id": "6cc93810-1b2f-4cda-bf7d-57f0646b7da3",
+      "name": "RandomBot-2",
+      "stats": {
+        "money": 21250,
+        "mentalHealth": 4,
+        "sin": 1,
+        "virtue": 0,
+        "actionPoints": 0,
+        "narrativeMomentum": 1,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "ef4f8362-c826-4d6d-91a1-b899044b8f9f",
+      "name": "RandomBot-3",
+      "stats": {
+        "money": 19800,
+        "mentalHealth": 10,
+        "sin": 0,
+        "virtue": 4,
+        "actionPoints": 0,
+        "narrativeMomentum": 1,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    },
+    {
+      "id": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+      "name": "RandomBot-4",
+      "stats": {
+        "money": 20000,
+        "mentalHealth": 7,
+        "sin": 0,
+        "virtue": 0,
+        "actionPoints": 2,
+        "narrativeMomentum": 0,
+        "kudos": 0,
+        "concern": 0
+      },
+      "isBurnedOut": false,
+      "hand": [],
+      "finalScore": null
+    }
+  ],
+  "currentPlayerId": "fc3192ec-cdf6-4ef8-832a-c60aa21a6f38",
+  "currentTurn": 4,
+  "currentState": "InProgress",
+  "pendingDecision": null,
+  "winner": null,
+  "titles": []
+}
+-----------------------

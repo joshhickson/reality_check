@@ -1,0 +1,241 @@
+--- Starting Test Runner ---
+Starting game server...
+[Server]: 🚀 Server listening on port 5000
+
+Server is running. Starting bots...
+[Bots]: Running Puppeteer Test...
+
+[Bots]: --- Starting Bot Simulation with bots: puppeteer, random, random, random ---
+
+[Server]: 🔌 New connection: qVAK7emjLxZAqU2QAAAB
+
+[Server]: 🔌 New connection: 53m-uKjb-WcRYn_BAAAD
+
+[Server]: 🔌 New connection: FXhKL-7-OY658L-qAAAF
+
+[Server]: 🔌 New connection: Xj2cnhN4WCU6z4-2AAAH
+
+[Server]: [SERVER][IN] create_game from qVAK7emjLxZAqU2QAAAB: { gameName: 'Bot Game' }
+
+[Server]: [SERVER][OUT] game_created to qVAK7emjLxZAqU2QAAAB: { gameId: 'e3c08e98-a890-4b8f-86f9-548499727373' }
+
+[Server]: [SERVER][IN] join_game from qVAK7emjLxZAqU2QAAAB: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  username: 'PuppeteerBot-1'
+}
+
+[Bots]: [PuppeteerBot-1] Joined game e3c08e98-a890-4b8f-86f9-548499727373 as player 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+[Server]: [SERVER][IN] join_game from 53m-uKjb-WcRYn_BAAAD: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  username: 'RandomBot-2'
+}
+
+[Bots]: [RandomBot-2] Joined game e3c08e98-a890-4b8f-86f9-548499727373 as player 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Server]: [SERVER][IN] join_game from FXhKL-7-OY658L-qAAAF: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  username: 'RandomBot-3'
+}
+
+[Bots]: [RandomBot-3] Joined game e3c08e98-a890-4b8f-86f9-548499727373 as player 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Server]: [SERVER][IN] join_game from Xj2cnhN4WCU6z4-2AAAH: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  username: 'RandomBot-4'
+}
+
+[Bots]: [RandomBot-4] Joined game e3c08e98-a890-4b8f-86f9-548499727373 as player d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]:
+--- Starting Game ---
+
+[Server]: [SERVER][IN] start_game from qVAK7emjLxZAqU2QAAAB: { gameId: 'e3c08e98-a890-4b8f-86f9-548499727373' }
+
+[Server]: 🔄 Game Phase transition: Waiting → InProgress
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+--- [PuppeteerBot-1] Turn 1 ---
+
+[Bots]: My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]: [PuppeteerBot-1] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [SERVER][IN] player_action from qVAK7emjLxZAqU2QAAAB: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: '93ff5295-ec22-484b-9d0f-b5fec7c2ffc6',
+  action: { type: 'DRAW_CARD', payload: { deck: 'VIRTUE' } }
+}
+
+[Server]: [GAME] Checking turn end for PuppeteerBot-1. AP: 1, PendingDecision: null
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+--- [PuppeteerBot-1] Turn 1 ---
+My Stats: AP=1, Hand=1, MH=7, NM=1
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]: [PuppeteerBot-1] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [SERVER][IN] player_action from qVAK7emjLxZAqU2QAAAB: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: '93ff5295-ec22-484b-9d0f-b5fec7c2ffc6',
+  action: { type: 'DRAW_CARD', payload: { deck: 'VIRTUE' } }
+}
+
+[Server]: [GAME] Checking turn end for PuppeteerBot-1. AP: 0, PendingDecision: null
+[GAME] Player PuppeteerBot-1's turn has ended (AP depleted).
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]:
+--- [RandomBot-2] Turn 2 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]: [RandomBot-2] Taking action: WORK_OVERTIME
+
+[Server]: [SERVER][IN] player_action from 53m-uKjb-WcRYn_BAAAD: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: '1e5bc790-0a6c-4af2-8f25-d4381cf98721',
+  action: { type: 'WORK_OVERTIME' }
+}
+
+[Server]: [GAME] Checking turn end for RandomBot-2. AP: 0, PendingDecision: null
+[GAME] Player RandomBot-2's turn has ended (AP depleted).
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+--- [RandomBot-3] Turn 3 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]: [RandomBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [SERVER][IN] player_action from FXhKL-7-OY658L-qAAAF: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: '294729a3-8ef6-491f-99fd-0e45d4e270e5',
+  action: { type: 'DRAW_CARD', payload: { deck: 'VIRTUE' } }
+}
+
+[Server]: [GAME] Checking turn end for RandomBot-3. AP: 1, PendingDecision: null
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+--- [RandomBot-3] Turn 3 ---
+
+[Bots]: My Stats: AP=1, Hand=1, MH=7, NM=1
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 294729a3-8ef6-491f-99fd-0e45d4e270e5, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]: [RandomBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [SERVER][IN] player_action from FXhKL-7-OY658L-qAAAF: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: '294729a3-8ef6-491f-99fd-0e45d4e270e5',
+  action: { type: 'DRAW_CARD', payload: { deck: 'VIRTUE' } }
+}
+
+[Server]: [GAME] Checking turn end for RandomBot-3. AP: 0, PendingDecision: null
+[GAME] Player RandomBot-3's turn has ended (AP depleted).
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: d5a45841-f0d6-4850-bfb0-b1bf4636b379, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: d5a45841-f0d6-4850-bfb0-b1bf4636b379, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: d5a45841-f0d6-4850-bfb0-b1bf4636b379, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: d5a45841-f0d6-4850-bfb0-b1bf4636b379, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+--- [RandomBot-4] Turn 4 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+
+[Bots]: [RandomBot-4] Taking action: WORK_OVERTIME
+
+[Server]: [SERVER][IN] player_action from Xj2cnhN4WCU6z4-2AAAH: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: 'd5a45841-f0d6-4850-bfb0-b1bf4636b379',
+  action: { type: 'WORK_OVERTIME' }
+}
+
+[Server]: [GAME] Checking turn end for RandomBot-4. AP: 0, PendingDecision: null
+[GAME] Player RandomBot-4's turn has ended (AP depleted).
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+--- [PuppeteerBot-1] Turn 5 ---
+My Stats: AP=2, Hand=2, MH=7, NM=2
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]: [PuppeteerBot-1] Taking action: PLAY_CARD { cardId: 'virtue_02' }
+
+[Server]: [SERVER][IN] player_action from qVAK7emjLxZAqU2QAAAB: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: '93ff5295-ec22-484b-9d0f-b5fec7c2ffc6',
+  action: { type: 'PLAY_CARD', payload: { cardId: 'virtue_02' } }
+}
+
+[Server]: [GAME] Checking turn end for PuppeteerBot-1. AP: 1, PendingDecision: null
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+--- [PuppeteerBot-1] Turn 5 ---
+
+[Bots]: My Stats: AP=1, Hand=1, MH=7, NM=2
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+[Bots]: [RandomBot-3] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379
+
+[Bots]: [PuppeteerBot-1] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+
+[Server]: [SERVER][IN] player_action from qVAK7emjLxZAqU2QAAAB: {
+  gameId: 'e3c08e98-a890-4b8f-86f9-548499727373',
+  playerId: '93ff5295-ec22-484b-9d0f-b5fec7c2ffc6',
+  action: { type: 'DRAW_CARD', payload: { deck: 'VIRTUE' } }
+}
+[GAME] Checking turn end for PuppeteerBot-1. AP: 0, PendingDecision: null
+[GAME] Player PuppeteerBot-1's turn has ended (AP depleted).
+
+[Bots]: [PuppeteerBot-1] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: 93ff5295-ec22-484b-9d0f-b5fec7c2ffc6
+
+[Bots]: [RandomBot-2] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: 1e5bc790-0a6c-4af2-8f25-d4381cf98721
+
+--- [RandomBot-2] Turn 6 ---
+My Stats: AP=2, Hand=0, MH=6, NM=1
+[RandomBot-3] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: 294729a3-8ef6-491f-99fd-0e45d4e270e5
+
+[Bots]: [RandomBot-4] GameState: in-progress, CurrentPlayer: 1e5bc790-0a6c-4af2-8f25-d4381cf98721, Me: d5a45841-f0d6-4850-bfb0-b1bf4636b379

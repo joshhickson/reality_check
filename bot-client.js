@@ -134,8 +134,10 @@ class Bot {
     handleDecision(pendingDecision) {
         console.log(`[${this.name}] Handling decision: ${pendingDecision.type}`);
         const choiceIndex = this.strategy.makeDecision(pendingDecision);
-        console.log(`[${this.name}] Decision: "${pendingDecision.text}"`);
-        console.log(`[${this.name}] Choosing option ${choiceIndex}: "${pendingDecision.options[choiceIndex].text}"`);
+        const decisionText = pendingDecision.type === 'crossroads' ? pendingDecision.card.text : pendingDecision.text;
+        const options = pendingDecision.type === 'crossroads' ? pendingDecision.card.choices : pendingDecision.options;
+        console.log(`[${this.name}] Decision: "${decisionText}"`);
+        console.log(`[${this.name}] Choosing option ${choiceIndex}: "${options[choiceIndex].text}"`);
         this.socket.emit('card_choice', {
             gameId: this.gameId,
             playerId: this.playerId,
@@ -166,6 +168,15 @@ class Bot {
     }
 }
 
+function setupStdIn(bot) {
+    process.stdin.on('data', (data) => {
+        const command = data.toString().trim();
+        if (command === 'get_game_state' && bot.socket) {
+            bot.socket.emit('get_full_game_state', { gameId: bot.gameId });
+        }
+    });
+}
+
 async function runSimulation(strategyTypes) {
     console.log(`--- Starting Bot Simulation with bots: ${strategyTypes.join(', ')} ---`);
     const bots = [];
@@ -187,9 +198,15 @@ async function runSimulation(strategyTypes) {
     try {
         for (const bot of bots) {
             await bot.connect();
+            bot.socket.on('full_game_state', (state) => {
+                console.log('--- FULL GAME STATE ---');
+                console.log(JSON.stringify(state, null, 2));
+                console.log('-----------------------');
+            });
         }
 
         const creatorBot = bots[0];
+        setupStdIn(creatorBot);
         const { gameId } = await creatorBot.createGame("Bot Game");
 
         for (let i = 1; i < bots.length; i++) {

@@ -45,7 +45,9 @@ class PuppeteerStrategy {
         let bestOptionIndex = 0;
         let maxSC = -1;
 
-        pendingDecision.options.forEach((option, index) => {
+        const options = pendingDecision.type === 'crossroads' ? pendingDecision.card.choices : pendingDecision.options;
+
+        options.forEach((option, index) => {
             const scEffect = option.effects.socialCapital || 0;
             if (scEffect > maxSC) {
                 maxSC = scEffect;

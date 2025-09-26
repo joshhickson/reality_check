@@ -42,6 +42,9 @@ class RandomStrategy {
         if (pendingDecision.type === 'exile-vote') {
             return Math.random() > 0.5; // 50% chance to vote yes
         }
+        if (pendingDecision.type === 'crossroads') {
+            return Math.floor(Math.random() * pendingDecision.card.choices.length);
+        }
         return Math.floor(Math.random() * pendingDecision.options.length);
     }
 

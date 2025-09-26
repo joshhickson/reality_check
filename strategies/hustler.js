@@ -1,41 +1,57 @@
 class HustlerStrategy {
     chooseAction(me) {
-        // Priority 1: Always work overtime if possible.
+        const possibleActions = [];
+
+        // Evaluate all possible actions
         if (me.stats.actionPoints >= 2) {
-            return { type: 'WORK_OVERTIME' };
+            possibleActions.push({ type: 'WORK_OVERTIME', score: 5 }); // Reliable money
         }
-
-        // Priority 2: Play cards from hand that give money.
-        if (me.stats.actionPoints >= 1 && me.hand.length > 0) {
-            const moneyCards = me.hand.filter(card => card.money && parseInt(card.money) > 0);
-            if (moneyCards.length > 0) {
-                // Find the card that gives the most money
-                moneyCards.sort((a, b) => parseInt(b.money) - parseInt(a.money));
-                return { type: 'PLAY_CARD', payload: { cardId: moneyCards[0].id } };
-            }
-        }
-
-        // Priority 3: If no direct money actions, spend momentum for a chance at a big score.
-        // This action costs 0 AP, so it can be a last resort.
-        if (me.stats.narrativeMomentum >= 5) {
-            return { type: 'SPEND_MOMENTUM' };
-        }
-
-        // Fallback: If no money-making options, just draw a card to get more options.
         if (me.stats.actionPoints >= 1 && me.hand.length < 5 && !me.isBurnedOut) {
-            // Prefer Sin cards as they are more likely to have financial benefits.
-            return { type: 'DRAW_CARD', payload: { deck: 'SIN' } };
+            possibleActions.push({ type: 'DRAW_CARD', deck: 'SIN', score: 2 }); // Sin cards are good for hustler
+            possibleActions.push({ type: 'DRAW_CARD', deck: 'VIRTUE', score: 1 });
+        }
+        if (me.stats.actionPoints >= 1 && me.hand.length > 0) {
+            me.hand.forEach(card => {
+                const moneyScore = (parseInt(card.money) || 0) / 1000;
+                const sinScore = (parseInt(card.sin) || 0);
+                const score = moneyScore + sinScore;
+                possibleActions.push({ type: 'PLAY_CARD', cardId: card.id, score });
+            });
+        }
+        if (me.stats.narrativeMomentum >= 5) {
+            possibleActions.push({ type: 'SPEND_MOMENTUM', score: 4 }); // Life happens can be profitable
+        }
+        if (me.stats.narrativeMomentum > 15) {
+            possibleActions.forEach(action => {
+                if (action.type === 'DRAW_CARD') action.score += 5;
+            });
         }
 
-        // If all else fails, do nothing.
-        return null;
+        if (possibleActions.length === 0) {
+            return { type: 'PASS_TURN' };
+        }
+
+        possibleActions.sort((a, b) => b.score - a.score);
+        const bestAction = possibleActions[0];
+
+        const action = { type: bestAction.type };
+        if (bestAction.type === 'DRAW_CARD') {
+            action.payload = { deck: bestAction.deck };
+        }
+        if (bestAction.type === 'PLAY_CARD') {
+            action.payload = { cardId: bestAction.cardId };
+        }
+
+        return action;
     }
 
     makeDecision(pendingDecision) {
         let bestOptionIndex = 0;
         let maxMoney = -Infinity;
 
-        pendingDecision.options.forEach((option, index) => {
+        const options = pendingDecision.type === 'crossroads' ? pendingDecision.card.choices : pendingDecision.options;
+
+        options.forEach((option, index) => {
             const moneyEffect = option.effects.money || 0;
             if (moneyEffect > maxMoney) {
                 maxMoney = moneyEffect;

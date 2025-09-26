@@ -33,6 +33,10 @@ function startBots() {
             console.log('Game finished. Shutting down in 3 seconds...');
             setTimeout(shutdown, 3000);
         }
+        if (data.toString().includes('--- [')) {
+            // Request full game state every time a turn starts
+            botsProcess.stdin.write('get_game_state\n');
+        }
     });
 
     botsProcess.stderr.on('data', (data) => {
