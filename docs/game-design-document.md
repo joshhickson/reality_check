@@ -58,7 +58,7 @@ This section provides concrete rules for the game's primary systems.
 *   At the start of your turn, if your **Mental Health** is **3 or lower**, you are suffering from **"Burnout."**
 *   While suffering from Burnout, you **cannot** perform the "Draw a Card" action. You must choose another action, such as "Play a Card" from your hand.
 *   If you have no other valid actions, you must spend your turn "recovering," which allows you to draw one card but immediately end your turn without playing it.
-*   **Circuit Breaker:** After a turn in which you suffered from Burnout, you are immune to its effects for one full round (i.e., until your turn comes up again), giving you a window to recover.
+*   **Circuit Breaker:** When you first enter the "Burnout" state, you are immediately granted immunity from its effects for your *next* turn. This provides a one-turn window to recover before you can suffer from Burnout again.
 
 ### 3.3 "Community Impact" & The Builder Victory
 
@@ -67,7 +67,7 @@ This section provides concrete rules for the game's primary systems.
 **Rule:**
 *   Each player has a **`communityImpact`** stat that tracks their positive contributions to the group.
 *   Players can gain Community Impact points via Direct Aid, Virtue Cards, and Babel Events.
-*   **The Builder Bonus:** At the end of the game, the player with the highest `communityImpact` stat is named "The Builder" and receives a tiered bonus to their final score, based on their final Virtue (V):
+*   **The Builder Bonus:** At the end of the game, the player with the highest `communityImpact` stat is named "The Builder." If this player's `communityImpact` is greater than zero, they receive a tiered bonus to their final score, based on their final Virtue (V):
     *   If 1 ≤ V ≤ 4, bonus = **+1 point**.
     *   If 5 ≤ V ≤ 9, bonus = **+2 points**.
     *   If V ≥ 10, bonus = **+3 points**.
@@ -88,11 +88,11 @@ This section provides concrete rules for the game's primary systems.
 
 ### 3.5 End Game Trigger: The Final Chapter
 
-**Concept:** The game's conclusion is not tied to a fixed number of rounds, but is instead triggered by a player choosing to capstone their personal story. This ensures the game ends at a moment of high narrative tension.
+**Concept:** To ensure a consistent game length, the game's conclusion is tied to a fixed number of turns, rather than a player-driven action. This provides a clear and predictable endpoint for the narrative.
 
 **Rule:**
-*   The end of the game is triggered immediately when any player accumulates **20 or more Narrative Momentum** points.
-*   When this threshold is met, the game transitions to the "Judgment Day" phase at the end of the current player's turn.
+*   The end of the game is triggered based on the total number of turns that have passed. The game has a maximum turn limit defined as `number of players * 10`, with a hard cap of 50 turns.
+*   When the turn count exceeds this limit, the game transitions to the "Judgment Day" phase at the end of the current player's turn.
 
 ### 3.6 Judgment Day: Final Scoring
 
@@ -109,7 +109,7 @@ This section provides concrete rules for the game's primary systems.
         *   If MH ≥ 8, MH_Bonus = 10 points.
         *   If 5 ≤ MH ≤ 7, MH_Bonus = 5 points.
         *   If MH < 5, MH_Bonus = 0 points.
-    *   **Final Score = (M / 1000) + (V * 2) - (S * 2) + MH_Bonus + (Kudos * 3) - (Concern * 1)**
+    *   **Final Score = (M / 200) + (V * 1.5) - (S * 1.5) + MH_Bonus + (Kudos * 2) - (Concern * 2)**
 3.  **End-Game Titles (Accolades):**
     *   After the final scores are calculated, a series of titles are awarded to recognize different philosophies of "winning." These titles do not affect the final score but add a narrative layer to the game's conclusion.
     *   The titles are defined in `src/game/titles.js` and can be easily extended. The current titles include:
@@ -127,10 +127,10 @@ This section details the more complex systems that provide "Reality Check" with 
 **Concept:** A player-driven catch-up mechanism that addresses a runaway leader without resorting to player elimination. It transforms a dominant player into a new kind of disruptive force, keeping all players engaged.
 
 **Rules:**
-*   **Trigger Condition:** The Exile Protocol can be initiated at the start of any player's turn if one player's **Money** is more than **2.5 times the average** of all players. This condition only applies if there are 3 or more players.
+*   **Trigger Condition:** The Exile Protocol can be initiated at the start of any player's turn if the wealthiest player's **Money** is more than **double the combined wealth of the two poorest players**. This condition only applies if there are 3 or more players.
 *   **The Vote:** The player whose turn it is may propose a vote to "Exile" the wealthy player. The vote requires a simple majority to pass. The wealthy player does not get a vote.
 *   **Consequences of Exile:**
-    *   The Exiled player immediately loses **33%** of their Money, which is redistributed equally among all other players.
+    *   The Exiled player immediately loses **50%** of their Money, which is redistributed equally among all other players.
     *   The Exiled player receives a new secret objective card from the `exile-objectives.json` deck.
     *   The Exiled player no longer pursues the standard victory conditions. They can only win by achieving their new secret objective. They are still part of the game, but their goals are now fundamentally different and often disruptive.
 *   **Exile Objectives:**
