@@ -1,30 +1,37 @@
 class HustlerStrategy {
     chooseAction(me) {
+        const { actionPoints, mentalHealth, narrativeMomentum, isBurnedOut } = me.stats;
+        const hand = me.hand || [];
         const possibleActions = [];
 
         // Evaluate all possible actions
-        if (me.stats.actionPoints >= 2) {
-            possibleActions.push({ type: 'WORK_OVERTIME', score: 5 }); // Reliable money
+        if (actionPoints >= 2) {
+            // Score is high when MH is high, drops off sharply.
+            const workScore = Math.max(0, mentalHealth - 2);
+            possibleActions.push({ type: 'WORK_OVERTIME', score: workScore });
         }
-        if (me.stats.actionPoints >= 1 && me.hand.length < 5 && !me.isBurnedOut) {
-            possibleActions.push({ type: 'DRAW_CARD', deck: 'SIN', score: 2 }); // Sin cards are good for hustler
-            possibleActions.push({ type: 'DRAW_CARD', deck: 'VIRTUE', score: 1 });
+
+        if (actionPoints >= 1 && hand.length < 5 && !isBurnedOut) {
+            // Drawing a Sin card is a priority, especially with an empty hand.
+            const drawScore = hand.length === 0 ? 4 : 3;
+            possibleActions.push({ type: 'DRAW_CARD', deck: 'SIN', score: drawScore });
+            possibleActions.push({ type: 'DRAW_CARD', deck: 'VIRTUE', score: 0 }); // Never voluntarily draw Virtue
         }
-        if (me.stats.actionPoints >= 1 && me.hand.length > 0) {
-            me.hand.forEach(card => {
-                const moneyScore = (parseInt(card.money) || 0) / 1000;
-                const sinScore = (parseInt(card.sin) || 0);
+
+        if (actionPoints >= 1 && hand.length > 0) {
+            hand.forEach(card => {
+                if (!card) return;
+                // Score cards based on immediate financial gain and sin.
+                const moneyScore = (parseInt(card.money) || 0) / 500; // Normalized
+                const sinScore = (parseInt(card.sin) || 0) * 1.5;     // Sin is valuable
                 const score = moneyScore + sinScore;
                 possibleActions.push({ type: 'PLAY_CARD', cardId: card.id, score });
             });
         }
-        if (me.stats.narrativeMomentum >= 5) {
-            possibleActions.push({ type: 'SPEND_MOMENTUM', score: 4 }); // Life happens can be profitable
-        }
-        if (me.stats.narrativeMomentum > 15) {
-            possibleActions.forEach(action => {
-                if (action.type === 'DRAW_CARD') action.score += 5;
-            });
+
+        if (narrativeMomentum >= 5) {
+            // Spending momentum for a Crossroads event is a high-value, high-risk move.
+            possibleActions.push({ type: 'SPEND_MOMENTUM', score: 5 });
         }
 
         if (possibleActions.length === 0) {

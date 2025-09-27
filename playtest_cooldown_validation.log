@@ -1,0 +1,278 @@
+Running Clash of Ideologies Test...
+--- Starting Bot Simulation with bots: hustler, hustler, zen, zen ---
+[HustlerBot-1] Joined game fb0ec3d2-3db8-4797-b030-2697193e4329 as player 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] Joined game fb0ec3d2-3db8-4797-b030-2697193e4329 as player b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] Joined game fb0ec3d2-3db8-4797-b030-2697193e4329 as player 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] Joined game fb0ec3d2-3db8-4797-b030-2697193e4329 as player 08676d27-0a29-44ac-b463-ef2824384152
+
+--- Starting Game ---
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+
+--- [HustlerBot-1] Turn 1 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] Taking action: WORK_OVERTIME
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 2 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: WORK_OVERTIME
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 3 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 3 ---
+My Stats: AP=1, Hand=1, MH=7, NM=1
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 4 ---
+My Stats: AP=2, Hand=0, MH=7, NM=0
+[ZenBot-4] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 4 ---
+My Stats: AP=1, Hand=1, MH=7, NM=1
+[ZenBot-4] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+
+--- [HustlerBot-1] Turn 5 ---
+My Stats: AP=2, Hand=0, MH=6, NM=1
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] Taking action: WORK_OVERTIME
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 6 ---
+My Stats: AP=2, Hand=0, MH=6, NM=1
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: WORK_OVERTIME
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 7 ---
+My Stats: AP=2, Hand=2, MH=7, NM=2
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 7 ---
+My Stats: AP=1, Hand=3, MH=7, NM=3
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: PLAY_CARD { cardId: 'virtue_18' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 8 ---
+My Stats: AP=2, Hand=2, MH=7, NM=2
+[ZenBot-4] Taking action: PLAY_CARD { cardId: 'virtue_09' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 8 ---
+My Stats: AP=1, Hand=1, MH=10, NM=2
+[ZenBot-4] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+
+--- [HustlerBot-1] Turn 9 ---
+My Stats: AP=2, Hand=0, MH=5, NM=2
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] Taking action: DRAW_CARD { deck: 'SIN' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+
+--- [HustlerBot-1] Turn 9 ---
+My Stats: AP=1, Hand=1, MH=5, NM=3
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] Taking action: DRAW_CARD { deck: 'SIN' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 10 ---
+My Stats: AP=2, Hand=0, MH=5, NM=2
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: DRAW_CARD { deck: 'SIN' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 10 ---
+My Stats: AP=1, Hand=1, MH=5, NM=3
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: PLAY_CARD { cardId: 'sin_17' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 11 ---
+My Stats: AP=2, Hand=2, MH=9, NM=3
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 11 ---
+My Stats: AP=1, Hand=3, MH=9, NM=4
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: PLAY_CARD { cardId: 'virtue_11' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 12 ---
+My Stats: AP=2, Hand=2, MH=10, NM=3
+[ZenBot-4] Taking action: PLAY_CARD { cardId: 'virtue_05' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 12 ---
+My Stats: AP=1, Hand=1, MH=10, NM=3
+[ZenBot-4] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+
+--- [HustlerBot-1] Turn 13 ---
+My Stats: AP=2, Hand=2, MH=5, NM=4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] Taking action: PLAY_CARD { cardId: 'sin_06' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+
+--- [HustlerBot-1] Turn 13 ---
+My Stats: AP=1, Hand=1, MH=7, NM=4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] Taking action: DRAW_CARD { deck: 'SIN' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 14 ---
+My Stats: AP=2, Hand=0, MH=5, NM=3
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: DRAW_CARD { deck: 'SIN' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 14 ---
+My Stats: AP=1, Hand=1, MH=5, NM=4
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: DRAW_CARD { deck: 'SIN' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 15 ---
+My Stats: AP=2, Hand=2, MH=10, NM=4
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+
+--- [ZenBot-3] Turn 15 ---
+My Stats: AP=1, Hand=3, MH=10, NM=5
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 7ee8b9f4-c998-40a4-8149-e9110d9126a6, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[ZenBot-3] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 16 ---
+My Stats: AP=2, Hand=2, MH=10, NM=4
+[ZenBot-4] Taking action: DRAW_CARD { deck: 'VIRTUE' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 08676d27-0a29-44ac-b463-ef2824384152, Me: 08676d27-0a29-44ac-b463-ef2824384152
+
+--- [ZenBot-4] Turn 16 ---
+My Stats: AP=1, Hand=3, MH=10, NM=5
+[ZenBot-4] Taking action: PLAY_CARD { cardId: 'virtue_03' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+
+--- [HustlerBot-1] Turn 17 ---
+My Stats: AP=2, Hand=2, MH=7, NM=5
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+[ZenBot-3] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] Taking action: WORK_OVERTIME
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 18 ---
+My Stats: AP=2, Hand=2, MH=5, NM=5
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: SPEND_MOMENTUM
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 18 ---
+My Stats: AP=2, Hand=2, MH=5, NM=0
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Handling decision: LIFE_HAPPENS
+[HustlerBot-2] Decision: "Your landlord is selling your apartment building. The new owner plans to double the rent, effectively evicting you. What do you do?"
+[HustlerBot-2] Choosing option 1: "Accept a small buyout from the new landlord to leave quietly."
+[HustlerBot-1] Card resolved: Accept a small buyout from the new landlord to leave quietly.
+[HustlerBot-2] Card resolved: Accept a small buyout from the new landlord to leave quietly.
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 18 ---
+My Stats: AP=2, Hand=2, MH=4, NM=0
+[ZenBot-3] Card resolved: Accept a small buyout from the new landlord to leave quietly.
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] Card resolved: Accept a small buyout from the new landlord to leave quietly.
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] Taking action: PLAY_CARD { cardId: 'sin_10' }
+[HustlerBot-1] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 15792b0b-b3cc-424e-9d71-ea5e1d06f8b4
+[HustlerBot-2] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab
+
+--- [HustlerBot-2] Turn 18 ---
+My Stats: AP=1, Hand=1, MH=3, NM=0
+[ZenBot-3] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 7ee8b9f4-c998-40a4-8149-e9110d9126a6
+[ZenBot-4] GameState: in-progress, CurrentPlayer: b83f5e8b-95f7-4cbf-bcd8-08c9bc5330ab, Me: 08676d27-0a29-44ac-b463-ef2824384152
+[HustlerBot-2] Taking action: DRAW_CARD { deck: 'SIN' }

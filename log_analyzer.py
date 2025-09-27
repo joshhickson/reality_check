@@ -1,11 +1,16 @@
 import re
 import json
+import sys  # Import sys module to handle command-line arguments
 from collections import defaultdict
 import numpy as np
 
 def parse_log_file(filepath):
-    with open(filepath, 'r') as f:
-        log_content = f.read()
+    try:
+        with open(filepath, 'r') as f:
+            log_content = f.read()
+    except FileNotFoundError:
+        print(f"Error: Log file not found at '{filepath}'")
+        return None
 
     # --- Regex Patterns ---
     turn_pattern = re.compile(r"--- \[(HustlerBot-\d|ZenBot-\d)\] Turn (\d+) ---")
@@ -86,7 +91,7 @@ def parse_log_file(filepath):
         card_resolved_match = card_resolved_pattern.search(line)
         if card_resolved_match:
             bot_name, choice_text = card_resolved_match.groups()
-            if "Crossroads Triggered" in game_data["game_flow"][-1]:
+            if game_data["game_flow"] and "Crossroads Triggered" in game_data["game_flow"][-1]:
                  game_data["game_flow"].append(f"Crossroads Resolved for {bot_name}. Returning to normal flow.")
 
         winner_match = winner_pattern.search(line)
@@ -108,27 +113,31 @@ def parse_log_file(filepath):
 
 def run_quantitative_analysis(data):
     print("\n--- Stage 1: Quantitative Analysis & Balance Baselining ---")
+    if not data or not data.get('turns'):
+        print("\nCould not parse game data. Analysis cannot be run.")
+        return
 
     # 1. Collate Archetype Performance Data
     print("\n1. Archetype Performance Data:")
     winner_name = data.get('winner', 'Unknown')
-    winner_archetype = "Hustler" if "Hustler" in winner_name else "Zen"
-    print(f"  - Winning Bot: {winner_name} ({winner_archetype})")
-    print("  - Win/Loss Record (1 Game):")
-    print(f"    - Hustler: 1 Win, 0 Losses")
-    print(f"    - Zen: 0 Wins, 1 Loss")
-    print("  - Win Rate:")
-    print(f"    - Hustler: 100%")
-    print(f"    - Zen: 0%")
+    if winner_name != 'Unknown':
+        winner_archetype = "Hustler" if "Hustler" in winner_name else "Zen"
+        print(f"  - Winning Bot: {winner_name} ({winner_archetype})")
+        print("  - Win/Loss Record (1 Game):")
+        print(f"    - Hustler: {'1 Win, 0 Losses' if winner_archetype == 'Hustler' else '0 Wins, 1 Loss'}")
+        print(f"    - Zen: {'1 Win, 0 Losses' if winner_archetype == 'Zen' else '0 Wins, 1 Loss'}")
+        print("  - Win Rate:")
+        print(f"    - Hustler: {'100%' if winner_archetype == 'Hustler' else '0%'}")
+        print(f"    - Zen: {'100%' if winner_archetype == 'Zen' else '0%'}")
+    else:
+        print("  - Winner could not be determined from the log.")
+
 
     # 2. Measure Game Length & Pacing
     print("\n2. Game Length & Pacing:")
-    total_turns = max(t['turn_number'] for t in data['turns']) if data['turns'] else 0
+    total_turns = max(t['turn_number'] for t in data['turns'])
     print(f"  - Total Turns: {total_turns}")
-    print("  - Average/Median/Range (1 Game):")
-    print(f"    - Average: {total_turns} turns")
-    print(f"    - Median: {total_turns} turns")
-    print(f"    - Range: 0 (single data point)")
+    print(f"  - Average/Median/Range: {total_turns} turns (single game)")
 
     # 3. Track "Narrative Momentum" (NM) Velocity
     print("\n3. Narrative Momentum (NM) Velocity:")
@@ -138,16 +147,13 @@ def run_quantitative_analysis(data):
 
     for archetype, nms in nm_by_archetype.items():
         if len(nms) > 1:
-            # This calculation is a simplification for this specific log
-            # A more robust calculation would track NM changes within a turn
             total_nm_gain = nms[-1][1] - nms[0][1]
             avg_gain_per_turn = total_nm_gain / len(nms)
             print(f"  - {archetype}:")
             print(f"    - Average NM Gain per Turn: {avg_gain_per_turn:.2f}")
 
-    # NM gain in the final 25% of turns (Turns 31-40)
     final_quarter_start_turn = total_turns * 0.75
-    print(f"  - Final 25% of Game (Turns {int(final_quarter_start_turn)}-{total_turns}):")
+    print(f"  - Final 25% of Game (Turns > {int(final_quarter_start_turn)}):")
     for archetype, nms in nm_by_archetype.items():
         final_nms = [nm for turn, nm in nms if turn >= final_quarter_start_turn]
         if len(final_nms) > 1:
@@ -164,16 +170,15 @@ def run_quantitative_analysis(data):
         for action in turn['actions']:
             action_counts[archetype][action['type']] += 1
 
-    print("  - Hustler Archetype:")
-    for action, count in sorted(action_counts['Hustler'].items()):
-        print(f"    - {action}: {count}")
-
-    print("  - Zen Archetype:")
-    for action, count in sorted(action_counts['Zen'].items()):
-        print(f"    - {action}: {count}")
+    for archetype in sorted(action_counts.keys()):
+        print(f"  - {archetype} Archetype:")
+        for action, count in sorted(action_counts[archetype].items()):
+            print(f"    - {action}: {count}")
 
 def run_qualitative_analysis(data):
     print("\n--- Stage 2: Qualitative Systems Analysis & Debugging Post-Mortem ---")
+    if not data:
+        return
 
     # 1. Deep-Dive on the Crossroads System
     print("\n1. Deep-Dive on the Crossroads System:")
@@ -185,34 +190,13 @@ def run_qualitative_analysis(data):
             print(f"    - Bot: {event['bot']} ({event['archetype']})")
             print(f"    - Situation: {event['decision']}")
             print(f"    - Choice Made: {event['choice']}")
-            print(f"    - Assessment:")
-            if "Steal their idea" in event['choice']:
-                print("      - This choice is highly aggressive and directly aligns with the Hustler archetype's goal of winning at any cost. It creates a significant swing by sacrificing Mental Health for a large resource gain (implied). This feels like a meaningful, if risky, tactical choice.")
-            elif "severance package" in event['choice']:
-                print("      - This choice represents a risk-averse, short-term gain. The bot chose immediate stability over a new, more demanding role. This is a reasonable tactical decision, preserving Mental Health and providing a resource cushion.")
-            elif "buyout" in event['choice']:
-                print("      - Similar to the severance package, this is a pragmatic, low-risk choice. The bot avoids conflict and takes a guaranteed, though small, payout. This is a logical, self-preservation move.")
-            else:
-                print("      - The choice appears to be a standard tactical decision with clear trade-offs.")
 
     # 2. Evaluate PLAY_CARD Logic and Impact
     print("\n2. Evaluate PLAY_CARD Logic and Impact:")
-    hustler_cards = [action['card'] for turn in data['turns'] if turn['archetype'] == 'Hustler' for action in turn['actions'] if action['type'] == 'PLAY_CARD' and 'card' in action]
-    zen_cards = [action['card'] for turn in data['turns'] if turn['archetype'] == 'Zen' for action in turn['actions'] if action['type'] == 'PLAY_CARD' and 'card' in action]
-
-    print(f"  - Hustler Archetype played {len(hustler_cards)} cards (all Sin cards):")
-    if hustler_cards:
-        print(f"    - Examples: {', '.join(list(set(hustler_cards))[:3])}")
-        print("    - Assessment: The Hustler bots exclusively played Sin cards, which aligns perfectly with their strategy. These actions directly contributed to their high final scores by boosting key stats, even at the cost of Mental Health. The PLAY_CARD action appears to be a vital tool for the Hustler's success.")
-    else:
-        print("    - No cards played.")
-
-    print(f"\n  - Zen Archetype played {len(zen_cards)} cards (all Virtue cards):")
-    if zen_cards:
-        print(f"    - Examples: {', '.join(list(set(zen_cards))[:3])}")
-        print("    - Assessment: The Zen bots consistently played Virtue cards throughout the game. These actions were crucial for maintaining high Mental Health and steadily accumulating Narrative Momentum and other positive stats. For the Zen archetype, PLAY_CARD is the primary engine of their strategy, contrasting with the Hustler's reliance on WORK_OVERTIME.")
-    else:
-        print("    - No cards played.")
+    for archetype in ["Hustler", "Zen"]:
+        cards = [action['card'] for turn in data['turns'] if turn['archetype'] == archetype for action in turn['actions'] if action['type'] == 'PLAY_CARD' and 'card' in action]
+        card_type = "Sin" if archetype == "Hustler" else "Virtue"
+        print(f"  - {archetype} Archetype played {len(cards)} cards (expected {card_type} cards).")
 
     # 3. Confirm Game State Integrity
     print("\n3. Confirm Game State Integrity:")
@@ -220,15 +204,22 @@ def run_qualitative_analysis(data):
     for i, flow_item in enumerate(data['game_flow']):
         if "Crossroads Triggered" in flow_item:
             if i + 1 >= len(data['game_flow']) or "Crossroads Resolved" not in data['game_flow'][i+1]:
-                print(f"  - POTENTIAL HANG DETECTED: Crossroads triggered at '{flow_item}' was not followed by a 'Resolved' state.")
                 flow_ok = False
 
     if flow_ok:
-        print("  - VERIFIED: The game flow correctly transitions from a Crossroads event back to the normal turn sequence. The 'game hang' bug appears to be fixed.")
+        print("  - VERIFIED: The game flow correctly transitions from a Crossroads event back to the normal turn sequence.")
     else:
-        print("  - FAILED: The game state integrity check failed.")
+        print("  - FAILED: A potential game hang was detected after a Crossroads event.")
 
 if __name__ == "__main__":
-    parsed_data = parse_log_file('bot-simulation-advanced.log')
-    run_quantitative_analysis(parsed_data)
-    run_qualitative_analysis(parsed_data)
+    if len(sys.argv) != 2:
+        print("Usage: python log_analyzer.py <path_to_log_file>")
+        sys.exit(1)
+
+    log_file_path = sys.argv[1]
+    parsed_data = parse_log_file(log_file_path)
+
+    if parsed_data:
+        run_quantitative_analysis(parsed_data)
+        run_qualitative_analysis(parsed_data)
+        print("\n--- Analysis Complete ---")

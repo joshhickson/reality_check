@@ -1,7 +1,8 @@
 class ZenStrategy {
     chooseAction(me) {
-        const { actionPoints, mentalHealth, hand, narrativeMomentum, isBurnedOut } = me.stats;
-        const handSize = me.hand.length;
+        const { actionPoints, mentalHealth, narrativeMomentum, isBurnedOut } = me.stats;
+        const hand = me.hand || []; // Ensure hand is an array
+        const handSize = hand.length;
         const possibleActions = [];
 
         // Evaluate all possible actions
@@ -14,6 +15,7 @@ class ZenStrategy {
         }
         if (actionPoints >= 1 && handSize > 0) {
             hand.forEach(card => {
+                if (!card) return; // Defensive check
                 const virtueScore = (parseInt(card.virtue) || 0) * 2;
                 const mentalScore = (parseInt(card.mental) || 0);
                 const sinScore = (parseInt(card.sin) || 0) * 2;

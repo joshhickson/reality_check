@@ -82,6 +82,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('player_action', (data) => {
+    // DEFENSIVE LOG: Check if the data object itself is the problem.
+    if (!data) {
+      console.log('[DEFENSIVE LOG] Received player_action with null or undefined data. This is likely the crash point.');
+      return; // Stop execution if data is invalid.
+    }
     const { gameId, playerId, action } = data;
     const game = games[gameId];
     if (!game) return;
