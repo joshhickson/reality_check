@@ -1,7 +1,7 @@
-# Game Logic & Implementation Map
+# Game Logic & Implementation Map v2.0
 *As of 2025-09-27*
 
-This document provides a detailed, color-coded visual map of the game's core logic and its current implementation status.
+This document provides a highly detailed, color-coded visual map of the game's core logic, focusing on mathematical formulas, decision branches, and specific implementation status. This V2 map expands upon the original to serve as a precise technical reference.
 
 ## Legend
 
@@ -24,202 +24,179 @@ graph TD
 
 ---
 
-## 1. Master Game State Diagram
+## 1. Final Scoring & Accolade Logic
 
-This diagram shows the primary states of the `Game` object and the transitions between them. All core state transitions are fully implemented.
-
-```mermaid
-stateDiagram-v2
-    direction LR
-
-    [*] --> Waiting: Game Created
-    Waiting --> InProgress: start()
-    InProgress --> JudgmentDay: Turn Limit Reached
-    InProgress --> ProposeExileVote: Exile Condition Met
-    ProposeExileVote --> AwaitingExileVote: Propose Vote
-    AwaitingExileVote --> InProgress: Vote Fails/Succeeds
-    JudgmentDay --> Finished: Final Scores Calculated
-    Finished --> [*]
-
-    state Waiting {
-        direction LR
-        [*] --> AddPlayer
-        AddPlayer --> AddPlayer: More players join
-    }
-
-    classDef implemented fill:#d4edda,stroke:#c3e6cb,color:#155724;
-    class Waiting,InProgress,JudgmentDay,Finished,ProposeExileVote,AwaitingExileVote,AddPlayer implemented;
-```
-
----
-
-## 2. Core Player Turn Loop
-
-This diagram details the sequence of events that occur during a single player's turn. The core loop and available actions are functional.
-
-```mermaid
-flowchart TD
-    subgraph "Player Turn"
-        A(Start Turn) --> B{Turn > Max Turns?};
-        B -- Yes --> Z(End Game);
-        B -- No --> C(Advance to Next Player);
-        C --> D(Grant 2 Action Points);
-        D --> E{Check Burnout Status};
-        E --> F(Player Takes Action);
-        F --> G{AP > 0?};
-        G -- Yes --> F;
-        G -- No --> A;
-    end
-
-    subgraph "Player Actions (AP Cost)"
-        F --> F1(Work Overtime - 2 AP):::implemented;
-        F --> F2(Draw Card - 1 AP):::implemented;
-        F2 --> F2a("If Burned Out: Not Allowed"):::implemented;
-        F --> F3(Play Card - 1 AP):::implemented;
-        F --> F4(Spend Momentum - 0 AP):::implemented;
-    end
-
-    subgraph "Exile Sub-Loop"
-        C --> H{Exile Condition Met?};
-        H -- Yes --> I(Propose Exile Vote):::implemented;
-        I --> J{Vote Passes?};
-        J -- Yes --> K(Handle Exile):::implemented;
-        J -- No --> C;
-        K --> C;
-    end
-
-    classDef implemented fill:#d4edda,stroke:#c3e6cb,color:#155724;
-    class A,B,C,D,E,F,G,H,I,J,K,Z,F1,F2,F2a,F3,F4 implemented;
-```
-
----
-
-## 3. Bot Strategy Analysis
-
-This diagram maps each bot strategy to its core decision-making logic and identifies its implementation status.
+This diagram details the precise mathematical formulas and logical conditions for final scoring and the awarding of end-game accolades.
 
 ```mermaid
 graph TD
-    subgraph Bot Strategies
-        direction LR
-        BS(Bot Client) --> R(RandomStrategy):::implemented;
-        BS --> H(HustlerStrategy):::implemented;
-        BS --> Z(ZenStrategy):::implemented;
-        BS --> P(PuppeteerStrategy):::broken;
-        BS --> AG(AgitatorStrategy):::incomplete;
+    subgraph "Scoring & Accolade Calculation"
+        A(Judgment Day Begins):::implemented --> B(Calculate Final Scores):::implemented;
+
+        B --> C{Tally Testimonies}:::implemented;
+        C --> C1("For each player:<br/>p.stats.kudos++<br/>p.stats.concern++"):::implemented;
+
+        B --> D{Calculate Builder Bonus}:::broken;
+        D --> D1{"topBuilder =<br/>max(p.stats.communityImpact)"}:::broken;
+        D1 --> D2{"If topBuilder.communityImpact > 0"}:::broken;
+        D2 -- Yes --> D3{"Bonus =<br/>if virtue >= 10 then 3<br/>if virtue >= 5 then 2<br/>if virtue >= 1 then 1"}:::broken
+        D1 & D2 & D3 --> D_Err("Depends on: communityImpact stat"):::hypothetical
+
+        B --> E(Calculate Base Score for each Player):::implemented;
+        E --> F(MH_Bonus = if MH >= 8 then 10 else if MH >= 5 then 5 else 0):::implemented;
+        E --> G("Score = (M/200) + (V*1.5) - (S*1.5) + MH_Bonus + (Kudos*2) - (Concern*2)"):::implemented;
+
+        G --> H(Sort Players by Final Score):::implemented;
+        H --> I(Award Titles):::implemented;
     end
 
-    subgraph "Random Logic"
-        R --> R1("Action: Any valid action"):::implemented;
-        R --> R2("Decision: Random choice"):::implemented;
-        R --> R3("Testimony: Random target"):::implemented;
-    end
+    subgraph "Accolade Awarding Logic"
+        I --> T_Capitalist("The Capitalist<br/>max(p.stats.money)"):::implemented;
+        I --> T_Debtor("The Debtor<br/>min(p.stats.money)"):::implemented;
+        I --> T_Saint("The Saint<br/>max(p.stats.virtue)"):::implemented;
+        I --> T_Sinner("The Sinner<br/>max(p.stats.sin)"):::implemented;
+        I --> T_Survivor("The Survivor<br/>max(p.stats.mentalHealth)"):::implemented;
+        I --> T_Influencer("The Influencer<br/>max(p.stats.kudos)"):::implemented;
+        I --> T_Pariah("The Pariah<br/>max(p.stats.concern)"):::implemented;
+        I --> T_Burned("The Burned Out<br/>find(p.isBurnedOut)"):::implemented;
+        I --> T_Middle("The Middle Child<br/>min(abs(p.stats - avg.stats))"):::implemented;
+        I --> T_Purest("The Purest Soul<br/>if sin==0, max(virtue)"):::implemented;
+        I --> T_Util("The Utilitarian<br/>if sin>10 & virtue>10, max(sin+virtue)"):::implemented;
+        I --> T_Martyr("The Martyr<br/>if MH<4, max(virtue)"):::implemented;
+        I --> T_Cautious("The Cautious<br/>if sin<2, min(money)"):::implemented;
 
-    subgraph "Hustler Logic"
-        H --> H1("Goal: Maximize Money & Sin"):::implemented;
-        H --> H2("Action: Score-based, prefers WORK_OVERTIME & SIN cards"):::implemented;
-        H --> H3("Decision: Chooses option with highest money gain"):::implemented;
-        H --> H4("Testimony: Kudos to richest, Concern to poorest"):::implemented;
-    end
+        I --> T_Socialite("The Socialite<br/>max(p.stats.socialCapital)"):::broken;
+        T_Socialite --> SC_Err("Depends on: socialCapital stat"):::hypothetical;
 
-    subgraph "Zen Logic"
-        Z --> Z1("Goal: Maximize Virtue & Mental Health"):::implemented;
-        Z --> Z2("Action: Score-based, prefers VIRTUE cards, avoids WORK_OVERTIME"):::implemented;
-        Z --> Z3("Decision: Chooses option with highest Virtue/MH gain"):::implemented;
-        Z --> Z4("Testimony: Kudos to most virtuous, Concern to most sinful"):::implemented;
-    end
+        I --> T_Builder("The Community Builder<br/>max(p.stats.communityImpact)"):::broken;
+        T_Builder --> CI_Err("Depends on: communityImpact stat"):::hypothetical;
 
-    subgraph "Puppeteer Logic (Broken)"
-        P --> P1("Goal: Maximize Social Capital"):::broken;
-        P --> P2("Action: Prioritizes cards/events that give Social Capital"):::broken;
-        P --> P3("Decision: Chooses option with highest Social Capital gain"):::broken;
-        P1 & P2 & P3 --> MissingStat1("Depends on: socialCapital stat"):::hypothetical;
-    end
-
-    subgraph "Agitator Logic (Incomplete)"
-        AG --> AG1("Goal: Cause Disruption (if Exiled)"):::incomplete;
-        AG --> AG2("Action: Attempts to play high-disruption SIN cards"):::incomplete;
-        AG --> AG3("If not Exiled or no good plays: Falls back to Random logic"):::incomplete;
-        AG1 & AG2 --> MissingStat2("Disruption score depends on: socialCapital stat"):::hypothetical;
+        I --> T_Workhorse("The Workhorse"):::placeholder;
+        T_Workhorse --> WH_Err("Depends on: Action Count Tracking"):::hypothetical;
+        I --> T_Storyteller("The Storyteller"):::placeholder;
+        T_Storyteller --> ST_Err("Depends on: Event Count Tracking"):::hypothetical;
+        I --> T_Gambler("The Gambler"):::placeholder;
+        T_Gambler --> G_Err("Depends on: Choice Risk Tracking"):::hypothetical;
+        I --> T_Drama("The Drama Queen"):::placeholder;
+        T_Drama --> DQ_Err("Depends on: Event Count Tracking"):::hypothetical;
+        I --> T_Roller("The Rollercoaster"):::placeholder;
+        T_Roller --> R_Err("Depends on: Stat History Tracking"):::hypothetical;
     end
 
     classDef implemented fill:#d4edda,stroke:#c3e6cb,color:#155724;
     classDef broken fill:#f8d7da,stroke:#f5c6cb,color:#721c24;
     classDef incomplete fill:#fff3cd,stroke:#ffeeba,color:#856404;
+    classDef placeholder fill:#d1ecf1,stroke:#bee5eb,color:#0c5460;
     classDef hypothetical fill:#e2e3e5,stroke:#d6d8db,color:#383d41;
 ```
 
 ---
 
-## 4. Accolade (Title) System
+## 2. Granular Player Turn Flow
 
-This diagram maps each end-game Title to its dependencies, showing its implementation status.
+This diagram provides a granular, step-by-step flowchart of the entire player turn, from initial state checks to action resolution and sub-processes.
+
+```mermaid
+flowchart TD
+    A(Start of Turn):::implemented --> B{"Game End?<br/>currentTurn > maxTurns"};
+    B -- Yes --> B1(Transition to Judgment Day):::implemented;
+    B -- No --> C(Advance to Next Player):::implemented;
+    C --> D(Grant 2 AP):::implemented;
+    D --> E("player.updateBurnoutStatus()"):::implemented;
+    E --> F{"game.checkExileCondition()<br/>richest > 2 * poorestTwo?"};
+
+    F -- No --> G(Await Player Action):::implemented;
+    F -- Yes --> F1(Enter Propose Exile Flow):::implemented;
+
+    subgraph "Exile Sub-Flow"
+        direction LR
+        F1 --> F2("Await Decision:<br/>Propose Exile Vote?"):::implemented;
+        F2 -- Yes --> F3(Await Votes from others):::implemented;
+        F3 --> F4{"Vote Passes?<br/>yesVotes > noVotes"}:::implemented;
+        F4 -- Yes --> F5("Handle Exile<br/>-50% Money<br/>Assign Secret Objective"):::implemented;
+        F2 & F4 -- No --> G;
+        F5 --> G;
+    end
+
+    G --> H{Action Type?};
+
+    H -- SPEND_MOMENTUM --> I1("Spend 5 NM"):::implemented;
+    I1 --> I2("Trigger Foresight<br/>(Draw 2 Life Happens cards)"):::implemented;
+    I2 --> I3("Await Foresight Decision<br/>(Player chooses one card)"):::implemented;
+    I3 --> I4("Resolve Card Effects"):::implemented;
+    I4 --> J;
+
+    H -- WORK_OVERTIME --> J1(Server-side logic to<br/>handle action is missing):::hypothetical;
+    H -- DRAW_CARD --> J2(Server-side logic to<br/>handle action is missing):::hypothetical;
+    H -- PLAY_CARD --> J3(Server-side logic to<br/>handle action is missing):::hypothetical;
+
+    J1 & J2 & J3 --> J;
+
+    J{"Player has AP > 0?"}:::implemented;
+    J -- Yes --> G;
+    J -- No --> A;
+
+    classDef implemented fill:#d4edda,stroke:#c3e6cb,color:#155724;
+    classDef hypothetical fill:#e2e3e5,stroke:#d6d8db,color:#383d41;
+```
+
+---
+
+## 3. Bot Strategy & Decision Logic
+
+This diagram breaks down the specific decision-making logic for each bot strategy, including the scoring functions they use to evaluate and prioritize actions.
 
 ```mermaid
 graph TD
-    subgraph "Accolade System"
-        direction TB
-        GameEnd("Game Ends"):::implemented --> AwardTitles("awardTitles() function"):::implemented;
-        AwardTitles --> TitlesJS("titles.js definitions"):::implemented;
+    subgraph "Bot Strategies & Logic"
+        direction LR
+        BS(Bot Client) --> R(Random):::implemented;
+        BS --> H(Hustler):::implemented;
+        BS --> Z(Zen):::implemented;
+        BS --> P(Puppeteer):::broken;
+        BS --> AG(Agitator):::incomplete;
     end
 
-    subgraph "Functional Titles (Implemented)"
-        TitlesJS --> T_Capitalist("The Capitalist"):::implemented;
-        T_Capitalist --> S_Money("Player Stat: Money"):::implemented;
-        TitlesJS --> T_Debtor("The Debtor"):::implemented;
-        T_Debtor --> S_Money;
-        TitlesJS --> T_PennyP("The Penny Pincher"):::implemented;
-        T_PennyP --> S_Money;
-        T_PennyP --> S_Sin("Player Stat: Sin"):::implemented;
-        TitlesJS --> T_Saint("The Saint"):::implemented;
-        T_Saint --> S_Virtue("Player Stat: Virtue"):::implemented;
-        TitlesJS --> T_Sinner("The Sinner"):::implemented;
-        T_Sinner --> S_Sin;
-        TitlesJS --> T_Purest("The Purest Soul"):::implemented;
-        T_Purest --> S_Virtue;
-        T_Purest --> S_Sin;
-        TitlesJS --> T_Util("The Utilitarian"):::implemented;
-        T_Util --> S_Virtue;
-        T_Util --> S_Sin;
-        TitlesJS --> T_Survivor("The Survivor"):::implemented;
-        T_Survivor --> S_MH("Player Stat: Mental Health"):::implemented;
-        TitlesJS --> T_Martyr("The Martyr"):::implemented;
-        T_Martyr --> S_MH;
-        T_Martyr --> S_Virtue;
-        TitlesJS --> T_Burned("The Burned Out"):::implemented;
-        T_Burned --> S_Burnout("Player Flag: isBurnedOut"):::implemented;
-        TitlesJS --> T_Influencer("The Influencer"):::implemented;
-        T_Influencer --> S_Kudos("Player Stat: Kudos"):::implemented;
-        TitlesJS --> T_Pariah("The Pariah"):::implemented;
-        T_Pariah --> S_Concern("Player Stat: Concern"):::implemented;
-        TitlesJS --> T_Cautious("The Cautious"):::implemented;
-        T_Cautious --> S_Sin;
-        TitlesJS --> T_Middle("The Middle Child"):::implemented;
-        T_Middle --> S_Money;
-        T_Middle --> S_Virtue;
-        T_Middle --> S_Sin;
+    subgraph "Random Strategy"
+        R --> R1("Action: Picks randomly from valid actions"):::implemented;
+        R --> R2("Decision: Picks random option"):::implemented;
     end
 
-    subgraph "Non-Functional Titles"
-        TitlesJS --> T_Builder("The Community Builder"):::broken;
-        T_Builder --> S_Impact("Depends on: communityImpact stat"):::hypothetical;
-        TitlesJS --> T_Socialite("The Socialite"):::broken;
-        T_Socialite --> S_SC("Depends on: socialCapital stat"):::hypothetical;
+    subgraph "Hustler Strategy (Score-Based)"
+        H --> H_Goal("Goal: Maximize Money & Sin"):::implemented
+        H --> H_Action("chooseAction: Picks highest score"):::implemented
+        H_Action --> H_S1("WORK_OVERTIME<br/>score = max(0, MH - 2)"):::implemented
+        H_Action --> H_S2("DRAW_CARD (SIN)<br/>score = 3 to 4"):::implemented
+        H_Action --> H_S3("PLAY_CARD<br/>score = (money/500) + (sin*1.5)"):::implemented
+        H --> H_Decision("makeDecision: Picks option with max money gain"):::implemented
+    end
 
-        TitlesJS --> T_Workhorse("The Workhorse"):::placeholder;
-        T_Workhorse --> D_ActionCount("Depends on: Action Count Tracking"):::hypothetical;
-        TitlesJS --> T_Storyteller("The Storyteller"):::placeholder;
-        T_Storyteller --> D_EventCount("Depends on: Event Count Tracking"):::hypothetical;
-        TitlesJS --> T_Gambler("The Gambler"):::placeholder;
-        T_Gambler --> D_RiskTracking("Depends on: Choice Risk Tracking"):::hypothetical;
-        TitlesJS --> T_Drama("The Drama Queen"):::placeholder;
-        T_Drama --> D_EventCount;
-        TitlesJS --> T_Roller("The Rollercoaster"):::placeholder;
-        T_Roller --> D_StatHistory("Depends on: Stat History Tracking"):::hypothetical;
+    subgraph "Zen Strategy (Score-Based)"
+        Z --> Z_Goal("Goal: Maximize Virtue & MH"):::implemented
+        Z --> Z_Action("chooseAction: Picks highest score"):::implemented
+        Z_Action --> Z_S1("WORK_OVERTIME<br/>score = -5 (avoids)"):::implemented
+        Z_Action --> Z_S2("DRAW_CARD (VIRTUE)<br/>score = 5"):::implemented
+        Z_Action --> Z_S3("PLAY_CARD<br/>score = (virtue*2) + MH - (sin*2)"):::implemented
+        Z --> Z_Decision("makeDecision: Picks option with max virtue/MH score"):::implemented
+    end
+
+    subgraph "Puppeteer Strategy (Priority-Based)"
+        P --> P_Goal("Goal: Maximize Social Capital"):::broken
+        P --> P_Action("chooseAction Priorities:<br/>1. Play SC cards<br/>2. Spend Momentum<br/>3. Draw Virtue"):::broken
+        P --> P_Decision("makeDecision: Picks option with max SC gain"):::broken
+        P_Goal & P_Action & P_Decision --> P_Err("Depends on: socialCapital stat"):::hypothetical
+    end
+
+    subgraph "Agitator Strategy (Mixed Logic)"
+        AG --> AG_Cond{"if exiled?"}:::incomplete
+        AG_Cond -- Yes --> AG_Exiled("Goal: Cause Disruption"):::incomplete
+        AG_Exiled --> AG_Action("PLAY_CARD (SIN)<br/>Calculates disruption score"):::incomplete
+        AG_Action --> AG_Err("Disruption score depends on: socialCapital stat"):::hypothetical
+        AG_Cond -- No --> AG_Fallback("Falls back to Random logic"):::incomplete
     end
 
     classDef implemented fill:#d4edda,stroke:#c3e6cb,color:#155724;
     classDef broken fill:#f8d7da,stroke:#f5c6cb,color:#721c24;
-    classDef placeholder fill:#d1ecf1,stroke:#bee5eb,color:#0c5460;
+    classDef incomplete fill:#fff3cd,stroke:#ffeeba,color:#856404;
     classDef hypothetical fill:#e2e3e5,stroke:#d6d8db,color:#383d41;
 ```
