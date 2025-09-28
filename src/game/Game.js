@@ -255,32 +255,28 @@ class Game {
       }
     });
 
-    let builderBonusAwarded = false;
+    // First, calculate the base score for all players.
+    this.players.forEach(player => {
+      const { money, mentalHealth, sin, virtue, kudos, concern } = player.stats;
+      let mhBonus = 0;
+      if (mentalHealth >= 8) {
+          mhBonus = 10;
+      } else if (mentalHealth >= 5) {
+          mhBonus = 5;
+      }
+      const score = (money / 200) + (virtue * 1.5) - (sin * 1.5) + mhBonus + (kudos * 2) - (concern * 2);
+      player.finalScore = score;
+    });
+
+    // Then, find the top builder and add their bonus.
     if (this.players.length > 0) {
         const topBuilder = this.players.reduce((max, p) => p.stats.communityImpact > max.stats.communityImpact ? p : max, this.players[0]);
-        if (topBuilder.stats.communityImpact > 0) {
+        if (topBuilder && topBuilder.stats.communityImpact > 0) {
             const bonus = topBuilder.getCommunityImpactBonus();
-            topBuilder.finalScore = (topBuilder.finalScore || 0) + bonus;
+            topBuilder.finalScore += bonus;
             console.log(`[GAME] Awarded ${bonus} point Builder Bonus to ${topBuilder.name}`);
-            builderBonusAwarded = true;
         }
     }
-
-    this.players.forEach(player => {
-      if (builderBonusAwarded && player.finalScore) {
-          // Score already calculated for the builder
-      } else {
-        const { money, mentalHealth, sin, virtue, kudos, concern } = player.stats;
-        let mhBonus = 0;
-        if (mentalHealth >= 8) {
-            mhBonus = 10;
-        } else if (mentalHealth >= 5) {
-            mhBonus = 5;
-        }
-        const score = (money / 200) + (virtue * 1.5) - (sin * 1.5) + mhBonus + (kudos * 2) - (concern * 2);
-        player.finalScore = score;
-      }
-    });
 
     this.players.sort((a, b) => b.finalScore - a.finalScore);
 

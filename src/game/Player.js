@@ -15,7 +15,9 @@ class Player {
       actionPoints: 0,
       narrativeMomentum: 0,
       kudos: 0,
-      concern: 0
+      concern: 0,
+      socialCapital: 0,
+      communityImpact: 0
     };
 
     this.isBurnedOut = false;
@@ -32,12 +34,16 @@ class Player {
     if (effects.sin) this.stats.sin += effects.sin;
     if (effects.virtue) this.stats.virtue += effects.virtue;
     if (effects.narrativeMomentum) this.stats.narrativeMomentum += effects.narrativeMomentum;
+    if (effects.socialCapital) this.stats.socialCapital += effects.socialCapital;
+    if (effects.communityImpact) this.stats.communityImpact += effects.communityImpact;
 
     // Clamp values to their ranges
     this.stats.mentalHealth = Math.max(0, Math.min(10, this.stats.mentalHealth));
     this.stats.sin = Math.max(0, this.stats.sin);
     this.stats.virtue = Math.max(0, this.stats.virtue);
     this.stats.narrativeMomentum = Math.max(0, this.stats.narrativeMomentum);
+    this.stats.socialCapital = Math.max(0, this.stats.socialCapital);
+    this.stats.communityImpact = Math.max(0, this.stats.communityImpact);
 
     this.updateBurnoutStatus(currentRound);
   }
