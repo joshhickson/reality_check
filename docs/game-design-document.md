@@ -1,6 +1,12 @@
 # Reality Check: Game Design Document (GDD)
 *Version 0.4 - The Hybrid Model*
 
+> **Designer's Note: Implementation Status Overview**
+> This document serves as both a design vision and a reflection of the current implementation. As of the last review (2025-09-27), the features have the following statuses:
+> *   <span style="color:green;">**Functional:**</span> Core turn loop, player stats (Money, MH, Sin, Virtue), card drawing, final scoring, Burnout mechanic, and the Exile Protocol trigger.
+> *   <span style="color:orange;">**Partially Implemented:**</span> The `bot-client.js` and its strategies. The Random, Hustler, and Zen bots are functional, but the Puppeteer and Agitator bots are not.
+> *   <span style="color:red;">**Aspirational (Not Implemented):**</span> The **Social Capital** and **Community Impact** stats are not implemented in the game engine. Any mechanic that relies on them (e.g., specific accolades, bot strategies) is non-functional. The **Crossroads Interrupt System** is also not implemented.
+
 ## 1. Core Game Loop & Vision
 
 **Vision:** To create a satirical, narrative-driven board game that mirrors the complexities of modern adult life. The game should encourage social interaction, moral ambiguity, and strategic thinking beyond simple resource accumulation. The primary goal is not just to "win," but to generate memorable stories and conversations.
@@ -62,6 +68,8 @@ This section provides concrete rules for the game's primary systems.
 
 ### 3.3 "Community Impact" & The Builder Victory
 
+> **Implementation Status:** <span style="color:red;">**ASPIRATIONAL.**</span> The `communityImpact` stat is not currently implemented on the `Player` object. Therefore, the Builder Bonus and any related mechanics are non-functional.
+
 **Concept:** Quantifies a player's positive contributions to the group, making "The Builder" victory condition measurable and balancing it to prevent runaway leaders.
 
 **Rule:**
@@ -74,6 +82,8 @@ This section provides concrete rules for the game's primary systems.
     *   This system of diminishing returns ensures that while Virtue is valuable, hyper-focusing on it at the expense of all else is not a dominant strategy.
 
 ### 3.4 Card & Action Economy
+
+> **Implementation Status:** <span style="color:orange;">**PARTIALLY IMPLEMENTED.**</span> The server correctly grants 2 Action Points per turn. However, the server-side logic in `Game.js` to process actions like `DRAW_CARD`, `PLAY_CARD`, and `WORK_OVERTIME` is currently missing. Only the `SPEND_MOMENTUM` action is handled.
 
 **Concept:** Defines the flow of cards and actions to ensure a balanced and well-paced game.
 
@@ -139,6 +149,8 @@ This section details the more complex systems that provide "Reality Check" with 
 
 ### 4.2. Social Capital as a Spendable Resource
 
+> **Implementation Status:** <span style="color:red;">**ASPIRATIONAL.**</span> The `socialCapital` stat and its related mechanics are not currently implemented in the game engine. This entire section describes a planned feature.
+
 **Concept:** Social Capital is a spendable resource representing a player's reputation, social clout, and network of favors. It mechanizes the power of social influence, allowing players to take powerful actions that are not tied to the game's economic engine.
 
 **Rules:**
@@ -152,6 +164,8 @@ This section details the more complex systems that provide "Reality Check" with 
     *   **5 SC: "Community Organizer"** - Add an additional vote to your side during any group decision or Exile vote.
 
 ### 4.3. "Crossroads" Interrupt System
+
+> **Implementation Status:** <span style="color:red;">**ASPIRATIONAL.**</span> The server-side logic for the Crossroads interrupt system is not currently implemented. The game engine does not draw or check for Crossroads card triggers during a player's turn.
 
 **Concept:** A system of thematic, player-driven interruptions that makes the game more interactive and the narrative more emergent. This system is modeled after the "Crossroads" mechanic in the game *Dead of Winter*.
 
