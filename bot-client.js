@@ -19,7 +19,7 @@ class Bot {
 
     connect() {
         return new Promise((resolve, reject) => {
-            this.socket = io(SERVER_URL, { reconnection: false, transports: ["websocket"] });
+            this.socket = io(SERVER_URL, { reconnection: false, transports: ['polling'] });
             this.socket.on('connect', () => {
                 setInterval(() => {
                     this.socket.emit('heartbeat', { name: this.name });

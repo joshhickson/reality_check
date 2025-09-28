@@ -1,1 +1,2 @@
-🚀 Server listening on port 5000
+Running Baseline Test...
+--- Starting Bot Simulation with bots: random, random, random, random ---

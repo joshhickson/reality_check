@@ -1,22 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-
 class ExileObjectivesDeck {
-    constructor() {
-        this.deck = [];
+    constructor(cards) {
+        this.deck = [...cards];
         this.discard = [];
-        this._loadCards();
-    }
-
-    _loadCards() {
-        const jsonPath = path.join(__dirname, '../../cards/exile-objectives.json');
-        try {
-            const jsonData = fs.readFileSync(jsonPath, 'utf-8');
-            this.deck = JSON.parse(jsonData);
-        } catch (e) {
-            console.error("Error loading or parsing exile-objectives.json:", e);
-            this.deck = [];
-        }
     }
 
     shuffle() {

@@ -1,32 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-
 class SinDeck {
-    constructor() {
-        this.deck = [];
+    constructor(cards) {
+        this.deck = [...cards];
         this.discard = [];
-        this._loadCards();
-    }
-
-    _loadCards() {
-        const csvPath = path.join(__dirname, '../../cards/sin.csv');
-        try {
-            const csvData = fs.readFileSync(csvPath, 'utf-8');
-            const lines = csvData.trim().split('\n');
-            const header = lines.shift().split(',');
-
-            this.deck = lines.map(line => {
-                const values = line.split(',');
-                const card = {};
-                for (let i = 0; i < header.length; i++) {
-                    card[header[i]] = values[i];
-                }
-                return card;
-            });
-        } catch (e) {
-            console.error("Error loading or parsing sin.csv:", e);
-            this.deck = [];
-        }
     }
 
     shuffle() {

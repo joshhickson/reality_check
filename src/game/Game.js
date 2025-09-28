@@ -8,21 +8,30 @@ const { VirtueDeck } = require('./decks/VirtueDeck.js');
 const { ExileObjectivesDeck } = require('./decks/ExileObjectivesDeck.js');
 const { TITLES } = require('./titles.js');
 
+/**
+ * Represents the main game instance, managing state, players, and game logic.
+ */
 class Game {
-  constructor(name, creatorSocket, gameId) {
+  /**
+   * Creates a new game instance.
+   * @param {string} name - The name of the game.
+   * @param {object} creatorSocket - The socket of the player who created the game.
+   * @param {string} gameId - The unique identifier for the game.
+   * @param {object} cardData - An object containing pre-loaded card arrays.
+   */
+  constructor(name, creatorSocket, gameId, cardData) {
     this.id = gameId;
     this.name = name;
     this.players = [];
-    this.status = 'waiting';
     this.maxHandSize = 5;
     this.pendingDecision = null;
 
     this.stateMachine = new StateMachine();
     this.scheduler = new RingScheduler();
-    this.lifeHappensDeck = new LifeHappensDeck();
-    this.sinDeck = new SinDeck();
-    this.virtueDeck = new VirtueDeck();
-    this.exileDeck = new ExileObjectivesDeck();
+    this.lifeHappensDeck = new LifeHappensDeck(cardData.lifeHappens);
+    this.sinDeck = new SinDeck(cardData.sin);
+    this.virtueDeck = new VirtueDeck(cardData.virtue);
+    this.exileDeck = new ExileObjectivesDeck(cardData.exile);
 
     this.lifeHappensDeck.shuffle();
     this.sinDeck.shuffle();
@@ -36,34 +45,47 @@ class Game {
     this.titles = [];
   }
 
+  /**
+   * Adds a new player to the game.
+   * @param {object} socket - The player's socket connection.
+   * @param {string} username - The player's chosen username.
+   * @returns {Player} The newly created player object.
+   */
   addPlayer(socket, username) {
-    if (this.status !== 'waiting') {
+    if (this.stateMachine.getCurrentState() !== 'Idle') {
       throw new Error('Game has already started.');
     }
     const player = new Player(username, socket);
     this.players.push(player);
-
     return player;
   }
 
+  /**
+   * Starts the game, transitioning its state and setting initial player values.
+   */
   start() {
     if (this.players.length < 1) {
       throw new Error('Not enough players to start the game.');
     }
-    this.status = 'in-progress';
     this.stateMachine.transition('InProgress');
     this.maxTurns = this.players.length * 10;
     this.getCurrentPlayer().stats.actionPoints = 2;
   }
 
+  /**
+   * Gets the player whose turn it currently is.
+   * @returns {Player} The current player.
+   */
   getCurrentPlayer() {
     return this.players[this.currentPlayerIndex];
   }
 
+  /**
+   * Advances the game to the next turn, checking for game-end conditions.
+   */
   nextTurn() {
     this.scheduler.advanceTurn();
     if ((this.scheduler.getCurrentTurn() > this.maxTurns && this.maxTurns > 0) || this.scheduler.getCurrentTurn() > 50) {
-        this.status = 'judgment_day';
         this.stateMachine.transition('JudgmentDay');
         return;
     }
@@ -76,6 +98,9 @@ class Game {
     this.checkExileCondition();
   }
 
+  /**
+   * Checks if the conditions for an exile vote have been met.
+   */
   checkExileCondition() {
     if (this.players.length < 3) return;
 
@@ -85,7 +110,7 @@ class Game {
     const combinedWealthOfPoorestTwo = poorestTwoPlayers.reduce((sum, p) => sum + p.stats.money, 0);
 
     if (richestPlayer.stats.money > combinedWealthOfPoorestTwo * 2) {
-      this.status = 'propose-exile-vote';
+      this.stateMachine.transition('ProposeExileVote');
       this.pendingDecision = {
         type: 'propose-exile',
         playerId: this.getCurrentPlayer().id,
@@ -95,12 +120,17 @@ class Game {
     }
   }
 
+  /**
+   * Initiates an exile vote.
+   * @param {string} playerId - The ID of the player proposing the vote.
+   * @returns {{success: boolean}|{error: string}} Result of the action.
+   */
   proposeExileVote(playerId) {
-    if (this.status !== 'propose-exile-vote' || this.pendingDecision.playerId !== playerId) {
+    if (this.stateMachine.getCurrentState() !== 'ProposeExileVote' || this.pendingDecision.playerId !== playerId) {
       return { error: 'Not the right time to propose an exile vote.' };
     }
 
-    this.status = 'awaiting-exile-vote';
+    this.stateMachine.transition('AwaitingExileVote');
     const targetPlayer = this.players.find(p => p.id === this.pendingDecision.targetId);
     this.pendingDecision = {
       type: 'exile-vote',
@@ -112,8 +142,14 @@ class Game {
     return { success: true };
   }
 
+  /**
+   * Submits a single player's vote for an ongoing exile proposal.
+   * @param {string} playerId - The ID of the voting player.
+   * @param {boolean} vote - The player's vote (true for 'yes', false for 'no').
+   * @returns {{success: boolean}|{error: string}} Result of the action.
+   */
   submitExileVote(playerId, vote) {
-    if (this.status !== 'awaiting-exile-vote' || !this.pendingDecision.voters.includes(playerId)) {
+    if (this.stateMachine.getCurrentState() !== 'AwaitingExileVote' || !this.pendingDecision.voters.includes(playerId)) {
       return { error: 'Not the right time to vote for exile.' };
     }
 
@@ -126,6 +162,9 @@ class Game {
     return { success: true };
   }
 
+  /**
+   * Tallies the votes of an exile proposal and processes the result.
+   */
   tallyExileVotes() {
     const votes = Object.values(this.pendingDecision.votes);
     const yesVotes = votes.filter(v => v).length;
@@ -135,10 +174,13 @@ class Game {
       this.handleExile();
     } else {
       this.pendingDecision = null;
-      this.status = 'in-progress';
+      this.stateMachine.transition('InProgress');
     }
   }
 
+  /**
+   * Processes the consequences of a successful exile vote.
+   */
   handleExile() {
     const exiledPlayer = this.players.find(p => p.id === this.pendingDecision.targetId);
     if (!exiledPlayer) return;
@@ -161,9 +203,16 @@ class Game {
     }
 
     this.pendingDecision = null;
-    this.status = 'in-progress';
+    this.stateMachine.transition('InProgress');
   }
 
+  /**
+   * Adds a player's testimony during the 'Judgment Day' phase.
+   * @param {string} playerId - The ID of the player submitting the testimony.
+   * @param {string} kudosTargetId - The ID of the player receiving kudos.
+   * @param {string} concernTargetId - The ID of the player receiving concern.
+   * @returns {{success: boolean}|{error: string}} Result of the action.
+   */
   addTestimony(playerId, kudosTargetId, concernTargetId) {
     if (this.testimonies.some(t => t.playerId === playerId)) {
       return { error: 'You have already submitted your testimony.' };
@@ -189,6 +238,9 @@ class Game {
     return { success: true };
   }
 
+  /**
+   * Calculates the final scores for all players at the end of the game.
+   */
   calculateFinalScores() {
     this.checkExileWinConditions();
 
@@ -249,10 +301,12 @@ class Game {
 
     this.awardTitles();
 
-    this.status = 'finished';
     this.stateMachine.transition('Finished');
   }
 
+  /**
+   * Awards titles to players based on their performance and stats.
+   */
   awardTitles() {
       TITLES.forEach(title => {
           const winner = title.isAwardedTo(this.players);
@@ -266,6 +320,9 @@ class Game {
       });
   }
 
+  /**
+   * Checks if any exiled players have met their secret win conditions.
+   */
   checkExileWinConditions() {
     const exiledPlayers = this.players.filter(p => p.isExiled);
     exiledPlayers.forEach(exiledPlayer => {
@@ -283,71 +340,134 @@ class Game {
     });
   }
 
-  handleAction(playerId, action) {
-    const player = this.players.find(p => p.id === playerId);
-    if (!player || player !== this.getCurrentPlayer()) {
-      return { error: 'Not your turn.' };
+  /**
+   * Checks if the current player's turn should end.
+   * @param {Player} player - The player whose turn it is.
+   * @returns {boolean} True if the turn ended, false otherwise.
+   */
+  checkTurnEnd(player) {
+    const playerToCheck = player || this.getCurrentPlayer();
+    console.log(`[GAME] Checking turn end for ${playerToCheck.name}. AP: ${playerToCheck.stats.actionPoints}, PendingDecision: ${JSON.stringify(this.pendingDecision)}`);
+    if (playerToCheck.stats.actionPoints <= 0 && !this.pendingDecision) {
+      console.log(`[GAME] Player ${playerToCheck.name}'s turn has ended (AP depleted).`);
+      this.nextTurn();
+      return true;
     }
-
-    if (action.type === 'SPEND_MOMENTUM') {
-      if (player.stats.narrativeMomentum < 5) {
-        return { error: 'Not enough Narrative Momentum.' };
-      }
-      player.stats.narrativeMomentum -= 5;
-      this.triggerForesight(player);
-      return { success: true, game: this };
-    }
-
-    // Other actions would be handled here
-    return { error: 'Unknown action type.' };
+    return false;
   }
 
-  triggerForesight(player) {
-    console.log(`Triggering foresight for player ${player.id}`);
-    const cards = this.lifeHappensDeck.drawTwo();
-    if (cards.length === 0) {
-      // No cards to draw, refund momentum
-      console.log('No cards to draw for foresight, refunding momentum.');
-      player.stats.narrativeMomentum += 5;
-      return;
-    }
-
-    this.status = 'awaiting-foresight-decision';
-    this.pendingDecision = {
-      type: 'foresight',
-      playerId: player.id,
-      options: cards
-    };
-    console.log(`Awaiting foresight decision from ${player.id} with options:`, cards.map(c => c.id));
-  }
-
-  resolveForesight(playerId, chosenCardId) {
-    if (this.status !== 'awaiting-foresight-decision' || !this.pendingDecision || this.pendingDecision.playerId !== playerId) {
-      return { error: 'Not awaiting a foresight decision from this player.' };
-    }
-
-    console.log(`Resolving foresight for player ${playerId} with chosen card ${chosenCardId}`);
-    const chosenCard = this.pendingDecision.options.find(c => c.id === chosenCardId);
-    if (!chosenCard) {
-      return { error: 'Invalid card chosen.' };
-    }
-
+  /**
+   * Processes a player action, updating game state accordingly.
+   * @param {string} playerId - The ID of the player performing the action.
+   * @param {object} action - The action object from the client.
+   * @returns {{success: boolean, error?: string}} An object indicating the result of the action.
+   */
+  handlePlayerAction(playerId, action) {
     const player = this.players.find(p => p.id === playerId);
-    // This is a simplification. A real implementation would have the player choose a card *choice*.
-    // For now, we'll just apply the effects of the first choice on the card.
-    player.applyEffects(chosenCard.choices[0].effects, this.scheduler.getCurrentTurn(), this.players.length);
+    if (!player) {
+      return { success: false, error: "Player not found." };
+    }
 
-    this.pendingDecision = null;
-    this.status = 'in-progress';
+    if (this.getCurrentPlayer().id !== player.id) {
+      return { success: false, error: "Not your turn." };
+    }
 
+    let actionSucceeded = false;
+    let cost = 0;
+
+    switch(action.type) {
+        case 'WORK_OVERTIME':
+            cost = 2;
+            if (player.stats.actionPoints >= cost) {
+                player.stats.actionPoints -= cost;
+                player.applyEffects({ money: 500, mentalHealth: -1, sin: 1, narrativeMomentum: 1 });
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'DRAW_CARD':
+            cost = player.isBurnedOut ? 2 : 1; // Burnout increases AP cost
+
+            if (player.hand.length >= this.maxHandSize) {
+                return { success: false, error: "Your hand is full." };
+            }
+
+            if (player.stats.actionPoints >= cost) {
+                player.stats.actionPoints -= cost;
+                let card;
+                if (action.payload.deck === 'SIN') {
+                    card = this.sinDeck.draw();
+                } else if (action.payload.deck === 'VIRTUE') {
+                    card = this.virtueDeck.draw();
+                }
+                if (card) {
+                    player.hand.push(card);
+                }
+                player.applyEffects({ narrativeMomentum: 1 });
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'PLAY_CARD':
+            cost = 1;
+            if (player.stats.actionPoints >= cost) {
+                const cardIndex = player.hand.findIndex(c => c.id === action.payload.cardId);
+                if (cardIndex > -1) {
+                    player.stats.actionPoints -= cost;
+                    const cardToPlay = player.hand.splice(cardIndex, 1)[0];
+                    const effects = {
+                        money: parseInt(cardToPlay.money) || 0,
+                        mentalHealth: parseInt(cardToPlay.mental) || 0,
+                        sin: parseInt(cardToPlay.sin) || 0,
+                        virtue: parseInt(cardToPlay.virtue) || 0,
+                        socialCapital: parseInt(cardToPlay.socialCapital) || 0
+                    };
+                    player.applyEffects(effects);
+                    actionSucceeded = true;
+                }
+            }
+            break;
+
+        case 'SPEND_MOMENTUM':
+            cost = 5;
+            if (player.stats.narrativeMomentum >= cost) {
+                player.stats.narrativeMomentum -= cost;
+                const card = this.lifeHappensDeck.draw();
+                if (card) {
+                    this.pendingDecision = {
+                        type: 'LIFE_HAPPENS',
+                        playerId: player.id,
+                        cardId: card.id,
+                        text: card.text,
+                        options: card.choices
+                    };
+                }
+                actionSucceeded = true;
+            }
+            break;
+
+        case 'PASS_TURN':
+            player.stats.actionPoints = 0;
+            actionSucceeded = true;
+            break;
+    }
+
+    if (!actionSucceeded) {
+      return { success: false, error: "Not enough resources." };
+    }
+
+    this.checkTurnEnd(player);
     return { success: true };
   }
 
+  /**
+   * Returns a serializable object representing the current state of the game.
+   * @returns {object} The public game state.
+   */
   getGameState() {
     return {
       id: this.id,
       name: this.name,
-      status: this.status,
       players: this.players.map(p => p.getPublicState()),
       currentPlayerId: this.getCurrentPlayer() ? this.getCurrentPlayer().id : null,
       currentTurn: this.scheduler.getCurrentTurn(),

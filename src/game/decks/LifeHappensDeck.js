@@ -1,22 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-
 class LifeHappensDeck {
-    constructor() {
-        this.deck = [];
+    constructor(cards) {
+        this.deck = [...cards];
         this.discard = [];
-        this._loadCards();
-    }
-
-    _loadCards() {
-        const jsonPath = path.join(__dirname, '../../cards/life-happens.json');
-        try {
-            const jsonData = fs.readFileSync(jsonPath, 'utf-8');
-            this.deck = JSON.parse(jsonData);
-        } catch (e) {
-            console.error("Error loading or parsing life-happens.json:", e);
-            this.deck = [];
-        }
     }
 
     shuffle() {

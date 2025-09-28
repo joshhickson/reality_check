@@ -1,3 +1,7 @@
+/**
+ * @file Manages the game server, WebSocket connections, and routes player actions to the game logic.
+ */
+
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -5,49 +9,63 @@ const path = require('path');
 const cors = require('cors');
 const { Game } = require('./src/game/Game.js');
 const { v4: uuidv4 } = require('uuid');
+const { loadAllCards } = require('./src/game/CardLoader.js');
 
 const app = express();
 const server = http.createServer(app);
 
+const CARD_DATA = loadAllCards();
+
 const io = new Server(server, {
+  transports: ['polling'],
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
   }
 });
 
+// Low-level engine error logging
+io.engine.on("connection_error", (err) => {
+  console.log('[SERVER_ENGINE_ERROR] Connection Error:');
+  console.log('Error Code:', err.code);
+  console.log('Error Message:', err.message);
+  console.log('HTTP Context:', err.context);
+});
+
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
-
 const publicPath = path.join(__dirname, 'public');
 app.use(express.static(publicPath));
 
+/**
+ * In-memory store for active game instances.
+ * @type {Object.<string, Game>}
+ */
 const games = {};
 
-function checkTurnEnd(game, player) {
-  console.log(`[GAME] Checking turn end for ${player.name}. AP: ${player.stats.actionPoints}, PendingDecision: ${JSON.stringify(game.pendingDecision)}`);
-  if (player.stats.actionPoints <= 0 && !game.pendingDecision) {
-    console.log(`[GAME] Player ${player.name}'s turn has ended (AP depleted).`);
-    game.nextTurn();
-    return true;
-  }
-  return false;
-}
-
+/**
+ * API endpoint to get a list of active game IDs.
+ */
 app.get('/api/games', (req, res) => {
   res.json(Object.keys(games));
 });
 
+console.log('[SERVER] Setting up main socket connection handler...');
+// Main socket connection handler
 io.on('connection', (socket) => {
+  console.log('[SERVER] Connection handler started.');
   console.log(`🔌 New connection: ${socket.id}`);
 
+  // Middleware to log all incoming socket events for debugging.
   socket.use((packet, next) => {
     console.log(`[SERVER][IN] ${packet[0]} from ${socket.id}:`, packet[1]);
     next();
   });
 
+  // Wrap the socket's emit function to log all outgoing events.
   const originalEmit = socket.emit;
   socket.emit = function(event, ...args) {
     console.log(`[SERVER][OUT] ${event} to ${socket.id}:`, args[0]);
@@ -60,7 +78,7 @@ io.on('connection', (socket) => {
 
   socket.on('create_game', ({ gameName }) => {
     const gameId = uuidv4();
-    const game = new Game(gameName, socket, gameId);
+    const game = new Game(gameName, socket, gameId, CARD_DATA);
     games[gameId] = game;
     socket.join(gameId);
     socket.emit('game_created', { gameId });
@@ -81,107 +99,26 @@ io.on('connection', (socket) => {
     io.to(gameId).emit('game_started', game.getGameState());
   });
 
+  /**
+   * Handles incoming player actions by delegating to the Game instance.
+   */
   socket.on('player_action', (data) => {
-    // DEFENSIVE LOG: Check if the data object itself is the problem.
     if (!data) {
-      console.log('[DEFENSIVE LOG] Received player_action with null or undefined data. This is likely the crash point.');
-      return; // Stop execution if data is invalid.
+      console.log('[DEFENSIVE LOG] Received player_action with null or undefined data.');
+      return;
     }
     const { gameId, playerId, action } = data;
     const game = games[gameId];
-    if (!game) return;
-    const player = game.players.find(p => p.id === playerId);
-    if (!player) return;
-
-    if (game.getCurrentPlayer().id !== player.id) {
-      return socket.emit('error', { message: 'Not your turn.' });
+    if (!game) {
+      return socket.emit('error', { message: 'Game not found.' });
     }
 
-    let actionSucceeded = false;
-    let cost = 0;
+    const result = game.handlePlayerAction(playerId, action);
 
-    switch(action.type) {
-        case 'WORK_OVERTIME':
-            cost = 2;
-            if (player.stats.actionPoints >= cost) {
-                player.stats.actionPoints -= cost;
-                player.applyEffects({ money: 500, mentalHealth: -1, sin: 1, narrativeMomentum: 1 });
-                actionSucceeded = true;
-            }
-            break;
-
-        case 'DRAW_CARD':
-            cost = player.isBurnedOut ? 2 : 1; // Burnout increases AP cost
-
-            if (player.hand.length >= game.maxHandSize) {
-                return socket.emit('error', { message: "Your hand is full." });
-            }
-
-            if (player.stats.actionPoints >= cost) {
-                player.stats.actionPoints -= cost;
-                let card;
-                if (action.payload.deck === 'SIN') {
-                    card = game.sinDeck.draw();
-                } else if (action.payload.deck === 'VIRTUE') {
-                    card = game.virtueDeck.draw();
-                }
-                if (card) {
-                    player.hand.push(card);
-                }
-                player.applyEffects({ narrativeMomentum: 1 });
-                actionSucceeded = true;
-            }
-            break;
-
-        case 'PLAY_CARD':
-            cost = 1;
-            if (player.stats.actionPoints >= cost) {
-                const cardIndex = player.hand.findIndex(c => c.id === action.payload.cardId);
-                if (cardIndex > -1) {
-                    player.stats.actionPoints -= cost;
-                    const cardToPlay = player.hand.splice(cardIndex, 1)[0];
-                    const effects = {
-                        money: parseInt(cardToPlay.money) || 0,
-                        mentalHealth: parseInt(cardToPlay.mental) || 0,
-                        sin: parseInt(cardToPlay.sin) || 0,
-                        virtue: parseInt(cardToPlay.virtue) || 0,
-                        socialCapital: parseInt(cardToPlay.socialCapital) || 0
-                    };
-                    player.applyEffects(effects);
-                    actionSucceeded = true;
-                }
-            }
-            break;
-
-        case 'SPEND_MOMENTUM':
-            cost = 5;
-            if (player.stats.narrativeMomentum >= cost) {
-                player.stats.narrativeMomentum -= cost;
-                const card = game.lifeHappensDeck.draw();
-                if (card) {
-                    game.pendingDecision = {
-                        type: 'LIFE_HAPPENS',
-                        playerId: player.id,
-                        cardId: card.id,
-                        text: card.text,
-                        options: card.choices
-                    };
-                }
-                actionSucceeded = true;
-            }
-            break;
-
-        case 'PASS_TURN':
-            player.stats.actionPoints = 0;
-            actionSucceeded = true;
-            break;
+    if (!result.success) {
+      return socket.emit('error', { message: result.error });
     }
 
-    if (!actionSucceeded) {
-      return socket.emit('error', { message: "Not enough resources." });
-    }
-
-    checkTurnEnd(game, player);
     io.to(game.id).emit('game_state_update', game.getGameState());
   });
 
@@ -209,14 +146,14 @@ io.on('connection', (socket) => {
           choiceText: chosenOption.text
       });
 
-      checkTurnEnd(game, player);
+      game.checkTurnEnd(player);
       io.to(game.id).emit('game_state_update', game.getGameState());
   });
 
   socket.on('submit_testimony', ({ gameId, playerId, kudosTargetId, concernTargetId }) => {
     const game = games[gameId];
     if (!game) return socket.emit('error', { message: 'Game not found.' });
-    if (game.status !== 'judgment_day') {
+    if (game.stateMachine.getCurrentState() !== 'JudgmentDay') {
       return socket.emit('error', { message: 'It is not time for testimony yet.' });
     }
 
@@ -231,7 +168,7 @@ io.on('connection', (socket) => {
       totalPlayers: game.players.length
     });
 
-    if (game.status === 'finished') {
+    if (game.stateMachine.getCurrentState() === 'Finished') {
       io.to(gameId).emit('game_over', game.getGameState());
     }
   });
